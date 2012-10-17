@@ -26,6 +26,6 @@ function makeTrianglePath(x, y, x1, y1, x2, y2) {
 
   result += "L" + x1 + "," + y1;
   result += "L" + x2 + "," + y2;
-
+  
   return result;
 }
