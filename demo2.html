@@ -1,0 +1,70 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title>Fuck your mother</title>
+        <style type="text/css" media="screen">
+            h2 {
+                text-align: center;
+            }
+        </style>
+        <script src="raphael.js" type="text/javascript" charset="utf-8"></script>
+        <script src="raphaelExtras.js" type="text/javascript" charset="utf-8"></script>
+
+        <script type="text/javascript" charset="utf-8">
+        window.onload = function () {          
+                                    
+            var paper = Raphael(0, 80, 450, 450);
+
+            var circlePath = makeCirclePath(40,40,20);
+            var rectPath = makeRectanglePath(10, 100, 100,100, 8,8,8,8);
+            var trianglePath = makeTrianglePath(100, 10, 100, 100, 150, 50);
+            var pathSwitch = 0;
+            
+            var theAttr = {fill: '#333'};
+          
+            var circle = paper.path(circlePath).attr(theAttr);
+
+
+            function animateNext() {
+            var thePath = circlePath;
+            
+            pathSwitch = (pathSwitch > 1) ? 0 : pathSwitch+1;
+            switch (pathSwitch)
+            {
+                case 0:
+                   thePath = circlePath;
+                   break;
+                case 1:
+                   thePath = trianglePath
+                   break;
+                case 2:
+                   thePath = rectPath;
+                   break;
+            }
+            circle.animate({path: thePath, fill: Raphael.getColor()}, 500, "<>", function() {
+
+                
+             animateNext();
+
+            });
+}
+
+
+             circle.node.onclick = function () {
+                 animateNext();
+              }
+            
+        };
+        </script>
+    </head>
+    <body>
+        <br>
+        <a href="index.html">HOME</a>
+        <br>
+        <br>
+        
+        <p> Click the ball </p>
+        
+    </body>
+</html>

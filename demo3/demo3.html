@@ -1,0 +1,63 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title>Fuck your mother</title>
+        <style type="text/css" media="screen">
+            h2 {
+                text-align: center;
+            }
+        </style>
+        <script src="../raphael.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../raphaelExtras.js" type="text/javascript" charset="utf-8"></script>
+        <script src="cog.js"></script>
+
+        <script type="text/javascript" charset="utf-8">
+        window.onload = function () {          
+                                    
+            var paper = Raphael(0, 80, 650, 650);
+
+            var rectPath = makeRectanglePath(10, 100, 100,400, 8,8,8,8);
+            var pathSwitch = true;
+            
+            var theAttr = {fill: '#333'};
+          
+            var circle = paper.path(rectPath).attr(theAttr);
+
+//            var theGear = Raphael(gear).attr(theAttr);  // do we have to remove it?  I just want to load the path
+             var theGear = gear[4].path;
+
+            // theGear = theGear[0]; // first item in set
+            // theGear = theGear.attr('path');
+            
+            function animateNext() {
+                var thePath = rectPath;
+                                    
+                if (pathSwitch)
+                   thePath = theGear;
+                
+               pathSwitch = !pathSwitch;
+            
+                circle.animate({path: thePath, fill: Raphael.getColor()}, 200, "<>", function() {
+
+            });
+}
+
+
+             circle.node.onclick = function () {
+                 animateNext();
+              }
+            
+        };
+        </script>
+    </head>
+    <body>
+        <br>
+        <a href="../index.html">HOME</a>
+        <br>
+        <br>
+        
+        <p> Click the ball </p>
+        
+    </body>
+</html>
