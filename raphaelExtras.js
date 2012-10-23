@@ -56,3 +56,15 @@ function scalePath(path, amount) {
 
   return path;
 }
+
+function translatePath(path, amountX, amountY) {
+  var bBox = Raphael.pathBBox(path);
+
+  var theMatrix = new Raphael.matrix;
+  theMatrix.translate(amountX, amountY);
+
+   var transformString = theMatrix.toTransformString();
+  path = Raphael.transformPath(path, transformString);
+
+  return path;
+}

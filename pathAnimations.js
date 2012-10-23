@@ -1,50 +1,49 @@
-function PathAnimation(inColor) {
+function PathAnimation(inColor, inOffset) {
 	this.fillColor = inColor;
+	this.offset = inOffset;
+
+	// private member?  do I need this to be this?
+	this.pathSwitch = false;
 
 	// method
 	this.setup = setup;
 
-	function setup() {
-		var paper = Raphael(0, 280, 650, 650);
+	// this is dumb
+	var that = this;
 
-		var theGradient = "90-#aaf-#004";
+	function setup(paper) {
 
-		paper.rect(0, 0, 850, 650).attr({
-			fill: theGradient,
-			stroke: '#f99',
-			title: 'background'
-		});
+		this.rectPath = makeRectanglePath(0, 0, 100, 400, 8, 8, 8, 8);
 
-		var rectPath = makeRectanglePath(0, 0, 100, 400, 8, 8, 8, 8);
-		var pathSwitch = false;
+		this.rectPath = translatePath(this.rectPath, this.offset, 0);
 
-		var theRect = paper.path(rectPath).attr({
+		this.mainPath = paper.path(this.rectPath).attr({
 			fill: this.fillColor
 		});
 
 		var theGear = gear[4].path;
 		theGear = normalizePath(theGear);
-		theGear = scalePath(theGear, .5);
+		this.gear = scalePath(theGear, .5);
+		this.gear = translatePath(this.gear, this.offset, 0);
 
-		theRect.attr({
+		this.mainPath.attr({
 			title: 'far out man'
 		});
 
-		var that = this;
-
-		function animateNext() {
-			var thePath = thePath = (+(pathSwitch = !pathSwitch)) ? theGear : rectPath;
-
-			theRect.animate({
-				path: thePath,
-				fill: that.fillColor,
-			}, 400, "bounce", function() {
-				console.log("animation done");
-			});
-		}
-
-		theRect.node.onclick = function() {
+		this.mainPath.node.onclick = function() {
 			animateNext();
 		}
 	}
+
+	function animateNext() {
+		var thePath = thePath = (+(that.pathSwitch = !that.pathSwitch)) ? that.gear : that.rectPath;
+
+		that.mainPath.animate({
+			path: thePath,
+			fill: that.fillColor,
+		}, 400, "bounce", function() {
+			console.log("animation done");
+		});
+	}
+
 }

@@ -15,10 +15,26 @@
 
         <script type="text/javascript" charset="utf-8">
         
-            window.onload = function() {
-                var animation = new PathAnimation('#44f');
-                animation.setup();
-            };
+           window.onload = function() {
+
+           var theGradient = "90-#aaf-#004";
+           var paper = Raphael(0, 280, 650, 650);
+
+           paper.rect(0, 0, 850, 650).attr({
+               fill: theGradient,
+               stroke: '#f99',
+               title: 'background'
+           });
+
+           var animation = new PathAnimation('#44f', 0);
+           animation.setup(paper);
+
+           var animation2 = new PathAnimation('#f33', 100);
+           animation2.setup(paper);
+
+           var animation3 = new PathAnimation('#2f2', 200);
+           animation3.setup(paper);
+       };
 
         </script>
     </head>
