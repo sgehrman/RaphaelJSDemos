@@ -7,6 +7,7 @@ function PathAnimation(inColor, inOffset) {
 
 	// method
 	this.setup = setup;
+	this.animate = animate;
 
 	// this is dumb
 	var that = this;
@@ -31,16 +32,16 @@ function PathAnimation(inColor, inOffset) {
 		});
 
 		this.mainPath.node.onclick = function() {
-			animateNext();
+			that.animate();
 		}
 	}
 
-	function animateNext() {
-		var thePath = thePath = (+(that.pathSwitch = !that.pathSwitch)) ? that.gear : that.rectPath;
+	function animate() {
+		var thePath = thePath = (+(this.pathSwitch = !this.pathSwitch)) ? this.gear : this.rectPath;
 
-		that.mainPath.animate({
+		this.mainPath.animate({
 			path: thePath,
-			fill: that.fillColor,
+			fill: this.fillColor,
 		}, 400, "bounce", function() {
 			console.log("animation done");
 		});
