@@ -36,8 +36,22 @@ function makeTrianglePath(x, y, x1, y1, x2, y2) {
 function normalizePath(path) {
   var bBox = Raphael.pathBBox(path);
 
-  var theMatrix = Raphael.matrix(1, 0, 0, 1, -bBox.x, -bBox.y);
+  var theMatrix = new Raphael.matrix;
+  theMatrix.translate(-bBox.x, -bBox.y);
+
   var transformString = theMatrix.toTransformString();
+  path = Raphael.transformPath(path, transformString);
+
+  return path;
+}
+
+function scalePath(path, amount) {
+  var bBox = Raphael.pathBBox(path);
+
+  var theMatrix = new Raphael.matrix;
+  theMatrix.scale(amount, amount);
+
+   var transformString = theMatrix.toTransformString();
   path = Raphael.transformPath(path, transformString);
 
   return path;

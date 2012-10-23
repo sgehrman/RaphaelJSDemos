@@ -10,51 +10,15 @@
         </style>
         <script src="../raphael.js" type="text/javascript" charset="utf-8"></script>
         <script src="../raphaelExtras.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../pathAnimations.js" type="text/javascript" charset="utf-8"></script>
         <script src="cog.js"></script>
 
         <script type="text/javascript" charset="utf-8">
-        window.onload = function () {          
-                                    
-            var paper = Raphael(0, 280, 650, 650);
+        
+            window.onload = function() {
+                setupAnimation();       
+            };
 
-            var theGradient = "90-#fff-#000";
-
-            paper.rect(0, 0, 650, 650).attr({
-                fill: theGradient,
-                title: 'fuck this shit'
-            });
-
-            var rectPath = makeRectanglePath(0, 0, 100, 400, 8, 8, 8, 8);
-            var pathSwitch = false;
-
-            var theRect = paper.path(rectPath).attr({
-                fill: '#333'
-            });
-
-            var theGear = gear[4].path;
-            theGear = normalizePath(theGear);
-
-            theRect.attr({
-                title: 'far out man'
-            });
-
-            function animateNext() {
-                var thePath = rectPath;
-                if(+(pathSwitch = !pathSwitch)) thePath = theGear;
-
-                theRect.animate({
-                    path: thePath,
-                    fill: Raphael.getColor(),
-                    'fill-opacity': 0.4
-                }, 400, "bounce", function() {
-                    console.log("animation done");
-                });
-            }
-
-            theRect.node.onclick = function() {
-                animateNext();
-            }            
-        };
         </script>
     </head>
     <body>
