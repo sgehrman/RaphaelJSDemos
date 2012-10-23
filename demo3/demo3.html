@@ -15,33 +15,36 @@
         <script type="text/javascript" charset="utf-8">
         window.onload = function () {          
                                     
-            var paper = Raphael(0, 80, 650, 650);
+            var paper = Raphael(0, 280, 650, 650);
 
-            var rectPath = makeRectanglePath(10, 100, 100,400, 8,8,8,8);
-            var pathSwitch = true;
-            
-            var theAttr = {fill: '#333'};
+            var theGradient = "90-#fff-#000";
+
+            paper.rect(0, 0, 650, 650).attr({fill: theGradient, title: 'fuck this shit'});
+
+
+            var rectPath = makeRectanglePath(0, 0, 100,400, 8,8,8,8);
+            var pathSwitch = false;
           
-            var circle = paper.path(rectPath).attr(theAttr);
+            var theRect = paper.path(rectPath).attr({fill: '#333'});
 
-            var theGear = gear[4].path;    
-//            var theTiger = tiger[4].path;    
-            
+            var theGear = gear[4].path;
+            theGear = normalizePath(theGear);
+
+            theRect.attr({title: 'far out man'});
+
             function animateNext() {
                 var thePath = rectPath;
                                     
-                if (pathSwitch)
+                if (+(pathSwitch = !pathSwitch))
                    thePath = theGear;
-                
-               pathSwitch = !pathSwitch;
-            
-                circle.animate({path: thePath, fill: Raphael.getColor()}, 200, "<>", function() {
+
+                theRect.animate({path: thePath, fill: Raphael.getColor(), 'fill-opacity': 0.4}, 400, "bounce", function() {
 
             });
-}
+            }
 
 
-             circle.node.onclick = function () {
+             theRect.node.onclick = function () {
                  animateNext();
               }
             

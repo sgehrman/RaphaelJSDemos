@@ -14,6 +14,7 @@ function makeRectanglePath(x, y, w, h, r1, r2, r3, r4) {
   strPath += "Z";
 
   // inner function
+
   function p(x, y) {
     return x + " " + y + " ";
   }
@@ -26,6 +27,18 @@ function makeTrianglePath(x, y, x1, y1, x2, y2) {
 
   result += "L" + x1 + "," + y1;
   result += "L" + x2 + "," + y2;
-  
+
   return result;
+}
+
+// moves the path so it starts at 0,0
+
+function normalizePath(path) {
+  var bBox = Raphael.pathBBox(path);
+
+  var theMatrix = Raphael.matrix(1, 0, 0, 1, -bBox.x, -bBox.y);
+  var transformString = theMatrix.toTransformString();
+  path = Raphael.transformPath(path, transformString);
+
+  return path;
 }
