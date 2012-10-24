@@ -14,7 +14,7 @@ function PathAnimation(inColor, inOffset) {
 
 	function setup(paper) {
 
-		this.rectPath = makeRectanglePath(0, 0, 100, 400, 8, 8, 8, 8);
+		this.rectPath = makeRectanglePath(0, 0, 100, 400);
 
 		this.rectPath = translatePath(this.rectPath, this.offset, 0);
 
@@ -26,6 +26,7 @@ function PathAnimation(inColor, inOffset) {
 		theGear = normalizePath(theGear);
 		this.gear = scalePath(theGear, .5);
 		this.gear = translatePath(this.gear, this.offset, 0);
+		this.gear = rotatePath(this.gear, -75);
 
 		this.mainPath.attr({
 			title: 'far out man'
@@ -42,7 +43,7 @@ function PathAnimation(inColor, inOffset) {
 		this.mainPath.animate({
 			path: thePath,
 			fill: this.fillColor,
-		}, 400, "bounce", function() {
+		}, 1800, "bounce", function() {
 			console.log("animation done");
 		});
 	}
