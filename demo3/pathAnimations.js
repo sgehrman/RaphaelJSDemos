@@ -28,6 +28,10 @@ function PathAnimation(inColor, inOffset) {
 		this.gear = translatePath(this.gear, this.offset, 0);
 		this.gear = rotatePath(this.gear, 75);
 
+		//this.gear = makeRectanglePath(0, 0, 200, 300);
+
+
+
 		this.mainPath.attr({
 			title: 'far out man',
 			stroke: 'none'
@@ -35,6 +39,7 @@ function PathAnimation(inColor, inOffset) {
 
 		this.mainPath.node.onclick = function() {
 			that.animate();
+			that.mainPath.toFront();
 		}
 	}
 
@@ -44,13 +49,7 @@ function PathAnimation(inColor, inOffset) {
 		this.mainPath.animate({
 			path: thePath,
 			fill: this.fillColor,
-		}, 800, "<>", function() {
-
-
-// that.mainPath.animate({hue: .1}, 200, '<>');
-
-
-		});
+		}, 800, "<>");
 	}
 
 }

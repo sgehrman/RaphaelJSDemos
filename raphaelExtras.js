@@ -25,26 +25,13 @@ function makeRoundRectanglePath(x, y, w, h, r1, r2, r3, r4) {
 function makeRectanglePath(x, y, w, h) {
   var strPath;
 
-  if (false)
-  {
-    strPath = "M" + p(x, y);
-    
-    strPath += "l" + p(w, 0);
-    strPath += lineY(h);
-    strPath += "l" + p(-w, 0);
-
-    strPath += "Z";
-
-  }
-  else
-   {
-    strPath = "M" + p(x, y+h);
-    
-    strPath += lineX(w);
-    strPath += lineY(-h);
-    strPath += lineX(-w);
-    strPath += lineY(h);
-  }
+ 
+  strPath = "M" + p(x, y+h);
+  
+  strPath += lineX(w);
+  strPath += lineY(-h);
+  strPath += lineX(-w);
+  strPath += lineY(h);
 
 
   // inner function
@@ -58,7 +45,7 @@ function makeRectanglePath(x, y, w, h) {
 
 function lineY(y) {
 
-// return "l" + p(0, y);
+ return "l" + p(0, y);
 
 
   var strPath = "";
@@ -81,7 +68,7 @@ function lineY(y) {
 
 function lineX(x) {
 
-  // return "l" + p(x, 0);
+  return "l" + p(x, 0);
 
   var strPath = "";
 
