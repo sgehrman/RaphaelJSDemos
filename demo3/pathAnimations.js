@@ -43,7 +43,7 @@ function PathAnimation(inColor, inOffset) {
 		this.mainPath.animate({
 			path: thePath,
 			fill: this.fillColor,
-		}, 1800, "bounce", function() {
+		}, 800, "bounce", function() {
 			console.log("animation done");
 		});
 	}
