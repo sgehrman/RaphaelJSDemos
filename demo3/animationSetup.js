@@ -9,11 +9,7 @@
     });
 
     var animations = [
-      new PathAnimation('#44f', 0), new PathAnimation('#f33', 100), 
-      new PathAnimation('#2f2', 200), 
-      new PathAnimation('#232', 300), 
-      new PathAnimation('#f1f', 400)
-    ];
+    new PathAnimation('#44f', 0), new PathAnimation('#f33', 100), new PathAnimation('#2f2', 200), new PathAnimation('#232', 300), new PathAnimation('#f1f', 400)];
 
     animations.forEach(function(el) {
       el.setup(paper);
@@ -25,6 +21,18 @@
       fill: '#333',
       stroke: '#29f'
     });
+
+    // bogs down quickly.  bug in raphael?
+    // var theAnim = Raphael.animation({
+    //   'fill-opacity': .7
+    // }, 1000, 'bounce');
+
+    // circle.animate(
+
+    // theAnim.repeat(Infinity)
+
+    // );
+
 
     circle.node.onclick = function() {
       // tell all the animations to run

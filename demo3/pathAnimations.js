@@ -14,7 +14,7 @@ function PathAnimation(inColor, inOffset) {
 
 	function setup(paper) {
 
-		this.rectPath = makeRectanglePath(0, 0, 100, 400);
+		this.rectPath = makeRectanglePath(0, 0, 100, 500);
 
 		this.rectPath = translatePath(this.rectPath, this.offset, 0);
 
@@ -23,13 +23,14 @@ function PathAnimation(inColor, inOffset) {
 		});
 
 		var theGear = gear[4].path;
-		theGear = normalizePath(theGear);
+		this.gear = normalizePath(theGear);
 		this.gear = scalePath(theGear, .5);
 		this.gear = translatePath(this.gear, this.offset, 0);
-		this.gear = rotatePath(this.gear, -75);
+		this.gear = rotatePath(this.gear, 75);
 
 		this.mainPath.attr({
-			title: 'far out man'
+			title: 'far out man',
+			stroke: 'none'
 		});
 
 		this.mainPath.node.onclick = function() {
@@ -43,8 +44,12 @@ function PathAnimation(inColor, inOffset) {
 		this.mainPath.animate({
 			path: thePath,
 			fill: this.fillColor,
-		}, 800, "bounce", function() {
-			console.log("animation done");
+		}, 800, "<>", function() {
+
+
+// that.mainPath.animate({hue: .1}, 200, '<>');
+
+
 		});
 	}
 

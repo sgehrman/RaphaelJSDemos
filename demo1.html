@@ -14,7 +14,7 @@
         <script type="text/javascript" charset="utf-8">
         window.onload = function () {          
                                     
-            var paper = Raphael(0, 80, 450, 450);
+            var paper = Raphael(0, 180, 450, 450);
 
             var circlePath = makeCirclePath(40,40,20);
             var rectPath = makeRectanglePath(10, 100, 100,100, 8,8,8,8);
@@ -63,6 +63,16 @@
         <a href="index.html">HOME</a>
         <br>
         <br>
+
+          <svg>
+        <path d="M 20,20 L 200,20 100,200 Z" stroke="black" fill="cyan">
+        <animate
+        attributeName="d" to="M 20,20 L 100,200 200,20 Z" 
+        dur="2s" repeatCount="indefinite" ease:"<>"
+        />
+        </path>
+        </svg>
+
         
         <p> Click the blue or red ball </p>
                 

@@ -23,19 +23,93 @@ function makeRoundRectanglePath(x, y, w, h, r1, r2, r3, r4) {
 }
 
 function makeRectanglePath(x, y, w, h) {
-  var strPath = "M" + p(x, y);
-  
-  strPath += "l" + p(w, 0);
-  strPath += "l" + p(0, h);
-  strPath += "l" + p(-w, 0);
+  var strPath;
 
-  strPath += "Z";
+  if (false)
+  {
+    strPath = "M" + p(x, y);
+    
+    strPath += "l" + p(w, 0);
+    strPath += lineY(h);
+    strPath += "l" + p(-w, 0);
+
+    strPath += "Z";
+
+  }
+  else
+   {
+    strPath = "M" + p(x, y+h);
+    
+    strPath += lineX(w);
+    strPath += lineY(-h);
+    strPath += lineX(-w);
+    strPath += lineY(h);
+  }
+
 
   // inner function
 
   function p(x, y) {
     return x + " " + y + " ";
   }
+
+
+
+
+function lineY(y) {
+
+// return "l" + p(0, y);
+
+
+  var strPath = "";
+
+  if (y < 0) {
+    while (y != 0) {
+      strPath += "l" + p(0, -1);
+      y += 1;
+    }
+  } else {
+    while(y > 0) {
+      strPath += "l" + p(0, 1);
+      y -= 1;
+    }
+  }
+
+  return strPath;
+}
+
+
+function lineX(x) {
+
+  // return "l" + p(x, 0);
+
+  var strPath = "";
+
+  if (x < 0) {
+    while (x != 0) {
+      strPath += "l" + p(-1, 0);
+      x += 1;
+    }
+  } else {
+    while(x > 0) {
+      strPath += "l" + p(1, 0);
+      x -= 1;
+    }
+  }
+
+  return strPath;
+}
+
+
+
+
+
+
+
+
+
+
+
 
   return strPath;
 }
