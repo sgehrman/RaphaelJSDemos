@@ -45,7 +45,7 @@ function makeRectanglePath(x, y, w, h) {
 
 function lineY(y) {
 
- return "l" + p(0, y);
+// return "l" + p(0, y);
 
 
   var strPath = "";
@@ -68,7 +68,7 @@ function lineY(y) {
 
 function lineX(x) {
 
-  return "l" + p(x, 0);
+//  return "l" + p(x, 0);
 
   var strPath = "";
 
