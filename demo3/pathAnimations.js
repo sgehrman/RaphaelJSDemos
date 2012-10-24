@@ -24,7 +24,7 @@ function PathAnimation(inColor, inOffset) {
 
 		var theGear = gear[4].path;
 		this.gear = normalizePath(theGear);
-		this.gear = scalePath(theGear, .5);
+		this.gear = scalePath(this.gear, .5);
 		this.gear = translatePath(this.gear, this.offset, 0);
 		this.gear = rotatePath(this.gear, 75);
 
