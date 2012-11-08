@@ -100,7 +100,7 @@ function makeTrianglePath(x, y, x1, y1, x2, y2) {
 function normalizePath(path) {
   var bBox = Raphael.pathBBox(path);
 
-  var theMatrix = new Raphael.matrix;
+  var theMatrix = new Raphael.matrix();
   theMatrix.translate(-bBox.x, -bBox.y);
 
   var transformString = theMatrix.toTransformString();
@@ -112,7 +112,7 @@ function normalizePath(path) {
 function scalePath(path, amount) {
   var bBox = Raphael.pathBBox(path);
 
-  var theMatrix = new Raphael.matrix;
+  var theMatrix = new Raphael.matrix();
   theMatrix.scale(amount, amount);
 
   var transformString = theMatrix.toTransformString();
@@ -124,7 +124,7 @@ function scalePath(path, amount) {
 function translatePath(path, amountX, amountY) {
   var bBox = Raphael.pathBBox(path);
 
-  var theMatrix = new Raphael.matrix;
+  var theMatrix = new Raphael.matrix();
   theMatrix.translate(amountX, amountY);
 
   var transformString = theMatrix.toTransformString();
@@ -136,7 +136,7 @@ function translatePath(path, amountX, amountY) {
 function rotatePath(path, degrees) {
   var bBox = Raphael.pathBBox(path);
 
-  var theMatrix = new Raphael.matrix;
+  var theMatrix = new Raphael.matrix();
   theMatrix.rotate(degrees, bBox.x + (bBox.width / 2), bBox.y + (bBox.height / 2));
 
   var transformString = theMatrix.toTransformString();

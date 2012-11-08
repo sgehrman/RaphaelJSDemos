@@ -12,7 +12,12 @@ function setupAnimations() {
   });
 
   var animations = [
-  new PathAnimation('#44f', 0), new PathAnimation('#f33', 100), new PathAnimation('#2f2', 200), new PathAnimation('#232', 300), new PathAnimation('#f1f', 400)];
+  new PathAnimation('#44f', 0)
+  // new PathAnimation('#f33', 100),
+  //  new PathAnimation('#2f2', 200),
+  //   new PathAnimation('#232', 300),
+  //    new PathAnimation('#f1f', 400)
+  ];
 
   animations.forEach(function(el) {
     el.setup(paper);
@@ -30,7 +35,7 @@ function setupAnimations() {
     animations.forEach(function(el) {
       el.animate();
     });
-  }
+  };
 }
 
 function setupPathFields() {
@@ -82,11 +87,9 @@ function removeGearHole(theGear) {
 function pathOne(offset) {
   var result = Globelz.oneText.text();
 
-  console.log("One" + result);
-
   // modify paths
   result = normalizePath(result);
-//  result = scalePath(result, .5);
+  result = scalePath(result, .5);
   result = translatePath(result, offset, 0);
  // result = rotatePath(result, 180);
   // removes the hole in the cog
@@ -100,10 +103,8 @@ function pathOne(offset) {
 function pathTwo(offset) {
   var result = Globelz.twoText.text();
 
-  console.log("Two" + result);
-
   result = normalizePath(result);
- // result = scalePath(result, .5);
+  result = scalePath(result, .5);
   result = translatePath(result, offset, 0);
 //  result = rotatePath(result, 180);
 
@@ -131,7 +132,7 @@ function PathAnimation(inColor, inOffset) {
     this.mainPath.node.onclick = function() {
       that.animate();
       that.mainPath.toFront();
-    }
+    };
   }
 
   function animate() {
@@ -139,7 +140,7 @@ function PathAnimation(inColor, inOffset) {
 
     this.mainPath.animate({
       path: thePath,
-      fill: this.fillColor,
+      fill: this.fillColor
     }, 800, "<>");
   }
 
