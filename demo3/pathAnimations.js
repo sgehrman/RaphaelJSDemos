@@ -23,12 +23,23 @@ function PathAnimation(inColor, inOffset) {
 		});
 
 		var theGear = gear[4].path;
+
+
+// removes the hole in the cog
+if (true) {
+	theGear = removeGearHole(theGear);
+
+	console.dir(theGear);
+}
+
 		this.gear = normalizePath(theGear);
 		this.gear = scalePath(this.gear, .5);
 		this.gear = translatePath(this.gear, this.offset, 0);
 		this.gear = rotatePath(this.gear, 75);
 
 		//this.gear = makeRectanglePath(0, 0, 200, 300);
+
+
 
 
 
@@ -51,5 +62,29 @@ function PathAnimation(inColor, inOffset) {
 			fill: this.fillColor,
 		}, 800, "<>");
 	}
+
+
+
+	function removeGearHole(theGear) {
+		   var theArray = Raphael.parsePathString(theGear);
+      var found=-1;
+      var index = 0;
+
+       var theResult = theArray.some(function (item) {
+
+	 index += 1;
+
+		if (item.toString() === "z") {
+		 found = index;
+	    	return true;
+		}
+
+   return false;
+      });
+
+if (found !== -1)
+       return theArray.slice(0, found);
+	}
+
 
 }
