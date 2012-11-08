@@ -17,28 +17,27 @@ function PathAnimation(inColor, inOffset) {
 	var gear = gearPath;
 	var circleGear = circleGearPath;
 
-	function setup(paper) {
-     	// not used now, saving 
-		// this.startPath = makeRectanglePath(0, 0, 100, 500);
-		// this.startPath = translatePath(this.startPath, this.offset, 0);
+	// modify paths
+	gear = normalizePath(gear);
+	gear = scalePath(gear, .5);
+	gear = translatePath(gear, this.offset, 0);
+	// gear = rotatePath(gear, 180);
 
-		// removes the hole in the cog
+	// removes the hole in the cog
 		if(false) {
 			gear = removeGearHole(gear);
 		}
 
-		gear = normalizePath(gear);
-		gear = scalePath(gear, .5);
-		gear = translatePath(gear, this.offset, 0);
-		// gear = rotatePath(gear, 180);
-		//gear = makeRectanglePath(0, 0, 200, 300);
+	circleGear = normalizePath(circleGear);
+	circleGear = scalePath(circleGear, .5);
+	circleGear = translatePath(circleGear, this.offset, 0);
+	circleGear = rotatePath(circleGear, 180);
 
-		circleGear = normalizePath(circleGear);
-		circleGear = scalePath(circleGear, .5);
-		circleGear = translatePath(circleGear, this.offset, 0);
-		//circleGear = rotatePath(circleGear, 75);
-		
-
+	function setup(paper) {
+     	// not used now, saving 
+		// this.startPath = makeRectanglePath(0, 0, 100, 500);
+		// this.startPath = translatePath(this.startPath, this.offset, 0);
+	
 		this.startPath = circleGear;
 		this.mainPath = paper.path(this.startPath).attr({
 			fill: this.fillColor
