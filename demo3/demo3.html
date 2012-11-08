@@ -10,15 +10,20 @@
         </style>
         <script src="../raphael.js" type="text/javascript" charset="utf-8"></script>
         <script src="../raphaelExtras.js" type="text/javascript" charset="utf-8"></script>
-        <script src="pathAnimations.js" type="text/javascript" charset="utf-8"></script>
         <script src="animationSetup.js" type="text/javascript" charset="utf-8"></script>
         <script src="cog.js"></script>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+
 
         <script type="text/javascript" charset="utf-8">
         
            window.onload = function() {
+              setupPathFields();
               setupAnimations();
-           };
+            };
+
+          
+
            
         </script>
     </head>
@@ -27,7 +32,12 @@
         <a href="../index.html">HOME</a>
         <br>
         <br>
+
+        <textarea id="one"></textarea>
+        <textarea id="two"></textarea>
+        <button id="cunt">morph</button>
         
+    
         <p> Click the stuff </p>
         
     </body>
