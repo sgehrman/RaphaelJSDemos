@@ -37,21 +37,21 @@ function setupPathFields() {
   Globelz.oneText = $('#one');
   Globelz.twoText = $('#two');
 
-  Globelz.oneText.text(gearPath);
-  Globelz.twoText.text(circleGearPath);
+  Globelz.oneText.val(gearPath);
+  Globelz.twoText.val(circleGearPath);
 
   $("#gears").on("click", function(event) {
 
-    Globelz.oneText.text(gearPath);
-    Globelz.twoText.text(circleGearPath);
+    Globelz.oneText.val(gearPath);
+    Globelz.twoText.val(circleGearPath);
 
     doAnimate();
   });
 
   $("#rects").on("click", function(event) {
 
-    Globelz.oneText.text(makeRectanglePath(0, 0, 100, 500));
-    Globelz.twoText.text(makeRectanglePath(0, 0, 200, 500));
+    Globelz.oneText.val(makeRectanglePath(0, 0, 100, 500));
+    Globelz.twoText.val(makeRectanglePath(0, 0, 200, 500));
 
     doAnimate();
   });
@@ -83,7 +83,7 @@ function removeGearHole(theGear) {
 }
 
 function pathOne(offset) {
-  var result = Globelz.oneText.text();
+  var result = Globelz.oneText.val();
 
   // modify paths
   result = normalizePath(result);
@@ -99,7 +99,7 @@ function pathOne(offset) {
 }
 
 function pathTwo(offset) {
-  var result = Globelz.twoText.text();
+  var result = Globelz.twoText.val();
 
   result = normalizePath(result);
  // result = scalePath(result, 0.5);
