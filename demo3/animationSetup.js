@@ -22,17 +22,6 @@ function setupAnimations() {
   Globelz.animations.forEach(function(el) {
     el.setup(paper);
   });
-
-  // control button
-  var controlPaper = Raphael(0, 100, 50, 50);
-  var circle = controlPaper.circle(22, 22, 22).attr({
-    fill: '#333',
-    stroke: '#29f'
-  });
-
-  circle.node.onclick = function() {
-    doAnimate();
-  };
 }
 
 function doAnimate() {
@@ -66,6 +55,12 @@ function setupPathFields() {
 
     doAnimate();
   });
+
+  $("#run").on("click", function(event) {
+
+    doAnimate();
+  });
+
 }
 
 function removeGearHole(theGear) {
@@ -92,7 +87,7 @@ function pathOne(offset) {
 
   // modify paths
   result = normalizePath(result);
-  result = scalePath(result, .5);
+  // result = scalePath(result, 0.5);
   result = translatePath(result, offset, 0);
   // result = rotatePath(result, 180);
   // removes the hole in the cog
@@ -107,7 +102,7 @@ function pathTwo(offset) {
   var result = Globelz.twoText.text();
 
   result = normalizePath(result);
-  result = scalePath(result, .5);
+ // result = scalePath(result, 0.5);
   result = translatePath(result, offset, 0);
   //  result = rotatePath(result, 180);
   return result;
