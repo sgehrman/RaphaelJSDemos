@@ -40,7 +40,7 @@ function setupPathFields() {
   Globelz.oneText.text(gearPath);
   Globelz.twoText.text(circleGearPath);
 
-  $("#cunt").on("click", function(event) {
+  $("#gears").on("click", function(event) {
 
     Globelz.oneText.text(gearPath);
     Globelz.twoText.text(circleGearPath);
