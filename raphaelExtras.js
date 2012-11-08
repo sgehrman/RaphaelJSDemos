@@ -25,14 +25,14 @@ function makeRoundRectanglePath(x, y, w, h, r1, r2, r3, r4) {
 function makeRectanglePath(x, y, w, h) {
   var strPath;
 
- 
-  strPath = "M" + p(x, y+h);
-  
-  strPath += lineX(w);
-  strPath += lineY(-h);
-  strPath += lineX(-w);
-  strPath += lineY(h);
+  strPath = "M" + p(x, y);
 
+  var complex = false;
+
+  strPath += lineX(w, complex);
+  strPath += lineY(h, complex);
+  strPath += lineX(-w, complex);
+  strPath += lineY(-h, complex);
 
   // inner function
 
@@ -40,63 +40,48 @@ function makeRectanglePath(x, y, w, h) {
     return x + " " + y + " ";
   }
 
+  function lineY(y, complex) {
+    var strPath = "";
 
-
-
-function lineY(y) {
-
-// return "l" + p(0, y);
-
-
-  var strPath = "";
-
-  if (y < 0) {
-    while (y != 0) {
-      strPath += "l" + p(0, -1);
-      y += 1;
+    if(!complex) {
+      strPath += "l" + p(0, y);
+    } else {
+      if(y < 0) {
+        while(y !== 0) {
+          strPath += "l" + p(0, -1);
+          y += 1;
+        }
+      } else {
+        while(y > 0) {
+          strPath += "l" + p(0, 1);
+          y -= 1;
+        }
+      }
     }
-  } else {
-    while(y > 0) {
-      strPath += "l" + p(0, 1);
-      y -= 1;
-    }
+
+    return strPath;
   }
 
-  return strPath;
-}
+  function lineX(x, complex) {
+    var strPath = "";
 
-
-function lineX(x) {
-
-//  return "l" + p(x, 0);
-
-  var strPath = "";
-
-  if (x < 0) {
-    while (x != 0) {
-      strPath += "l" + p(-1, 0);
-      x += 1;
+    if(!complex) {
+      strPath += "l" + p(x, 0);
+    } else {
+      if(x < 0) {
+        while(x !== 0) {
+          strPath += "l" + p(-1, 0);
+          x += 1;
+        }
+      } else {
+        while(x > 0) {
+          strPath += "l" + p(1, 0);
+          x -= 1;
+        }
+      }
     }
-  } else {
-    while(x > 0) {
-      strPath += "l" + p(1, 0);
-      x -= 1;
-    }
+    return strPath;
   }
-
-  return strPath;
-}
-
-
-
-
-
-
-
-
-
-
-
 
   return strPath;
 }
@@ -130,7 +115,7 @@ function scalePath(path, amount) {
   var theMatrix = new Raphael.matrix;
   theMatrix.scale(amount, amount);
 
-   var transformString = theMatrix.toTransformString();
+  var transformString = theMatrix.toTransformString();
   path = Raphael.transformPath(path, transformString);
 
   return path;
@@ -142,7 +127,7 @@ function translatePath(path, amountX, amountY) {
   var theMatrix = new Raphael.matrix;
   theMatrix.translate(amountX, amountY);
 
-   var transformString = theMatrix.toTransformString();
+  var transformString = theMatrix.toTransformString();
   path = Raphael.transformPath(path, transformString);
 
   return path;
@@ -154,9 +139,8 @@ function rotatePath(path, degrees) {
   var theMatrix = new Raphael.matrix;
   theMatrix.rotate(degrees, bBox.x + (bBox.width / 2), bBox.y + (bBox.height / 2));
 
-   var transformString = theMatrix.toTransformString();
+  var transformString = theMatrix.toTransformString();
   path = Raphael.transformPath(path, transformString);
 
   return path;
 }
-
