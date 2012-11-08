@@ -11,7 +11,7 @@ function setupAnimations() {
     title: 'background'
   });
 
-  var animations = [
+  Globelz.animations = [
   new PathAnimation('#44f', 0)
   // new PathAnimation('#f33', 100),
   //  new PathAnimation('#2f2', 200),
@@ -19,7 +19,7 @@ function setupAnimations() {
   //    new PathAnimation('#f1f', 400)
   ];
 
-  animations.forEach(function(el) {
+  Globelz.animations.forEach(function(el) {
     el.setup(paper);
   });
 
@@ -31,11 +31,15 @@ function setupAnimations() {
   });
 
   circle.node.onclick = function() {
-    // tell all the animations to run
-    animations.forEach(function(el) {
-      el.animate();
-    });
+    doAnimate();
   };
+}
+
+function doAnimate() {
+  // tell all the animations to run
+  Globelz.animations.forEach(function(el) {
+    el.animate();
+  });
 }
 
 function setupPathFields() {
@@ -52,8 +56,7 @@ function setupPathFields() {
     Globelz.oneText.text(gearPath);
     Globelz.twoText.text(circleGearPath);
 
-
-    alert("reset to defaults.");
+    doAnimate();
   });
 
   $("#rects").on("click", function(event) {
@@ -61,7 +64,7 @@ function setupPathFields() {
     Globelz.oneText.text(makeRectanglePath(0, 0, 100, 500));
     Globelz.twoText.text(makeRectanglePath(0, 0, 200, 500));
 
-    alert("set to rects.");
+    doAnimate();
   });
 }
 
@@ -91,7 +94,7 @@ function pathOne(offset) {
   result = normalizePath(result);
   result = scalePath(result, .5);
   result = translatePath(result, offset, 0);
- // result = rotatePath(result, 180);
+  // result = rotatePath(result, 180);
   // removes the hole in the cog
   if(false) {
     result = removeGearHole(result);
@@ -106,8 +109,7 @@ function pathTwo(offset) {
   result = normalizePath(result);
   result = scalePath(result, .5);
   result = translatePath(result, offset, 0);
-//  result = rotatePath(result, 180);
-
+  //  result = rotatePath(result, 180);
   return result;
 }
 
