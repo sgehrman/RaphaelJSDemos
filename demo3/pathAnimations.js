@@ -12,40 +12,36 @@ function PathAnimation(inColor, inOffset) {
 	// this is dumb
 	var that = this;
 
+	// private vars
+	// getting the gears out of "cog.js"
+	var gear = gearPath;
+	var circleGear = circleGearPath;
+
 	function setup(paper) {
+     	// not used now, saving 
+		// this.startPath = makeRectanglePath(0, 0, 100, 500);
+		// this.startPath = translatePath(this.startPath, this.offset, 0);
 
-		this.rectPath = makeRectanglePath(0, 0, 100, 500);
+		// removes the hole in the cog
+		if(false) {
+			gear = removeGearHole(gear);
+		}
 
-		this.rectPath = translatePath(this.rectPath, this.offset, 0);
+		gear = normalizePath(gear);
+		gear = scalePath(gear, .5);
+		gear = translatePath(gear, this.offset, 0);
+		// gear = rotatePath(gear, 180);
+		//gear = makeRectanglePath(0, 0, 200, 300);
 
-		this.mainPath = paper.path(this.rectPath).attr({
+		circleGear = normalizePath(circleGear);
+		circleGear = scalePath(circleGear, .5);
+		circleGear = translatePath(circleGear, this.offset, 0);
+		//circleGear = rotatePath(circleGear, 75);
+		
+
+		this.startPath = circleGear;
+		this.mainPath = paper.path(this.startPath).attr({
 			fill: this.fillColor
-		});
-
-		var theGear = gear[4].path;
-
-
-// removes the hole in the cog
-if (true) {
-	theGear = removeGearHole(theGear);
-
-	console.dir(theGear);
-}
-
-		this.gear = normalizePath(theGear);
-		this.gear = scalePath(this.gear, .5);
-		this.gear = translatePath(this.gear, this.offset, 0);
-		this.gear = rotatePath(this.gear, 75);
-
-		//this.gear = makeRectanglePath(0, 0, 200, 300);
-
-
-
-
-
-		this.mainPath.attr({
-			title: 'far out man',
-			stroke: 'none'
 		});
 
 		this.mainPath.node.onclick = function() {
@@ -55,7 +51,7 @@ if (true) {
 	}
 
 	function animate() {
-		var thePath = thePath = (+(this.pathSwitch = !this.pathSwitch)) ? this.gear : this.rectPath;
+		var thePath = thePath = (+(this.pathSwitch = !this.pathSwitch)) ? gear : this.startPath;
 
 		this.mainPath.animate({
 			path: thePath,
@@ -63,27 +59,24 @@ if (true) {
 		}, 800, "<>");
 	}
 
-
-
 	function removeGearHole(theGear) {
-		   var theArray = Raphael.parsePathString(theGear);
-      var found=-1;
-      var index = 0;
+		var theArray = Raphael.parsePathString(theGear);
+		var found = -1;
+		var index = 0;
 
-       var theResult = theArray.some(function (item) {
+		var theResult = theArray.some(function(item) {
+			index += 1;
 
-	 index += 1;
+			if(item.toString() === "z") {
+				found = index;
+				return true;
+			}
 
-		if (item.toString() === "z") {
-		 found = index;
-	    	return true;
-		}
+			return false;
+		});
 
-   return false;
-      });
-
-if (found !== -1)
-       return theArray.slice(0, found);
+		if(found !== -1) 
+			return theArray.slice(0, found);
 	}
 
 
