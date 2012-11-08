@@ -1,3 +1,6 @@
+window.Globelz = {}
+
+
   function setupAnimations() {
     var theGradient = "90-#aaf-#004";
     var paper = Raphael(0, 280, 650, 650);
@@ -46,17 +49,19 @@ function setupPathFields()
 {
     var $ = jQuery;
 
-   var oneTextArea = $('#one');
-   var twoTextArea = $('#two');
+   Globelz.oneText = $('#one');
+  Globelz.twoText = $('#two');
 
-   oneTextArea.text(gearPath);
-   twoTextArea.text(circleGearPath);
+   Globelz.oneText.text(gearPath);
+   Globelz.twoText.text(circleGearPath);
 
     $("#cunt").on("click", function(event){
         
-     console.log(oneTextArea.text());
-     console.log(twoTextArea.text());
+     Globelz.oneText.text(gearPath);
+     Globelz.twoText.text(circleGearPath);
 
+
+    alert("reset to defaults.");
     });
 
 
@@ -84,33 +89,35 @@ function removeGearHole(theGear) {
 
 function pathOne(offset)
 {
-  // private vars
-  // getting the gears out of "cog.js"
-  var gear = gearPath;
+  var result = Globelz.oneText.text();
+
+console.log("One" + result);
 
   // modify paths
-  gear = normalizePath(gear);
-  gear = scalePath(gear, .5);
-  gear = translatePath(gear, offset, 0);
-  // gear = rotatePath(gear, 180);
+  result = normalizePath(result);
+  result = scalePath(result, .5);
+  result = translatePath(result, offset, 0);
+  // result = rotatePath(result, 180);
 
   // removes the hole in the cog
     if(false) {
-      gear = removeGearHole(gear);
+      result = removeGearHole(result);
     }
 
-    return gear;
+    return result;
 }
 
 function pathTwo(offset) {
-   var circleGear = circleGearPath;
+   var result = Globelz.twoText.text();
  
-  circleGear = normalizePath(circleGear);
-  circleGear = scalePath(circleGear, .5);
-  circleGear = translatePath(circleGear, offset, 0);
-  circleGear = rotatePath(circleGear, 180);
+ console.log("Two" + result);
 
-return circleGear;
+  result = normalizePath(result);
+  result = scalePath(result, .5);
+  result = translatePath(result, offset, 0);
+  result = rotatePath(result, 180);
+
+return result;
 }
 
 function PathAnimation(inColor, inOffset) {
