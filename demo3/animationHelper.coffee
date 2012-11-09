@@ -5,6 +5,9 @@ class Amoeba.Animations
 	constructor: ->
 	  @animations = [new PathAnimation("#44f", 0), new PathAnimation("#f32", 420)]
 
+	  this.setupPathFields()
+	  this.setupAnimations()
+
 	setupAnimations: ->
 	  paper = Raphael(0, 280, 850, 650)
 	  paper.rect(0, 0, 850, 650).attr

@@ -9,7 +9,9 @@
   Amoeba.Animations = (function() {
 
     function Animations() {
-      this.animations = [new PathAnimation("#44f", 0), new PathAnimation("#f31", 420)];
+      this.animations = [new PathAnimation("#44f", 0), new PathAnimation("#f32", 420)];
+      this.setupPathFields();
+      this.setupAnimations();
     }
 
     Animations.prototype.setupAnimations = function() {
