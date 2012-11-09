@@ -3,7 +3,7 @@ window.Amoeba ?= {}
 
 class Amoeba.Animations
 	constructor: ->
-	  @animations = [new PathAnimation("#44f", 0), new PathAnimation("#f34", 420)]
+	  @animations = [new PathAnimation("#44f", 0), new PathAnimation("#f32", 420)]
 
 	setupAnimations: ->
 	  paper = Raphael(0, 280, 850, 650)
