@@ -9,9 +9,9 @@
   Amoeba.Animations = (function() {
 
     function Animations() {
-      this.animations = [new PathAnimation("#44f", 0), new PathAnimation("#f32", 420)];
       this.setupPathFields();
       this.setupAnimations();
+      this.setupEventHandlers();
     }
 
     Animations.prototype.setupAnimations = function() {
@@ -22,9 +22,7 @@
         stroke: "#f99",
         title: "background"
       });
-      return this.animations.forEach(function(el) {
-        return el.setup(paper);
-      });
+      return this.animations = [new PathAnimation(paper, "#44f", 0), new PathAnimation(paper, "#f32", 420)];
     };
 
     Animations.prototype.doAnimate = function() {
@@ -34,11 +32,14 @@
     };
 
     Animations.prototype.setupPathFields = function() {
-      var _this = this;
       Amoeba.oneText = $("#one");
       Amoeba.twoText = $("#two");
       Amoeba.oneText.val(gearPath);
-      Amoeba.twoText.val(circleGearPath);
+      return Amoeba.twoText.val(circleGearPath);
+    };
+
+    Animations.prototype.setupEventHandlers = function() {
+      var _this = this;
       $("#gears").on("click", function(event) {
         Amoeba.oneText.val(gearPath);
         Amoeba.twoText.val(circleGearPath);
@@ -60,22 +61,19 @@
 
   PathAnimation = (function() {
 
-    function PathAnimation(fillColor, offset) {
+    function PathAnimation(paper, fillColor, offset) {
+      var _this = this;
       this.fillColor = fillColor;
       this.offset = offset;
       this.pathSwitch = true;
-    }
-
-    PathAnimation.prototype.setup = function(paper) {
-      var _this = this;
       this.mainPath = paper.path(this.pathOne(this.offset)).attr({
         fill: this.fillColor
       });
-      return this.mainPath.node.onclick = function() {
+      this.mainPath.node.onclick = function() {
         _this.animate();
         return _this.mainPath.toFront();
       };
-    };
+    }
 
     PathAnimation.prototype.animate = function() {
       var thePath;

@@ -3,10 +3,9 @@ window.Amoeba ?= {}
 
 class Amoeba.Animations
 	constructor: ->
-	  @animations = [new PathAnimation("#44f", 0), new PathAnimation("#f32", 420)]
-
 	  this.setupPathFields()
 	  this.setupAnimations()
+	  this.setupEventHandlers();
 
 	setupAnimations: ->
 	  paper = Raphael(0, 280, 850, 650)
@@ -15,8 +14,7 @@ class Amoeba.Animations
 	    stroke: "#f99"
 	    title: "background"
 
-	  @animations.forEach (el) ->
-	    el.setup paper
+	  @animations = [new PathAnimation(paper, "#44f", 0), new PathAnimation(paper, "#f32", 420)]
 
 	doAnimate: ->
 	  @animations.forEach (el) ->
@@ -25,9 +23,12 @@ class Amoeba.Animations
 	setupPathFields: ->
 	  Amoeba.oneText = $("#one")
 	  Amoeba.twoText = $("#two")
+
+	  # default gear paths in cog.js
 	  Amoeba.oneText.val gearPath
 	  Amoeba.twoText.val circleGearPath
 
+	setupEventHandlers: ->
 	  $("#gears").on "click", (event) =>
 	    Amoeba.oneText.val gearPath
 	    Amoeba.twoText.val circleGearPath
@@ -42,10 +43,9 @@ class Amoeba.Animations
 	    this.doAnimate()
 
 class PathAnimation
-	constructor: (@fillColor, @offset) ->
+	constructor: (paper, @fillColor, @offset) ->
 		@pathSwitch = true
 
-	setup: (paper) ->
 		@mainPath = paper.path(this.pathOne(@offset)).attr(fill:@fillColor)
 		
 		@mainPath.node.onclick = =>
