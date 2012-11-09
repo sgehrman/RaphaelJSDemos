@@ -3,10 +3,10 @@ window.Amoeba ?= {}
 
 class Amoeba.Animations
 	constructor: ->
-	  @animations = [new PathAnimation("#44f", 0)]
+	  @animations = [new PathAnimation("#44f", 0), new PathAnimation("#f31", 420)]
 
 	setupAnimations: ->
-	  paper = Raphael(0, 280, 650, 650)
+	  paper = Raphael(0, 280, 850, 650)
 	  paper.rect(0, 0, 850, 650).attr
 	    fill: "90-#aaf-#004"
 	    stroke: "#f99"
@@ -32,7 +32,7 @@ class Amoeba.Animations
 
 	  $("#rects").on "click", (event) =>
 	    Amoeba.oneText.val makeRectanglePath(0, 0, 100, 500)
-	    Amoeba.twoText.val makeRectanglePath(0, 0, 200, 500)
+	    Amoeba.twoText.val makeRectanglePath(0, 0, 200, 300)
 	    this.doAnimate()
 
 	  $("#run").on "click", (event) =>
@@ -44,14 +44,18 @@ class PathAnimation
 
 	setup: (paper) ->
 		@mainPath = paper.path(this.pathOne(@offset)).attr(fill:@fillColor)
+		
 		@mainPath.node.onclick = =>
 			this.animate()
 			this.mainPath.toFront()
 
 	animate: ->
-		thePath = (if (+(@pathSwitch = not @pathSwitch)) then this.pathOne(@offset) else this.pathTwo(@offset))
+		if (+(@pathSwitch = not @pathSwitch)) 
+			thePath = this.pathOne(@offset)
+		else
+			thePath = this.pathTwo(@offset)
 
-		@mainPath.animate path:thePath, fill:@fillColor, 800, "<>"
+		@mainPath.animate path:thePath, fill:@fillColor, 400, "<>"
 
 	pathOne: (offset) ->
 	  result = Amoeba.oneText.val()

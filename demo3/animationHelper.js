@@ -9,12 +9,12 @@
   Amoeba.Animations = (function() {
 
     function Animations() {
-      this.animations = [new PathAnimation("#44f", 0)];
+      this.animations = [new PathAnimation("#44f", 0), new PathAnimation("#f31", 420)];
     }
 
     Animations.prototype.setupAnimations = function() {
       var paper;
-      paper = Raphael(0, 280, 650, 650);
+      paper = Raphael(0, 280, 850, 650);
       paper.rect(0, 0, 850, 650).attr({
         fill: "90-#aaf-#004",
         stroke: "#f99",
@@ -44,7 +44,7 @@
       });
       $("#rects").on("click", function(event) {
         Amoeba.oneText.val(makeRectanglePath(0, 0, 100, 500));
-        Amoeba.twoText.val(makeRectanglePath(0, 0, 200, 500));
+        Amoeba.twoText.val(makeRectanglePath(0, 0, 200, 300));
         return _this.doAnimate();
       });
       return $("#run").on("click", function(event) {
@@ -77,11 +77,15 @@
 
     PathAnimation.prototype.animate = function() {
       var thePath;
-      thePath = (+(this.pathSwitch = !this.pathSwitch) ? this.pathOne(this.offset) : this.pathTwo(this.offset));
+      if (+(this.pathSwitch = !this.pathSwitch)) {
+        thePath = this.pathOne(this.offset);
+      } else {
+        thePath = this.pathTwo(this.offset);
+      }
       return this.mainPath.animate({
         path: thePath,
         fill: this.fillColor
-      }, 800, "<>");
+      }, 400, "<>");
     };
 
     PathAnimation.prototype.pathOne = function(offset) {
