@@ -49,25 +49,25 @@
       });
       $("#example1").on("click", function(event) {
         var result;
-        result = "M190.5,370.5c11,0 20,9 20,20c0,11 -9,20 -20,20c-11,0 -20-9 -20-20c0-11 9-20 20-20z";
-        result = scalePath(result, 2);
-        result = normalizePath(result);
+        result = "M0,0c11,0 20,9 20,20c0,11 -9,20 -20,20c-11,0 -20-9 -20-20c0-11 9-20 20-20z";
         Amoeba.oneText.val(result);
-        result = "M290.5,370.5l20,20 -20,20 -20-20z";
-        result = scalePath(result, 2);
-        result = normalizePath(result);
+        result = "M0,0l20,20 -20,20 -20-20z";
         Amoeba.twoText.val(result);
         return _this.doAnimate();
       });
       $("#example2").on("click", function(event) {
         var result;
-        result = "M190.5,370.5c11,0 20,9 20,20c0,11 -9,20 -20,20c-11,0 -20-9 -20-20c0-11 9-20 20-20z";
-        result = scalePath(result, 2);
-        result = normalizePath(result);
+        result = makeCirclePath(0, 0, 20);
         Amoeba.oneText.val(result);
-        result = "M290.5,370.5l20,20 -20,20 -20-20z";
-        result = scalePath(result, 2);
-        result = normalizePath(result);
+        result = "M0,0l20,20 -20,20 -20-20z";
+        Amoeba.twoText.val(result);
+        return _this.doAnimate();
+      });
+      $("#example3").on("click", function(event) {
+        var result;
+        result = "M0,0 h-150 a150,150 0 1,0 150,-150 z";
+        Amoeba.oneText.val(result);
+        result = "M0,0l20,20 -20,20 -20-20z";
         Amoeba.twoText.val(result);
         return _this.doAnimate();
       });
