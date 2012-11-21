@@ -41,7 +41,7 @@ class Amoeba.Animations
       # result = normalizePath(result)
       Amoeba.oneText.val result
 
-      result = "M0,0l20,20 -20,20 -20-20z"
+      result = this._diamondPath(20)
       # result = scalePath(result, 2)
       # result = normalizePath(result)
       Amoeba.twoText.val result
@@ -54,7 +54,7 @@ class Amoeba.Animations
       # result = normalizePath(result)
       Amoeba.oneText.val result
 
-      result = "M0,0l20,20 -20,20 -20-20z"
+      result = this._diamondPath(20)
       # result = scalePath(result, 2)
       # result = normalizePath(result)
       Amoeba.twoText.val result
@@ -62,12 +62,12 @@ class Amoeba.Animations
       this.doAnimate()
 
     $("#example3").on "click", (event) =>
-      result = "M0,0 h-150 a150,150 0 1,0 150,-150 z"
+      result = "M0,0 h-150 a150,150 0 1,0 150,-150z"
       # result = scalePath(result, 2)
       # result = normalizePath(result)
       Amoeba.oneText.val result
 
-      result = "M0,0l20,20 -20,20 -20-20z"
+      result = this._diamondPath(200)
       # result = scalePath(result, 2)
       # result = normalizePath(result)
       Amoeba.twoText.val result
@@ -76,6 +76,12 @@ class Amoeba.Animations
 
     $("#run").on "click", (event) =>
       this.doAnimate()
+
+  # how make private coffeescript methods?
+  _diamondPath: (width=20) =>
+    result = "M0,0l#{width},#{width} -#{width},#{width} -#{width}-#{width}z"
+
+    return result
 
 class PathAnimation
   constructor: (@fillColor, @offset) ->
