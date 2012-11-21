@@ -99,7 +99,7 @@
 
     Animations.prototype._createAnimations = function() {
       var num, _i, _len, _ref1;
-      if ((this.animations != null)) {
+      if (this.animations != null) {
         _ref1 = this.animations;
         for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
           num = _ref1[_i];

@@ -84,9 +84,9 @@ class Amoeba.Animations
     return result
 
   _createAnimations: =>
-    if (@animations?)
+    if @animations?
       num.remove() for num in @animations
-      
+
     @animations = [new PathAnimation("#44f", 0, @paper), new PathAnimation("#f31", 420, @paper)]
 
 class PathAnimation
