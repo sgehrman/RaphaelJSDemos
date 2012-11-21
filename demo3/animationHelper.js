@@ -10,6 +10,8 @@
   Amoeba.Animations = (function() {
 
     function Animations() {
+      this._updateStatus = __bind(this._updateStatus, this);
+
       this._createAnimations = __bind(this._createAnimations, this);
 
       this._diamondPath = __bind(this._diamondPath, this);
@@ -17,7 +19,7 @@
     }
 
     Animations.prototype.setupAnimations = function() {
-      this.paper = Raphael(0, 280, 850, 650);
+      this.paper = Raphael(0, 380, 850, 650);
       this.paper.rect(0, 0, 850, 650).attr({
         fill: "90-#aaf-#004",
         stroke: "#f99",
@@ -36,17 +38,20 @@
       var _this = this;
       Amoeba.oneText = $("#one");
       Amoeba.twoText = $("#two");
+      Amoeba.statusText = $("#status");
       Amoeba.oneText.val(gearPath);
       Amoeba.twoText.val(circleGearPath);
       $("#gears").on("click", function(event) {
         Amoeba.oneText.val(gearPath);
         Amoeba.twoText.val(circleGearPath);
-        return _this.doAnimate();
+        _this.doAnimate();
+        return _this._updateStatus("Showing gears");
       });
       $("#rects").on("click", function(event) {
         Amoeba.oneText.val(makeRectanglePath(0, 0, 100, 500));
         Amoeba.twoText.val(makeRectanglePath(0, 0, 200, 300));
-        return _this.doAnimate();
+        _this.doAnimate();
+        return _this._updateStatus("Showing rects");
       });
       $("#example1").on("click", function(event) {
         var result;
@@ -54,6 +59,7 @@
         Amoeba.oneText.val(result);
         result = _this._diamondPath(20);
         Amoeba.twoText.val(result);
+        _this._updateStatus("Showing example1");
         return _this.doAnimate();
       });
       $("#example2").on("click", function(event) {
@@ -62,6 +68,7 @@
         Amoeba.oneText.val(result);
         result = _this._diamondPath(20);
         Amoeba.twoText.val(result);
+        _this._updateStatus("Showing example2");
         return _this.doAnimate();
       });
       $("#example3").on("click", function(event) {
@@ -70,6 +77,7 @@
         Amoeba.oneText.val(result);
         result = _this._diamondPath(200);
         Amoeba.twoText.val(result);
+        _this._updateStatus("Showing example3");
         return _this.doAnimate();
       });
       $("#revDiamond").on("change", function(event) {
@@ -107,6 +115,10 @@
         }
       }
       return this.animations = [new PathAnimation("#44f", 0, this.paper), new PathAnimation("#f31", 420, this.paper)];
+    };
+
+    Animations.prototype._updateStatus = function(inStatus) {
+      return Amoeba.statusText.text(inStatus);
     };
 
     return Animations;

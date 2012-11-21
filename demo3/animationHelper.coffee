@@ -5,7 +5,7 @@ class Amoeba.Animations
   constructor: ->
 
   setupAnimations: ->
-    @paper = Raphael(0, 280, 850, 650)
+    @paper = Raphael(0, 380, 850, 650)
     @paper.rect(0, 0, 850, 650).attr
       fill: "90-#aaf-#004"
       stroke: "#f99"
@@ -20,6 +20,7 @@ class Amoeba.Animations
   setupPathFields: ->
     Amoeba.oneText = $("#one")
     Amoeba.twoText = $("#two")
+    Amoeba.statusText = $("#status")
     Amoeba.oneText.val gearPath
     Amoeba.twoText.val circleGearPath
 
@@ -27,11 +28,13 @@ class Amoeba.Animations
       Amoeba.oneText.val gearPath
       Amoeba.twoText.val circleGearPath
       this.doAnimate()
+      this._updateStatus("Showing gears")
 
     $("#rects").on "click", (event) =>
       Amoeba.oneText.val makeRectanglePath(0, 0, 100, 500)
       Amoeba.twoText.val makeRectanglePath(0, 0, 200, 300)
       this.doAnimate()
+      this._updateStatus("Showing rects")
 
     $("#example1").on "click", (event) =>
       result = "M0,0c11,0 20,9 20,20c0,11 -9,20 -20,20c-11,0 -20-9 -20-20c0-11 9-20 20-20z"
@@ -39,6 +42,8 @@ class Amoeba.Animations
 
       result = this._diamondPath(20)
       Amoeba.twoText.val result
+
+      this._updateStatus("Showing example1")
 
       this.doAnimate()
 
@@ -49,6 +54,8 @@ class Amoeba.Animations
       result = this._diamondPath(20)
       Amoeba.twoText.val result
 
+      this._updateStatus("Showing example2")
+
       this.doAnimate()
 
     $("#example3").on "click", (event) =>
@@ -57,6 +64,8 @@ class Amoeba.Animations
 
       result = this._diamondPath(200)
       Amoeba.twoText.val result
+
+      this._updateStatus("Showing example3")
 
       this.doAnimate()
 
@@ -88,6 +97,9 @@ class Amoeba.Animations
       num.remove() for num in @animations
 
     @animations = [new PathAnimation("#44f", 0, @paper), new PathAnimation("#f31", 420, @paper)]
+  
+  _updateStatus: (inStatus) =>
+    Amoeba.statusText.text inStatus
 
 class PathAnimation
   constructor: (@fillColor, @offset, paper) ->

@@ -4,6 +4,9 @@
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
         <title>Demo 3</title>
         <style type="text/css" media="screen">
+        body {
+            background-color: gray;
+        }
             h2 {
                 text-align: center;
             }
@@ -11,13 +14,27 @@
                 width: 80%;
                 height: 4em;
             }
+
+            .clit {
+                padding: 10px;
+
+                /*text-transform: uppercase;*/
+                text-shadow: 45px;
+                font-size: 2em;
+
+                width: 80%;
+                text-align: center;
+            }
+
         </style>
         <script src="../raphael.js" type="text/javascript" charset="utf-8"></script>
         <script src="../raphaelExtras.js" type="text/javascript" charset="utf-8"></script>
         <script src="animationHelper.js" type="text/javascript" charset="utf-8"></script>
         <script src="cog.js"></script>
         <script src="../vendor/jquery-1.8.2.js" type="text/javascript" charset="utf-8"></script>
-        <!-- <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script> -->
+        <!-- this was hanging when the net was down, isn't this suppose to get cached?
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script> 
+        -->
 
         <script type="text/javascript" charset="utf-8">
             window.onload = function() {
@@ -45,7 +62,8 @@
         <br/><br/>
         <input id="revDiamond" type=checkbox>Reverse Diamond</input>
 
-        </br></br>
-        <button id="run">run</button>        
+        <div id="status" class="clit"></div>
+
+        <button id="run">Play Animation</button>        
     </body>
 </html>
