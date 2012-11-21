@@ -130,7 +130,12 @@
     }
 
     PathAnimation.prototype.remove = function() {
-      return this.mainPath.remove();
+      var _this = this;
+      return this.mainPath.animate({
+        "fill-opacity": 0
+      }, 400, "<>", function() {
+        return _this.mainPath.remove();
+      });
     };
 
     PathAnimation.prototype.animate = function() {

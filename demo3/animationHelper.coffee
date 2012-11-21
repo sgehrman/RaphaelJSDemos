@@ -99,7 +99,9 @@ class PathAnimation
       this.mainPath.toFront()
 
   remove: ->
-    @mainPath.remove();
+    # animate it out so it looks cool
+    @mainPath.animate "fill-opacity":0, 400, "<>", =>
+      @mainPath.remove()
 
   animate: ->
     if (+(@pathSwitch = not @pathSwitch)) 
