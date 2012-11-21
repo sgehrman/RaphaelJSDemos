@@ -35,7 +35,20 @@ class Amoeba.Animations
       Amoeba.twoText.val makeRectanglePath(0, 0, 200, 300)
       this.doAnimate()
 
-    $("#example").on "click", (event) =>
+    $("#example1").on "click", (event) =>
+      result = "M190.5,370.5c11,0 20,9 20,20c0,11 -9,20 -20,20c-11,0 -20-9 -20-20c0-11 9-20 20-20z"
+      result = scalePath(result, 2)
+      result = normalizePath(result)
+      Amoeba.oneText.val result
+
+      result = "M290.5,370.5l20,20 -20,20 -20-20z"
+      result = scalePath(result, 2)
+      result = normalizePath(result)
+      Amoeba.twoText.val result
+
+      this.doAnimate()
+
+    $("#example2").on "click", (event) =>
       result = "M190.5,370.5c11,0 20,9 20,20c0,11 -9,20 -20,20c-11,0 -20-9 -20-20c0-11 9-20 20-20z"
       result = scalePath(result, 2)
       result = normalizePath(result)
