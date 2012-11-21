@@ -3,17 +3,15 @@ window.Amoeba ?= {}
 
 class Amoeba.Animations
   constructor: ->
-    @animations = [new PathAnimation("#44f", 0), new PathAnimation("#f31", 420)]
 
   setupAnimations: ->
-    paper = Raphael(0, 280, 850, 650)
-    paper.rect(0, 0, 850, 650).attr
+    @paper = Raphael(0, 280, 850, 650)
+    @paper.rect(0, 0, 850, 650).attr
       fill: "90-#aaf-#004"
       stroke: "#f99"
       title: "background"
 
-    @animations.forEach (el) ->
-      el.setup paper
+    this._createAnimations()
 
   doAnimate: ->
     @animations.forEach (el) ->
@@ -37,40 +35,38 @@ class Amoeba.Animations
 
     $("#example1").on "click", (event) =>
       result = "M0,0c11,0 20,9 20,20c0,11 -9,20 -20,20c-11,0 -20-9 -20-20c0-11 9-20 20-20z"
-      # result = scalePath(result, 2)
-      # result = normalizePath(result)
       Amoeba.oneText.val result
 
       result = this._diamondPath(20)
-      # result = scalePath(result, 2)
-      # result = normalizePath(result)
       Amoeba.twoText.val result
 
       this.doAnimate()
 
     $("#example2").on "click", (event) =>
       result = makeCirclePath(0,0,20)
-      # result = scalePath(result, 2)
-      # result = normalizePath(result)
       Amoeba.oneText.val result
 
       result = this._diamondPath(20)
-      # result = scalePath(result, 2)
-      # result = normalizePath(result)
       Amoeba.twoText.val result
 
       this.doAnimate()
 
     $("#example3").on "click", (event) =>
       result = "M0,0 h-150 a150,150 0 1,0 150,-150z"
-      # result = scalePath(result, 2)
-      # result = normalizePath(result)
       Amoeba.oneText.val result
 
       result = this._diamondPath(200)
-      # result = scalePath(result, 2)
-      # result = normalizePath(result)
       Amoeba.twoText.val result
+
+      this.doAnimate()
+
+    $("#revDiamond").on "change", (event) =>
+      # recreate the diamond
+      result = this._diamondPath(200)
+      Amoeba.twoText.val result
+      
+      # recreate animations fresh
+      this._createAnimations()
 
       this.doAnimate()
 
@@ -81,18 +77,29 @@ class Amoeba.Animations
   _diamondPath: (width=20) =>
     result = "M0,0l#{width},#{width} -#{width},#{width} -#{width}-#{width}z"
 
+    if (jQuery('#revDiamond').is(':checked'))
+      result = "M0,0l-#{width},#{width} #{width},#{width} #{width}-#{width}z"
+      console.log("reversed")
+
     return result
 
-class PathAnimation
-  constructor: (@fillColor, @offset) ->
-    @pathSwitch = true
+  _createAnimations: =>
+    if (@animations?)
+      num.remove() for num in @animations
+      
+    @animations = [new PathAnimation("#44f", 0, @paper), new PathAnimation("#f31", 420, @paper)]
 
-  setup: (paper) ->
+class PathAnimation
+  constructor: (@fillColor, @offset, paper) ->
+    @pathSwitch = true
     @mainPath = paper.path(this.pathOne(@offset)).attr(fill:@fillColor)
     
     @mainPath.node.onclick = =>
       this.animate()
       this.mainPath.toFront()
+
+  remove: ->
+    @mainPath.remove();
 
   animate: ->
     if (+(@pathSwitch = not @pathSwitch)) 

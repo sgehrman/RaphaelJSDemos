@@ -10,21 +10,20 @@
   Amoeba.Animations = (function() {
 
     function Animations() {
+      this._createAnimations = __bind(this._createAnimations, this);
+
       this._diamondPath = __bind(this._diamondPath, this);
-      this.animations = [new PathAnimation("#44f", 0), new PathAnimation("#f31", 420)];
+
     }
 
     Animations.prototype.setupAnimations = function() {
-      var paper;
-      paper = Raphael(0, 280, 850, 650);
-      paper.rect(0, 0, 850, 650).attr({
+      this.paper = Raphael(0, 280, 850, 650);
+      this.paper.rect(0, 0, 850, 650).attr({
         fill: "90-#aaf-#004",
         stroke: "#f99",
         title: "background"
       });
-      return this.animations.forEach(function(el) {
-        return el.setup(paper);
-      });
+      return this._createAnimations();
     };
 
     Animations.prototype.doAnimate = function() {
@@ -73,6 +72,13 @@
         Amoeba.twoText.val(result);
         return _this.doAnimate();
       });
+      $("#revDiamond").on("change", function(event) {
+        var result;
+        result = _this._diamondPath(200);
+        Amoeba.twoText.val(result);
+        _this._createAnimations();
+        return _this.doAnimate();
+      });
       return $("#run").on("click", function(event) {
         return _this.doAnimate();
       });
@@ -84,7 +90,23 @@
         width = 20;
       }
       result = "M0,0l" + width + "," + width + " -" + width + "," + width + " -" + width + "-" + width + "z";
+      if (jQuery('#revDiamond').is(':checked')) {
+        result = "M0,0l-" + width + "," + width + " " + width + "," + width + " " + width + "-" + width + "z";
+        console.log("reversed");
+      }
       return result;
+    };
+
+    Animations.prototype._createAnimations = function() {
+      var num, _i, _len, _ref1;
+      if ((this.animations != null)) {
+        _ref1 = this.animations;
+        for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+          num = _ref1[_i];
+          num.remove();
+        }
+      }
+      return this.animations = [new PathAnimation("#44f", 0, this.paper), new PathAnimation("#f31", 420, this.paper)];
     };
 
     return Animations;
@@ -93,21 +115,22 @@
 
   PathAnimation = (function() {
 
-    function PathAnimation(fillColor, offset) {
+    function PathAnimation(fillColor, offset, paper) {
+      var _this = this;
       this.fillColor = fillColor;
       this.offset = offset;
       this.pathSwitch = true;
-    }
-
-    PathAnimation.prototype.setup = function(paper) {
-      var _this = this;
       this.mainPath = paper.path(this.pathOne(this.offset)).attr({
         fill: this.fillColor
       });
-      return this.mainPath.node.onclick = function() {
+      this.mainPath.node.onclick = function() {
         _this.animate();
         return _this.mainPath.toFront();
       };
+    }
+
+    PathAnimation.prototype.remove = function() {
+      return this.mainPath.remove();
     };
 
     PathAnimation.prototype.animate = function() {
