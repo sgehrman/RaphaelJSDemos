@@ -1,3 +1,4 @@
+# coffee -wc ./animationHelper.coffee 
 
 window.Amoeba ?= {}
 
