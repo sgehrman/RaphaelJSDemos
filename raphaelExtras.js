@@ -144,3 +144,36 @@ function rotatePath(path, degrees) {
 
   return path;
 }
+
+
+function crap(r)
+{
+  var angle = 0;
+  while (angle < 360) {
+      var color = Raphael.getColor();
+      (function (t, c) {
+          var theCircle = r.circle(320, 450, 20).attr({stroke: c, fill: c, transform: t, "fill-opacity": 0.4});
+
+          theCircle.click(function () {
+              s.animate({transform: t, stroke: c}, 2000, "bounce");
+          })
+          theCircle.mouseover(function () {
+              this.animate({"fill-opacity": 0.75}, 500);
+          })
+          theCircle.mouseout(function () {
+              this.animate({"fill-opacity": 0.4}, 500);
+          });
+
+      })("r" + angle + " 320 240", color);
+      
+      angle += 30;
+  }
+  Raphael.getColor.reset();
+  var s = r.set();
+  s.push(r.path("M320,240c-50,100,50,110,0,190").attr({fill: "none", "stroke-width": 2}));
+  s.push(r.circle(320, 450, 20).attr({fill: "none", "stroke-width": 2}));
+  s.push(r.circle(320, 240, 5).attr({fill: "none", "stroke-width": 10}));
+  s.attr({stroke: Raphael.getColor()});
+}
+
+

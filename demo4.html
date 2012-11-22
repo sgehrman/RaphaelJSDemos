@@ -3,20 +3,25 @@
     <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Raphaël · Ball</title>
+
+    <style type="text/css" media="screen">
+        div {
+            background-color: gray;
+
+            width: 600px;
+            height: 600px;
+        }
+
+    </style>
+
     <script src="raphael.js" type="text/javascript" charset="utf-8"></script>
-    <script src="font.js" type="text/javascript" charset="utf-8"></script>
+    <script src="raphaelExtras.js" type="text/javascript" charset="utf-8"></script>
     <script type="text/javascript" charset="utf-8">
-        Raphael.fn.ball = function (x, y, r, hue) {
-            hue = hue || 0;
-            return this.set(
-                this.ellipse(x, y + r - r / 5, r, r / 2).attr({fill: "rhsb(" + hue + ", 1, .25)-hsb(" + hue + ", 1, .25)", stroke: "none", opacity: 0}),
-                this.ellipse(x, y, r, r).attr({fill: "r(.5,.9)hsb(" + hue + ", 1, .75)-hsb(" + hue + ", .5, .25)", stroke: "none"}),
-                this.ellipse(x, y, r - r / 5, r - r / 20).attr({stroke: "none", fill: "r(.5,.1)#ccc-#ccc", opacity: 0})
-            );
-        };
+        
         window.onload = function () {
-            var R = Raphael("holder"), x = 310, y = 180, r = 150;
-         //   R.ball(x, y, r, Math.random());
+            var paper = Raphael("holder");
+
+            crap(paper);
             
         };
     </script>

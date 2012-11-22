@@ -12,7 +12,7 @@ class Amoeba.Animations
       title: "background"
 
     this._createAnimations()
-
+    
   doAnimate: ->
     @animations.forEach (el) ->
       el.animate()
