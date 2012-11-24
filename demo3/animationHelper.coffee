@@ -82,10 +82,10 @@ class Amoeba.Animations
       this.doAnimate()
 
     $("#example5").on "click", (event) =>
-      result = this._gerePath();
+      result = this._shieldPath();
       Amoeba.oneText.val result
 
-      result = this._gerePath(30, true);
+      result = this._shieldPath(30, true);
       Amoeba.twoText.val result
 
       this._updateStatus("Showing example3")
@@ -125,7 +125,7 @@ class Amoeba.Animations
   _updateStatus: (inStatus) =>
     Amoeba.statusText.text inStatus
 
-  _gerePath: (degees=90, flat=false) =>
+  _shieldPath: (degees=90, flat=false) =>
     dim = 100
     radius = dim/2
     centerX = dim/2

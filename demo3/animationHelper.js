@@ -12,7 +12,7 @@
     function Animations() {
       this._sawPath = __bind(this._sawPath, this);
 
-      this._gerePath = __bind(this._gerePath, this);
+      this._shieldPath = __bind(this._shieldPath, this);
 
       this._updateStatus = __bind(this._updateStatus, this);
 
@@ -95,9 +95,9 @@
       });
       $("#example5").on("click", function(event) {
         var result;
-        result = _this._gerePath();
+        result = _this._shieldPath();
         Amoeba.oneText.val(result);
-        result = _this._gerePath(30, true);
+        result = _this._shieldPath(30, true);
         Amoeba.twoText.val(result);
         _this._updateStatus("Showing example3");
         return _this.doAnimate();
@@ -143,7 +143,7 @@
       return Amoeba.statusText.text(inStatus);
     };
 
-    Animations.prototype._gerePath = function(degees, flat) {
+    Animations.prototype._shieldPath = function(degees, flat) {
       var angle, centerX, centerY, dim, radius, result, x1, y1;
       if (degees == null) {
         degees = 90;
