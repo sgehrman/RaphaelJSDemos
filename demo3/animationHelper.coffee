@@ -71,10 +71,10 @@ class Amoeba.Animations
       this.doAnimate()
 
     $("#example4").on "click", (event) =>
-      result = this._sawPath();
+      result = this._kogPath();
       Amoeba.oneText.val result
 
-      result = this._sawPath(true);
+      result = this._kogPath(0);
       Amoeba.twoText.val result
 
       this._updateStatus("Showing example3")
@@ -148,38 +148,60 @@ class Amoeba.Animations
 
     return result
 
-  _sawPath: (largeTeeth=false) =>
-    dim = 100
-    inset = 10
-    w = dim
-    h = dim
-    cw = dim/4
-    ch = dim/4
-    medd = 22
 
-    teeth = cw
-    if largeTeeth
-      teeth = dim
-    result = "M0,0"
+
+
+
+
+
+
+
+
+  _kogPath: (toothHeight=10) =>
+    dim = 500
+    inset = 10
+    innerDim = dim - (2*inset)
+    radius = innerDim/2
+    centerX = dim/2
+    centerY = dim/2
 
     angle = 0;
-    i=0
 
     while (angle <= 360)
-      cogPath = "l#{teeth},0"
+      x1 = centerX + (Math.cos(toRadians(angle)) * radius)
+      y1 = centerY + (Math.sin(toRadians(angle)) * radius)
 
-      if (angle > 0)
-        cogPath = Raphael.transformPath(cogPath, "r" + -angle + " 50, 50")
+      if (angle is 0)
+        result = "M#{x1},#{y1}"
+      else
 
-      result += cogPath
-      console.log(i++ + " #{angle}")
-      angle += 15
-    
+        cogX = centerX + (Math.cos(toRadians(270)) * dim/2)
+        cogY = centerY + (Math.sin(toRadians(270)) * dim/2)
+
+        toothPath = "l10,0, 0,-10, 10,0, 0,10, 10, 0"
+        toothPath = Raphael.transformPath(toothPath, "T#{cogX}, #{cogY}");
+
+        toothPath = Raphael.transformPath(toothPath, "r#{angle} #{centerX}, #{centerY}");
+
+        console.dir(toothPath)
+
+        result += toothPath + "L#{x1},#{y1}"
+       
+      angle += 90
+
     result += "z"
 
-    console.log(result)
+    return result
 
-    return result;
+
+
+
+
+
+
+
+
+
 
 class PathAnimation
   constructor: (@fillColor, @offset, paper) ->

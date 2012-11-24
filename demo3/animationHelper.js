@@ -10,7 +10,7 @@
   Amoeba.Animations = (function() {
 
     function Animations() {
-      this._sawPath = __bind(this._sawPath, this);
+      this._kogPath = __bind(this._kogPath, this);
 
       this._shieldPath = __bind(this._shieldPath, this);
 
@@ -86,9 +86,9 @@
       });
       $("#example4").on("click", function(event) {
         var result;
-        result = _this._sawPath();
+        result = _this._kogPath();
         Amoeba.oneText.val(result);
-        result = _this._sawPath(true);
+        result = _this._kogPath(0);
         Amoeba.twoText.val(result);
         _this._updateStatus("Showing example3");
         return _this.doAnimate();
@@ -170,36 +170,35 @@
       return result;
     };
 
-    Animations.prototype._sawPath = function(largeTeeth) {
-      var angle, ch, cogPath, cw, dim, h, i, inset, medd, result, teeth, w;
-      if (largeTeeth == null) {
-        largeTeeth = false;
+    Animations.prototype._kogPath = function(toothHeight) {
+      var angle, centerX, centerY, cogX, cogY, dim, innerDim, inset, radius, result, toothPath, x1, y1;
+      if (toothHeight == null) {
+        toothHeight = 10;
       }
-      dim = 100;
+      dim = 500;
       inset = 10;
-      w = dim;
-      h = dim;
-      cw = dim / 4;
-      ch = dim / 4;
-      medd = 22;
-      teeth = cw;
-      if (largeTeeth) {
-        teeth = dim;
-      }
-      result = "M0,0";
+      innerDim = dim - (2 * inset);
+      radius = innerDim / 2;
+      centerX = dim / 2;
+      centerY = dim / 2;
       angle = 0;
-      i = 0;
       while (angle <= 360) {
-        cogPath = "l" + teeth + ",0";
-        if (angle > 0) {
-          cogPath = Raphael.transformPath(cogPath, "r" + -angle + " 50, 50");
+        x1 = centerX + (Math.cos(toRadians(angle)) * radius);
+        y1 = centerY + (Math.sin(toRadians(angle)) * radius);
+        if (angle === 0) {
+          result = "M" + x1 + "," + y1;
+        } else {
+          cogX = centerX + (Math.cos(toRadians(270)) * dim / 2);
+          cogY = centerY + (Math.sin(toRadians(270)) * dim / 2);
+          toothPath = "l10,0, 0,-10, 10,0, 0,10, 10, 0";
+          toothPath = Raphael.transformPath(toothPath, "T" + cogX + ", " + cogY);
+          toothPath = Raphael.transformPath(toothPath, "r" + angle + " " + centerX + ", " + centerY);
+          console.dir(toothPath);
+          result += toothPath + ("L" + x1 + "," + y1);
         }
-        result += cogPath;
-        console.log(i++ + (" " + angle));
-        angle += 15;
+        angle += 90;
       }
       result += "z";
-      console.log(result);
       return result;
     };
 
