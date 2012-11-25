@@ -170,34 +170,36 @@
       return result;
     };
 
-    Animations.prototype._kogPath = function(toothHeight) {
-      var angle, centerX, centerY, cogPaths, dim, innerDim, inset, radius, result, toothPath, x1, xx1, y1, yy1;
+    Animations.prototype._kogPath = function(toothHeight, spaceWidth) {
+      var angle, centerX, centerY, degreeIncrement, dim, innerDim, inset, radius, result, toothPath, x1, xx1, y1, yy1;
       if (toothHeight == null) {
         toothHeight = 50;
       }
+      if (spaceWidth == null) {
+        spaceWidth = 10;
+      }
       dim = 500;
-      inset = 10;
+      inset = toothHeight;
       innerDim = dim - (2 * inset);
       radius = innerDim / 2;
       centerX = dim / 2;
       centerY = dim / 2;
+      degreeIncrement = 25;
       angle = 0;
-      cogPaths = "";
       while (angle <= 360) {
         x1 = centerX + (Math.cos(toRadians(angle)) * radius);
         y1 = centerY + (Math.sin(toRadians(angle)) * radius);
         if (angle === 0) {
           result = "M" + x1 + "," + y1;
         } else {
-          xx1 = centerX + (Math.cos(toRadians(angle - 15)) * radius);
-          yy1 = centerY + (Math.sin(toRadians(angle - 15)) * radius);
-          toothPath = "l" + toothHeight + ",0, 0,-" + toothHeight + ", " + toothHeight + ",0, 0," + toothHeight + ", " + toothHeight + ", 0";
+          xx1 = centerX + (Math.cos(toRadians(angle - degreeIncrement)) * radius);
+          yy1 = centerY + (Math.sin(toRadians(angle - degreeIncrement)) * radius);
+          toothPath = "l" + spaceWidth + ",0, 0,-" + toothHeight + ", " + toothHeight + ",0, 0," + toothHeight + ", " + spaceWidth + ", 0";
           toothPath = Raphael.transformPath(toothPath, "T" + xx1 + "," + yy1);
-          toothPath = Raphael.transformPath(toothPath, "r" + (angle + 15) + " " + xx1 + ", " + yy1);
-          cogPaths += toothPath;
+          toothPath = Raphael.transformPath(toothPath, "r" + (angle + degreeIncrement) + " " + xx1 + ", " + yy1);
           result += toothPath + ("L" + x1 + "," + y1);
         }
-        angle += 15;
+        angle += degreeIncrement;
       }
       result += "z";
       return result;
@@ -214,6 +216,7 @@
       this.fillColor = fillColor;
       this.offset = offset;
       this.pathSwitch = true;
+      this.stopped = false;
       this.mainPath = paper.path(this.pathOne(this.offset)).attr({
         fill: this.fillColor
       });
@@ -225,6 +228,7 @@
 
     PathAnimation.prototype.remove = function() {
       var _this = this;
+      this.stopped = true;
       return this.mainPath.animate({
         "fill-opacity": 0
       }, 400, "<>", function() {
@@ -244,7 +248,11 @@
         path: thePath,
         fill: this.fillColor
       }, 800, "elastic", function() {
-        return _this.animate();
+        if (!_this.stopped) {
+          if (jQuery('#repeatCheck').is(':checked')) {
+            return _this.animate();
+          }
+        }
       });
     };
 

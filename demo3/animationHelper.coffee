@@ -157,16 +157,16 @@ class Amoeba.Animations
 
 
 
-  _kogPath: (toothHeight=50) =>
+  _kogPath: (toothHeight=50, spaceWidth=10) =>
     dim = 500
-    inset = 10
+    inset = toothHeight
     innerDim = dim - (2*inset)
     radius = innerDim/2
     centerX = dim/2
     centerY = dim/2
+    degreeIncrement = 25
 
     angle = 0;
-    cogPaths = ""
 
     while (angle <= 360)
       x1 = centerX + (Math.cos(toRadians(angle)) * radius)
@@ -175,33 +175,22 @@ class Amoeba.Animations
       if (angle is 0)
         result = "M#{x1},#{y1}"
       else
-        xx1 = centerX + (Math.cos(toRadians(angle-15)) * radius)
-        yy1 = centerY + (Math.sin(toRadians(angle-15)) * radius)
+        xx1 = centerX + (Math.cos(toRadians(angle-degreeIncrement)) * radius)
+        yy1 = centerY + (Math.sin(toRadians(angle-degreeIncrement)) * radius)
 
 
-        toothPath = "l#{toothHeight},0, 0,-#{toothHeight}, #{toothHeight},0, 0,#{toothHeight}, #{toothHeight}, 0"
+        toothPath = "l#{spaceWidth},0, 0,-#{toothHeight}, #{toothHeight},0, 0,#{toothHeight}, #{spaceWidth}, 0"
         toothPath = Raphael.transformPath(toothPath, "T#{xx1},#{yy1}");
 
-        toothPath = Raphael.transformPath(toothPath, "r#{angle+15} #{xx1}, #{yy1}")
-
-        cogPaths += toothPath;
+        toothPath = Raphael.transformPath(toothPath, "r#{angle+degreeIncrement} #{xx1}, #{yy1}")
 
         result += toothPath + "L#{x1},#{y1}"
        
-      angle += 15
+      angle += degreeIncrement
 
     result += "z"
 
-    # result += cogPaths
-
     return result
-
-
-
-
-
-
-
 
 
 
@@ -209,6 +198,7 @@ class Amoeba.Animations
 class PathAnimation
   constructor: (@fillColor, @offset, paper) ->
     @pathSwitch = true
+    @stopped = false;
     @mainPath = paper.path(this.pathOne(@offset)).attr(fill:@fillColor)
     
     @mainPath.node.onclick = =>
@@ -216,6 +206,8 @@ class PathAnimation
       this.mainPath.toFront()
 
   remove: ->
+    @stopped = true
+
     # animate it out so it looks cool
     @mainPath.animate "fill-opacity":0, 400, "<>", =>
       @mainPath.remove()
@@ -227,7 +219,9 @@ class PathAnimation
       thePath = this.pathTwo(@offset)
 
     @mainPath.animate path:thePath, fill:@fillColor, 800, "elastic", =>
-      this.animate()
+      if (not @stopped)
+        if (jQuery('#repeatCheck').is(':checked'))
+          this.animate()
 
   pathOne: (offset) ->
     result = Amoeba.oneText.val()
