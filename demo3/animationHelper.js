@@ -95,9 +95,9 @@
       });
       $("#example5").on("click", function(event) {
         var result;
-        result = _this._shieldPath();
+        result = _this._shieldPath(45);
         Amoeba.oneText.val(result);
-        result = _this._shieldPath(30, true);
+        result = _this._shieldPath(45, true);
         Amoeba.twoText.val(result);
         _this._updateStatus("Showing example3");
         return _this.doAnimate();
@@ -143,13 +143,13 @@
       return Amoeba.statusText.text(inStatus);
     };
 
-    Animations.prototype._shieldPath = function(degees, flat) {
+    Animations.prototype._shieldPath = function(increment, useArcs) {
       var angle, centerX, centerY, dim, radius, result, x1, y1;
-      if (degees == null) {
-        degees = 90;
+      if (increment == null) {
+        increment = 45;
       }
-      if (flat == null) {
-        flat = false;
+      if (useArcs == null) {
+        useArcs = false;
       }
       dim = 100;
       radius = dim / 2;
@@ -162,18 +162,22 @@
         if (angle === 0) {
           result = "M" + x1 + "," + y1;
         } else {
-          result += "L" + x1 + "," + y1;
+          if (useArcs) {
+            result += "A" + radius + "," + radius + ",0,0,1," + x1 + "," + y1;
+          } else {
+            result += "L" + x1 + "," + y1;
+          }
         }
-        angle += degees;
+        angle += increment;
       }
       result += "z";
       return result;
     };
 
     Animations.prototype._kogPath = function(toothHeight, spaceWidth) {
-      var angle, centerX, centerY, degreeIncrement, dim, innerDim, inset, radius, result, toothPath, x1, xx1, y1, yy1;
+      var angle, centerX, centerY, degreeIncrement, dim, innerDim, inset, prev_x1, prev_y1, radius, result, toothPath, x1, y1;
       if (toothHeight == null) {
-        toothHeight = 50;
+        toothHeight = 30;
       }
       if (spaceWidth == null) {
         spaceWidth = 10;
@@ -184,7 +188,7 @@
       radius = innerDim / 2;
       centerX = dim / 2;
       centerY = dim / 2;
-      degreeIncrement = 25;
+      degreeIncrement = 45;
       angle = 0;
       while (angle <= 360) {
         x1 = centerX + (Math.cos(toRadians(angle)) * radius);
@@ -192,13 +196,13 @@
         if (angle === 0) {
           result = "M" + x1 + "," + y1;
         } else {
-          xx1 = centerX + (Math.cos(toRadians(angle - degreeIncrement)) * radius);
-          yy1 = centerY + (Math.sin(toRadians(angle - degreeIncrement)) * radius);
           toothPath = "l" + spaceWidth + ",0, 0,-" + toothHeight + ", " + toothHeight + ",0, 0," + toothHeight + ", " + spaceWidth + ", 0";
-          toothPath = Raphael.transformPath(toothPath, "T" + xx1 + "," + yy1);
-          toothPath = Raphael.transformPath(toothPath, "r" + (angle + degreeIncrement) + " " + xx1 + ", " + yy1);
+          toothPath = Raphael.transformPath(toothPath, "T" + prev_x1 + "," + prev_y1);
+          toothPath = Raphael.transformPath(toothPath, "r" + (angle + 56) + " " + prev_x1 + ", " + prev_y1);
           result += toothPath + ("L" + x1 + "," + y1);
         }
+        prev_x1 = x1;
+        prev_y1 = y1;
         angle += degreeIncrement;
       }
       result += "z";
