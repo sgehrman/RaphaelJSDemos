@@ -126,7 +126,7 @@ class Amoeba.Animations
     Amoeba.statusText.text inStatus
 
   _shieldPath: (increment=45, useArcs=false) =>
-    dim = 100
+    dim = 400
     radius = dim/2
     centerX = dim/2
     centerY = dim/2
@@ -143,7 +143,9 @@ class Amoeba.Animations
         if useArcs
           result += "A#{radius},#{radius},0,0,1,#{x1},#{y1}"
         else
-          result += "L#{x1},#{y1}"
+          result += "A#{radius/2},#{radius/2},0,0,0,#{x1},#{y1}"
+
+          # result += "L#{x1},#{y1}"
 
       angle += increment
 

@@ -151,7 +151,7 @@
       if (useArcs == null) {
         useArcs = false;
       }
-      dim = 100;
+      dim = 400;
       radius = dim / 2;
       centerX = dim / 2;
       centerY = dim / 2;
@@ -165,7 +165,7 @@
           if (useArcs) {
             result += "A" + radius + "," + radius + ",0,0,1," + x1 + "," + y1;
           } else {
-            result += "L" + x1 + "," + y1;
+            result += "A" + (radius / 2) + "," + (radius / 2) + ",0,0,0," + x1 + "," + y1;
           }
         }
         angle += increment;
