@@ -171,9 +171,9 @@
     };
 
     Animations.prototype._kogPath = function(toothHeight) {
-      var angle, centerX, centerY, cogX, cogY, dim, innerDim, inset, radius, result, toothPath, x1, y1;
+      var angle, centerX, centerY, cogPaths, dim, innerDim, inset, radius, result, toothPath, x1, xx1, y1, yy1;
       if (toothHeight == null) {
-        toothHeight = 10;
+        toothHeight = 50;
       }
       dim = 500;
       inset = 10;
@@ -182,21 +182,22 @@
       centerX = dim / 2;
       centerY = dim / 2;
       angle = 0;
+      cogPaths = "";
       while (angle <= 360) {
         x1 = centerX + (Math.cos(toRadians(angle)) * radius);
         y1 = centerY + (Math.sin(toRadians(angle)) * radius);
         if (angle === 0) {
           result = "M" + x1 + "," + y1;
         } else {
-          cogX = centerX + (Math.cos(toRadians(270)) * dim / 2);
-          cogY = centerY + (Math.sin(toRadians(270)) * dim / 2);
-          toothPath = "l10,0, 0,-10, 10,0, 0,10, 10, 0";
-          toothPath = Raphael.transformPath(toothPath, "T" + cogX + ", " + cogY);
-          toothPath = Raphael.transformPath(toothPath, "r" + angle + " " + centerX + ", " + centerY);
-          console.dir(toothPath);
+          xx1 = centerX + (Math.cos(toRadians(angle - 15)) * radius);
+          yy1 = centerY + (Math.sin(toRadians(angle - 15)) * radius);
+          toothPath = "l" + toothHeight + ",0, 0,-" + toothHeight + ", " + toothHeight + ",0, 0," + toothHeight + ", " + toothHeight + ", 0";
+          toothPath = Raphael.transformPath(toothPath, "T" + xx1 + "," + yy1);
+          toothPath = Raphael.transformPath(toothPath, "r" + (angle + 15) + " " + xx1 + ", " + yy1);
+          cogPaths += toothPath;
           result += toothPath + ("L" + x1 + "," + y1);
         }
-        angle += 90;
+        angle += 15;
       }
       result += "z";
       return result;
@@ -232,7 +233,8 @@
     };
 
     PathAnimation.prototype.animate = function() {
-      var thePath;
+      var thePath,
+        _this = this;
       if (+(this.pathSwitch = !this.pathSwitch)) {
         thePath = this.pathOne(this.offset);
       } else {
@@ -241,7 +243,9 @@
       return this.mainPath.animate({
         path: thePath,
         fill: this.fillColor
-      }, 400, "<>");
+      }, 800, "elastic", function() {
+        return _this.animate();
+      });
     };
 
     PathAnimation.prototype.pathOne = function(offset) {

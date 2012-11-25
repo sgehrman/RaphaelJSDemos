@@ -157,7 +157,7 @@ class Amoeba.Animations
 
 
 
-  _kogPath: (toothHeight=10) =>
+  _kogPath: (toothHeight=50) =>
     dim = 500
     inset = 10
     innerDim = dim - (2*inset)
@@ -166,6 +166,7 @@ class Amoeba.Animations
     centerY = dim/2
 
     angle = 0;
+    cogPaths = ""
 
     while (angle <= 360)
       x1 = centerX + (Math.cos(toRadians(angle)) * radius)
@@ -174,22 +175,24 @@ class Amoeba.Animations
       if (angle is 0)
         result = "M#{x1},#{y1}"
       else
+        xx1 = centerX + (Math.cos(toRadians(angle-15)) * radius)
+        yy1 = centerY + (Math.sin(toRadians(angle-15)) * radius)
 
-        cogX = centerX + (Math.cos(toRadians(270)) * dim/2)
-        cogY = centerY + (Math.sin(toRadians(270)) * dim/2)
 
-        toothPath = "l10,0, 0,-10, 10,0, 0,10, 10, 0"
-        toothPath = Raphael.transformPath(toothPath, "T#{cogX}, #{cogY}");
+        toothPath = "l#{toothHeight},0, 0,-#{toothHeight}, #{toothHeight},0, 0,#{toothHeight}, #{toothHeight}, 0"
+        toothPath = Raphael.transformPath(toothPath, "T#{xx1},#{yy1}");
 
-        toothPath = Raphael.transformPath(toothPath, "r#{angle} #{centerX}, #{centerY}");
+        toothPath = Raphael.transformPath(toothPath, "r#{angle+15} #{xx1}, #{yy1}")
 
-        console.dir(toothPath)
+        cogPaths += toothPath;
 
         result += toothPath + "L#{x1},#{y1}"
        
-      angle += 90
+      angle += 15
 
     result += "z"
+
+    # result += cogPaths
 
     return result
 
@@ -223,7 +226,8 @@ class PathAnimation
     else
       thePath = this.pathTwo(@offset)
 
-    @mainPath.animate path:thePath, fill:@fillColor, 400, "<>"
+    @mainPath.animate path:thePath, fill:@fillColor, 800, "elastic", =>
+      this.animate()
 
   pathOne: (offset) ->
     result = Amoeba.oneText.val()
