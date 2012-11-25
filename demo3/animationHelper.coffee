@@ -82,10 +82,10 @@ class Amoeba.Animations
       this.doAnimate()
 
     $("#example5").on "click", (event) =>
-      result = this._shieldPath(45);
+      result = this._shieldPath(360/10);
       Amoeba.oneText.val result
 
-      result = this._shieldPath(45, true);
+      result = this._shieldPath(360/10, true);
       Amoeba.twoText.val result
 
       this._updateStatus("Showing example3")
@@ -144,7 +144,6 @@ class Amoeba.Animations
           result += "A#{radius},#{radius},0,0,1,#{x1},#{y1}"
         else
           result += "A#{radius/2},#{radius/2},0,0,0,#{x1},#{y1}"
-
           # result += "L#{x1},#{y1}"
 
       angle += increment
@@ -155,34 +154,63 @@ class Amoeba.Animations
 
 
 
-  _kogPath: (toothHeight=30, spaceWidth=10) =>
-    dim = 500
-    inset = toothHeight
-    innerDim = dim - (2*inset)
-    radius = innerDim/2
-    centerX = dim/2
-    centerY = dim/2
-    degreeIncrement = 45
+        # toothPath = Raphael.transformPath(toothPath, "T#{prev_x1},#{prev_y1}");
+        # toothPath = Raphael.transformPath(toothPath, "r#{angle+56} #{prev_x1}, #{prev_y1}")
+
+
+
+  # innerX1,innerY1 will be the current position, so not used
+  _toothPath: (outerX1,outerY1, outerX2,outerY2, innerX1,innerY1, innerX2,innerY2) =>
+    result = ""
+
+    result = "L#{outerX1},#{outerY1}"
+    result += "L#{outerX2},#{outerY2}"
+    result += "L#{innerX2},#{innerY2}"
+
+    console.log(result)
+
+    return result
+
+  _kogPath: (toothHeight=30) =>
+    outerDim = 500
+    outerRadius = outerDim/2
+    innerDim = outerDim - (2*toothHeight)
+    innerRadius = innerDim/2
+    centerX = outerDim/2
+    centerY = outerDim/2
+    degreeIncrement = 15
 
     angle = 0;
 
     while (angle <= 360)
-      x1 = centerX + (Math.cos(toRadians(angle)) * radius)
-      y1 = centerY + (Math.sin(toRadians(angle)) * radius)
+
+      cosValue = Math.cos(toRadians(angle))
+      sinValue = Math.sin(toRadians(angle))
+
+      inner_x1 = centerX + (cosValue * innerRadius)
+      inner_y1 = centerY + (sinValue * innerRadius)
+      outer_x1 = centerX + (cosValue * outerRadius)
+      outer_y1 = centerY + (sinValue * outerRadius)
 
       if (angle is 0)
-        result = "M#{x1},#{y1}"
+        result = "M#{inner_x1},#{inner_y1}"
       else
-        toothPath = "l#{spaceWidth},0, 0,-#{toothHeight}, #{toothHeight},0, 0,#{toothHeight}, #{spaceWidth}, 0"
-        toothPath = Raphael.transformPath(toothPath, "T#{prev_x1},#{prev_y1}");
-
-        toothPath = Raphael.transformPath(toothPath, "r#{angle+56} #{prev_x1}, #{prev_y1}")
-
-        result += toothPath + "L#{x1},#{y1}"
+        result += this._toothPath(prev_outer_x1, prev_outer_y1, outer_x1, outer_y1, prev_inner_x1, prev_inner_y1, inner_x1, inner_y1)
        
-      prev_x1 = x1
-      prev_y1 = y1
+      prev_inner_x1 = inner_x1
+      prev_inner_y1 = inner_y1
+      prev_outer_x1 = outer_x1
+      prev_outer_y1 = outer_y1
+
       angle += degreeIncrement
+
+      # add spacer
+      result += "A#{radius},#{radius},0,0,1,#{x1},#{y1}"
+
+
+      angle += degreeIncrement
+
+
 
     result += "z"
 
