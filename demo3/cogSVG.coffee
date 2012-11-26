@@ -1,6 +1,7 @@
 
 window.Amoeba ?= {}
 
+# ------------------------------------------------
 class Amoeba.Cog
   constructor: (@size, @numSegments) ->
 
@@ -80,6 +81,7 @@ class Amoeba.Cog
 
     return result;
 
+# ------------------------------------------------
 class Point
   constructor: (@x, @y) ->
 
@@ -95,13 +97,15 @@ class Point
    
     return Math.sqrt( xs + ys );
 
+# ------------------------------------------------
 class PointPair
   constructor: (@left, @right) ->
 
   toString: ->
     return "(#{@left}, #{@right})"
 
-class CogSegment # isTooth, or is a spacer
+# ------------------------------------------------
+class CogSegment
   constructor: (@isTooth, @size, @toothHeight, @topLeft, @topRight, @bottomLeft, @bottomRight) ->
     @outerRadius = @size/2
     @innerRadius = (@size - (@toothHeight * 2)) / 2
