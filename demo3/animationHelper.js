@@ -320,14 +320,18 @@
     };
 
     CogSegment.prototype.path = function() {
-      var result;
+      var flag, result;
       result = "";
       if (this.isTooth) {
         result += "L" + this.topLeft.x + "," + this.topLeft.y;
         result += "A" + this.outerRadius + "," + this.outerRadius + ",0,0,1," + this.topRight.x + "," + this.topRight.y;
         result += "L" + this.bottomRight.x + "," + this.bottomRight.y;
       } else {
-        result += "A" + this.innerRadius + "," + this.innerRadius + ",0,0,1," + this.bottomRight.x + "," + this.bottomRight.y;
+        flag = 1;
+        if (this.toothHeight > 0) {
+          flag = 0;
+        }
+        result += "A" + this.outerRadius + "," + this.outerRadius + ",0,0," + flag + "," + this.bottomRight.x + "," + this.bottomRight.y;
       }
       return result;
     };

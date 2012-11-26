@@ -157,7 +157,6 @@ class Amoeba.Animations
 
 
 
-
   _toothHeight: (size, numSegments) =>
     outerPoints = this._pairsAroundCircle(size, 0, numSegments)
     return outerPoints[0].left.distance(outerPoints[0].right) * 0.55
@@ -235,6 +234,17 @@ class Amoeba.Animations
 
     return result
 
+
+
+
+
+
+
+
+
+
+
+
 # ///////////////////////////////////////////////////////////////////////
 # ///////////////////////////////////////////////////////////////////////
 
@@ -275,21 +285,13 @@ class CogSegment # isTooth, or is a spacer
       result += "A#{@outerRadius},#{@outerRadius},0,0,1,#{@topRight.x},#{@topRight.y}"
       result += "L#{@bottomRight.x},#{@bottomRight.y}"
     else
-      result += "A#{@innerRadius},#{@innerRadius},0,0,1,#{@bottomRight.x},#{@bottomRight.y}"
+      flag = 1
+      if @toothHeight > 0
+        flag = 0
+
+      result += "A#{@outerRadius},#{@outerRadius},0,0,#{flag},#{@bottomRight.x},#{@bottomRight.y}"
 
     return result;
-
-
-
-
-
-
-
-
-
-
-
-
 
 # ///////////////////////////////////////////////////////////////////////
 # ///////////////////////////////////////////////////////////////////////
@@ -341,13 +343,3 @@ class PathAnimation
     #  result = rotatePath(result, 180);
 
     result
-
-
-
-# ///////////////////////////////////////////////////////////////////////
-# ///////////////////////////////////////////////////////////////////////
-
-  # toothPath = Raphael.transformPath(toothPath, "T#{prev_x1},#{prev_y1}");
-  # toothPath = Raphael.transformPath(toothPath, "r#{angle+56} #{prev_x1}, #{prev_y1}")
-
-
