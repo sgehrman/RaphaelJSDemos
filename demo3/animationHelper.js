@@ -10,11 +10,13 @@
   Amoeba.Animations = (function() {
 
     function Animations() {
-      this._kogPath = __bind(this._kogPath, this);
+      this._cogPath = __bind(this._cogPath, this);
 
       this._createCogSegments = __bind(this._createCogSegments, this);
 
       this._pairsAroundCircle = __bind(this._pairsAroundCircle, this);
+
+      this._toothHeight = __bind(this._toothHeight, this);
 
       this._shieldPath = __bind(this._shieldPath, this);
 
@@ -90,9 +92,9 @@
       });
       $("#example4").on("click", function(event) {
         var result;
-        result = _this._kogPath();
+        result = _this._cogPath();
         Amoeba.oneText.val(result);
-        result = _this._kogPath(false);
+        result = _this._cogPath(false);
         Amoeba.twoText.val(result);
         _this._updateStatus("Showing example3");
         return _this.doAnimate();
@@ -178,6 +180,12 @@
       return result;
     };
 
+    Animations.prototype._toothHeight = function(size, numSegments) {
+      var outerPoints;
+      outerPoints = this._pairsAroundCircle(size, 0, numSegments);
+      return outerPoints[0].left.distance(outerPoints[0].right) * 0.55;
+    };
+
     Animations.prototype._pairsAroundCircle = function(size, inset, numSegments) {
       var angle, centerX, centerY, cosValue, degrees, i, nextPoint, points, prevPoint, radius, result, sinValue, x, y, _i, _j, _len;
       centerX = size / 2;
@@ -213,7 +221,7 @@
       result = [];
       toothHeight = 0;
       if (showTeeth) {
-        toothHeight = 24;
+        toothHeight = this._toothHeight(size, numSegments);
       }
       outerPoints = this._pairsAroundCircle(size, 0, numSegments);
       innerPoints = this._pairsAroundCircle(size, toothHeight, numSegments);
@@ -232,7 +240,7 @@
       return result;
     };
 
-    Animations.prototype._kogPath = function(showTeeth) {
+    Animations.prototype._cogPath = function(showTeeth) {
       var result, segment, segments, _i, _len;
       if (showTeeth == null) {
         showTeeth = true;

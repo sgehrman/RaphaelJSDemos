@@ -71,10 +71,10 @@ class Amoeba.Animations
       this.doAnimate()
 
     $("#example4").on "click", (event) =>
-      result = this._kogPath();
+      result = this._cogPath();
       Amoeba.oneText.val result
 
-      result = this._kogPath(false);
+      result = this._cogPath(false);
       Amoeba.twoText.val result
 
       this._updateStatus("Showing example3")
@@ -158,7 +158,9 @@ class Amoeba.Animations
 
 
 
-
+  _toothHeight: (size, numSegments) =>
+    outerPoints = this._pairsAroundCircle(size, 0, numSegments)
+    return outerPoints[0].left.distance(outerPoints[0].right) * 0.55
 
   _pairsAroundCircle: (size, inset, numSegments) =>
     centerX = size/2
@@ -175,7 +177,6 @@ class Amoeba.Animations
       if angle >= 360
         angle = 360 - angle
 
-      # inner points
       cosValue = Math.cos(toRadians(angle))
       sinValue = Math.sin(toRadians(angle))
 
@@ -197,10 +198,9 @@ class Amoeba.Animations
   _createCogSegments: (size, showTeeth, numSegments) =>
     result = []
 
-    # tooth height is relative to the space between two points
     toothHeight = 0
     if (showTeeth)
-      toothHeight = 24 # innerPoints[0].left.distance(innerPoints[0].right)
+      toothHeight = this._toothHeight(size, numSegments) 
 
     outerPoints = this._pairsAroundCircle(size, 0, numSegments)
     innerPoints = this._pairsAroundCircle(size, toothHeight, numSegments)
@@ -221,17 +221,8 @@ class Amoeba.Animations
 
     return result;
 
-  _kogPath: (showTeeth=true) =>
-    # CogSegments array
+  _cogPath: (showTeeth=true) =>
     segments = this._createCogSegments(500, showTeeth, 34)
-
-    # debug points
-    # result = ""
-    # for segment in segments
-    #   result += makeCirclePath(segment.topLeft.x, segment.topLeft.y, 5)
-    #   result += makeCirclePath(segment.topRight.x, segment.topRight.y, 5)
-    #   result += makeCirclePath(segment.bottomLeft.x, segment.bottomLeft.y, 5)
-    #   result += makeCirclePath(segment.bottomRight.x, segment.bottomRight.y, 5)
 
     result = null
     for segment in segments
