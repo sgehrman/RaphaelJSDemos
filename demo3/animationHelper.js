@@ -84,7 +84,7 @@
       });
       $("#example4").on("click", function(event) {
         var result, theCog;
-        theCog = new Amoeba.Cog(500, 34);
+        theCog = new Amoeba.Cog(400, 34);
         result = theCog.path(true);
         Amoeba.oneText.val(result);
         result = theCog.path(false);
@@ -215,7 +215,7 @@
       return this.mainPath.animate({
         path: thePath,
         fill: this.fillColor
-      }, 800, "elastic", function() {
+      }, 800, "<>", function() {
         if (!_this.stopped) {
           if (jQuery('#repeatCheck').is(':checked')) {
             return _this.animate();
@@ -227,16 +227,12 @@
     PathAnimation.prototype.pathOne = function(offset) {
       var result;
       result = Amoeba.oneText.val();
-      result = normalizePath(result);
-      result = translatePath(result, offset, 0);
       return result;
     };
 
     PathAnimation.prototype.pathTwo = function(offset) {
       var result;
       result = Amoeba.twoText.val();
-      result = normalizePath(result);
-      result = translatePath(result, offset, 0);
       return result;
     };
 

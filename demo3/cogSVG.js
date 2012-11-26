@@ -16,6 +16,8 @@
 
       this._pairsAroundCircle = __bind(this._pairsAroundCircle, this);
 
+      this._pointsAroundCircle = __bind(this._pointsAroundCircle, this);
+
     }
 
     Cog.prototype.path = function(showTeeth) {
@@ -33,32 +35,60 @@
       return result;
     };
 
-    Cog.prototype._pairsAroundCircle = function(size, inset, numSegments) {
-      var angle, centerX, centerY, cosValue, degrees, i, nextPoint, points, prevPoint, radius, result, sinValue, x, y, _i, _j, _len;
+    Cog.prototype._pointsAroundCircle = function(size, inset, numSegments, shift) {
+      var angle, centerX, centerY, cosValue, degrees, degreesShift, i, radius, result, sinValue, x, y, _i;
+      if (shift == null) {
+        shift = 0;
+      }
       centerX = size / 2;
       centerY = size / 2;
-      degrees = 360 / numSegments;
       radius = (size - (inset * 2)) / 2;
-      points = [];
+      degrees = 360 / numSegments;
+      result = [];
       for (i = _i = 0; 0 <= numSegments ? _i <= numSegments : _i >= numSegments; i = 0 <= numSegments ? ++_i : --_i) {
         angle = i * degrees;
+        degreesShift = degrees * 0.15;
+        if (shift === -1) {
+          angle -= degreesShift;
+        } else if (shift === 1) {
+          angle += degreesShift;
+        }
         if (angle >= 360) {
-          angle = 360 - angle;
+          angle = angle - 360;
+        } else if (angle < 0) {
+          angle = 360 + angle;
         }
         cosValue = Math.cos(toRadians(angle));
         sinValue = Math.sin(toRadians(angle));
         x = centerX + (cosValue * radius);
         y = centerY + (sinValue * radius);
-        points.push(new Point(x, y));
+        result.push(new Point(x, y));
+      }
+      return result;
+    };
+
+    Cog.prototype._pairsAroundCircle = function(size, inset, numSegments, shifted) {
+      var i, leftPoints, nextPoint, points, prevPoint, result, rightPoints, _i, _j, _len, _ref1;
+      if (shifted == null) {
+        shifted = false;
       }
       result = [];
-      prevPoint = null;
-      for (_j = 0, _len = points.length; _j < _len; _j++) {
-        nextPoint = points[_j];
-        if ((prevPoint != null)) {
-          result.push(new PointPair(prevPoint, nextPoint));
+      if (!shifted) {
+        points = this._pointsAroundCircle(size, inset, numSegments);
+        prevPoint = null;
+        for (_i = 0, _len = points.length; _i < _len; _i++) {
+          nextPoint = points[_i];
+          if ((prevPoint != null)) {
+            result.push(new PointPair(prevPoint, nextPoint));
+          }
+          prevPoint = nextPoint;
         }
-        prevPoint = nextPoint;
+      } else {
+        leftPoints = this._pointsAroundCircle(size, inset, numSegments, 1);
+        rightPoints = this._pointsAroundCircle(size, inset, numSegments, -1);
+        for (i = _j = 0, _ref1 = leftPoints.length - 1; 0 <= _ref1 ? _j < _ref1 : _j > _ref1; i = 0 <= _ref1 ? ++_j : --_j) {
+          result.push(new PointPair(leftPoints[i], rightPoints[i + 1]));
+        }
       }
       return result;
     };
@@ -67,11 +97,11 @@
       var i, innerPoint, innerPoints, isTooth, newSegment, outerPoint, outerPoints, result, toothHeight, _i;
       result = [];
       toothHeight = 0;
-      outerPoints = this._pairsAroundCircle(size, 0, numSegments);
+      outerPoints = this._pairsAroundCircle(size, 0, numSegments, false);
       if (showTeeth) {
         toothHeight = outerPoints[0].left.distance(outerPoints[0].right) * 0.55;
       }
-      innerPoints = this._pairsAroundCircle(size, toothHeight, numSegments);
+      innerPoints = this._pairsAroundCircle(size, toothHeight, numSegments, false);
       if ((outerPoints.length !== innerPoints.length) || (outerPoints.length !== numSegments)) {
         console.log("inner and outer points not right?");
       } else {

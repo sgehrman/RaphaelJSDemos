@@ -72,7 +72,7 @@ class Amoeba.Animations
       this.doAnimate()
 
     $("#example4").on "click", (event) =>
-      theCog = new Amoeba.Cog(500, 34);
+      theCog = new Amoeba.Cog(400, 34);
       result = theCog.path(true);
       Amoeba.oneText.val result
 
@@ -180,7 +180,7 @@ class PathAnimation
     else
       thePath = this.pathTwo(@offset)
 
-    @mainPath.animate path:thePath, fill:@fillColor, 800, "elastic", =>
+    @mainPath.animate path:thePath, fill:@fillColor, 800, "<>", =>
       if (not @stopped)
         if (jQuery('#repeatCheck').is(':checked'))
           this.animate()
@@ -188,9 +188,9 @@ class PathAnimation
   pathOne: (offset) ->
     result = Amoeba.oneText.val()
     
-    result = normalizePath(result)
+    # result = normalizePath(result)
     # result = scalePath(result, 0.5);
-    result = translatePath(result, offset, 0)
+    # result = translatePath(result, offset, 0)
     # result = rotatePath(result, 180);
 
     result
@@ -198,9 +198,9 @@ class PathAnimation
   pathTwo: (offset) ->
     result = Amoeba.twoText.val()
 
-    result = normalizePath(result)
+    # result = normalizePath(result)
     # result = scalePath(result, 0.5);
-    result = translatePath(result, offset, 0)
+    # result = translatePath(result, offset, 0)
     #  result = rotatePath(result, 180);
 
     result

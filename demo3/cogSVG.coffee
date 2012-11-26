@@ -19,21 +19,29 @@ class Amoeba.Cog
 
     return result
 
-  _pairsAroundCircle: (size, inset, numSegments) =>
+  _pointsAroundCircle: (size, inset, numSegments, shift=0) =>
     centerX = size/2
     centerY = size/2
-    degrees = (360/numSegments);
     radius = (size-(inset*2))/2
 
-    # get the points around the circle
-    points = []
+    degrees = (360/numSegments)
+
+    result = []
 
     # .. (not ...) to go one more to add point back to beginning
     for i in [0..numSegments] 
       angle = i * degrees
 
+      degreesShift = degrees * 0.15
+      if shift is -1
+        angle -= degreesShift
+      else if shift is 1
+        angle += degreesShift
+
       if angle >= 360
-        angle = 360 - angle
+        angle = angle - 360
+      else if angle < 0
+        angle = 360 + angle
 
       cosValue = Math.cos(toRadians(angle))
       sinValue = Math.sin(toRadians(angle))
@@ -41,15 +49,30 @@ class Amoeba.Cog
       x = centerX + (cosValue * radius)
       y = centerY + (sinValue * radius)
 
-      points.push(new Point(x,y))
+      result.push(new Point(x,y))
 
-    # create a pair of points and add to result
+    return result
+
+  _pairsAroundCircle: (size, inset, numSegments, shifted=false) =>
     result = []
-    prevPoint = null
-    for nextPoint in points
-      if (prevPoint?)
-        result.push(new PointPair(prevPoint, nextPoint))
-      prevPoint = nextPoint
+
+    if (not shifted)
+      points = this._pointsAroundCircle(size, inset, numSegments)
+
+      # create a pair of points and add to result
+      prevPoint = null
+      for nextPoint in points
+        if (prevPoint?)
+          result.push(new PointPair(prevPoint, nextPoint))
+        prevPoint = nextPoint
+
+    else
+
+      leftPoints = this._pointsAroundCircle(size, inset, numSegments, 1)
+      rightPoints = this._pointsAroundCircle(size, inset, numSegments, -1)
+
+      for i in [0...leftPoints.length-1]
+        result.push(new PointPair(leftPoints[i], rightPoints[i+1]))
 
     return result
 
@@ -57,13 +80,13 @@ class Amoeba.Cog
     result = []
     toothHeight = 0
 
-    outerPoints = this._pairsAroundCircle(size, 0, numSegments)
+    outerPoints = this._pairsAroundCircle(size, 0, numSegments, false)
 
     # calc tooth height relative to distance between outer points
     if (showTeeth)
       toothHeight = outerPoints[0].left.distance(outerPoints[0].right) * 0.55
 
-    innerPoints = this._pairsAroundCircle(size, toothHeight, numSegments)
+    innerPoints = this._pairsAroundCircle(size, toothHeight, numSegments, false)
 
     if ((outerPoints.length != innerPoints.length) or (outerPoints.length != numSegments))
       console.log("inner and outer points not right?")
@@ -100,7 +123,7 @@ class Point
 # ------------------------------------------------
 class PointPair
   constructor: (@left, @right) ->
-
+    
   toString: ->
     return "(#{@left}, #{@right})"
 
@@ -115,6 +138,10 @@ class CogSegment
 
   path: ->
     result = ""
+
+
+    # return makeCirclePath(@bottomLeft.x, @bottomLeft.y, 3) + makeCirclePath(@bottomRight.x, @bottomRight.y, 5);
+
 
     if @isTooth
       result += "L#{@topLeft.x},#{@topLeft.y}"
