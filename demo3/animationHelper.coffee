@@ -154,70 +154,144 @@ class Amoeba.Animations
 
 
 
-        # toothPath = Raphael.transformPath(toothPath, "T#{prev_x1},#{prev_y1}");
-        # toothPath = Raphael.transformPath(toothPath, "r#{angle+56} #{prev_x1}, #{prev_y1}")
 
 
 
-  # innerX1,innerY1 will be the current position, so not used
-  _toothPath: (outerX1,outerY1, outerX2,outerY2, innerX1,innerY1, innerX2,innerY2) =>
+
+
+
+  _pairsAroundCircle: (size, inset, numSegments) =>
+    centerX = size/2
+    centerY = size/2
+    degrees = (360/numSegments);
+    radius = (size-(inset*2))/2
+
+    # get the points around the circle
+    points = []
+    
+    for i in [0..numSegments] # go one more to add point back to beginning
+      angle = i * degrees
+
+      if angle >= 360
+        angle = 360 - angle
+
+      # inner points
+      cosValue = Math.cos(toRadians(angle))
+      sinValue = Math.sin(toRadians(angle))
+
+      x = centerX + (cosValue * radius)
+      y = centerY + (sinValue * radius)
+
+      points.push(new Point(x,y))
+
+    # create a pair of points and add to result
+    result = []
+    prevPoint = null
+    for nextPoint in points
+      if (prevPoint?)
+        result.push(new PointPair(prevPoint, nextPoint))
+      prevPoint = nextPoint
+
+    return result
+
+  _createCogSegments: (size, toothHeight, numSegments) =>
+    result = []
+
+    outerPoints = this._pairsAroundCircle(size, 0, numSegments)
+    innerPoints = this._pairsAroundCircle(size, toothHeight, numSegments)
+
+    if ((outerPoints.length != innerPoints.length) or (outerPoints.length != numSegments))
+      console.log("inner and outer points not OK?")
+    else
+      isTooth = false
+
+      for i in [0...numSegments]
+        outerPoint = outerPoints[i]
+        innerPoint = innerPoints[i]
+
+        newSegment = new CogSegment(isTooth, outerPoint.left, outerPoint.right, innerPoint.left, innerPoint.right);
+        result.push(newSegment)
+       
+        isTooth = not isTooth
+
+    return result;
+
+  _toothPath: (topLeft, topRight, bottomRight, radius) =>
     result = ""
 
-    result = "L#{outerX1},#{outerY1}"
-    result += "L#{outerX2},#{outerY2}"
-    result += "L#{innerX2},#{innerY2}"
-
-    console.log(result)
+    result += "L#{topLeft.x},#{topLeft.y}"
+    result += "A#{radius},#{radius},0,0,1,#{topRight.x},#{topRight.y}"
+    result += "L#{bottomRight.x},#{bottomRight.y}"
 
     return result
 
   _kogPath: (toothHeight=30) =>
-    outerDim = 500
-    outerRadius = outerDim/2
-    innerDim = outerDim - (2*toothHeight)
-    innerRadius = innerDim/2
-    centerX = outerDim/2
-    centerY = outerDim/2
-    degreeIncrement = 15
+    size = 500
 
-    angle = 0;
+    # CogSegments array
+    segments = this._createCogSegments(size, toothHeight, 24)
 
-    while (angle <= 360)
+    # debug points
+    # result = ""
+    # for segment in segments
+    #   result += makeCirclePath(segment.topLeft.x, segment.topLeft.y, 5)
+    #   result += makeCirclePath(segment.topRight.x, segment.topRight.y, 5)
+    #   result += makeCirclePath(segment.bottomLeft.x, segment.bottomLeft.y, 5)
+    #   result += makeCirclePath(segment.bottomRight.x, segment.bottomRight.y, 5)
 
-      cosValue = Math.cos(toRadians(angle))
-      sinValue = Math.sin(toRadians(angle))
+    outerRadius = size / 2
+    innerRadius = (size - (toothHeight*2)) / 2
 
-      inner_x1 = centerX + (cosValue * innerRadius)
-      inner_y1 = centerY + (sinValue * innerRadius)
-      outer_x1 = centerX + (cosValue * outerRadius)
-      outer_y1 = centerY + (sinValue * outerRadius)
+    result = null
+    for segment in segments
+      if (not result?)
+        result = "M#{segment.bottomLeft.x},#{segment.bottomLeft.y}"
 
-      if (angle is 0)
-        result = "M#{inner_x1},#{inner_y1}"
+      if segment.isTooth
+        result += this._toothPath(segment.topLeft, segment.topRight, segment.bottomRight, outerRadius)
       else
-        result += this._toothPath(prev_outer_x1, prev_outer_y1, outer_x1, outer_y1, prev_inner_x1, prev_inner_y1, inner_x1, inner_y1)
-       
-      prev_inner_x1 = inner_x1
-      prev_inner_y1 = inner_y1
-      prev_outer_x1 = outer_x1
-      prev_outer_y1 = outer_y1
-
-      angle += degreeIncrement
-
-      # add spacer
-      result += "A#{radius},#{radius},0,0,1,#{x1},#{y1}"
-
-
-      angle += degreeIncrement
-
-
+        result += "A#{innerRadius},#{innerRadius},0,0,1,#{segment.bottomRight.x},#{segment.bottomRight.y}"
 
     result += "z"
 
     return result
 
+# ///////////////////////////////////////////////////////////////////////
+# ///////////////////////////////////////////////////////////////////////
+
+class Point
+  constructor: (@x, @y) ->
+
+  toString: ->
+    return "(#{@x}, #{@y})"
+
+class PointPair
+  constructor: (@left, @right) ->
+
+  toString: ->
+    return "(#{@left}, #{@right})"
+
+class CogSegment # isTooth, or is a spacer
+  constructor: (@isTooth, @topLeft, @topRight, @bottomLeft, @bottomRight) ->
+   
+  toString: ->
+    return "(#{@topLeft}, #{@topRight}, #{@bottomLeft}, #{@bottomRight})"
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+# ///////////////////////////////////////////////////////////////////////
+# ///////////////////////////////////////////////////////////////////////
 
 class PathAnimation
   constructor: (@fillColor, @offset, paper) ->
@@ -266,3 +340,13 @@ class PathAnimation
     #  result = rotatePath(result, 180);
 
     result
+
+
+
+# ///////////////////////////////////////////////////////////////////////
+# ///////////////////////////////////////////////////////////////////////
+
+  # toothPath = Raphael.transformPath(toothPath, "T#{prev_x1},#{prev_y1}");
+  # toothPath = Raphael.transformPath(toothPath, "r#{angle+56} #{prev_x1}, #{prev_y1}")
+
+
