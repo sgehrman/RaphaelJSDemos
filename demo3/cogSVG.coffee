@@ -139,9 +139,7 @@ class CogSegment
   path: ->
     result = ""
 
-
     # return makeCirclePath(@bottomLeft.x, @bottomLeft.y, 3) + makeCirclePath(@bottomRight.x, @bottomRight.y, 5);
-
 
     if @isTooth
       result += "L#{@topLeft.x},#{@topLeft.y}"
