@@ -12,8 +12,6 @@
     function Animations() {
       this._kogPath = __bind(this._kogPath, this);
 
-      this._toothPath = __bind(this._toothPath, this);
-
       this._createCogSegments = __bind(this._createCogSegments, this);
 
       this._pairsAroundCircle = __bind(this._pairsAroundCircle, this);
@@ -94,7 +92,7 @@
         var result;
         result = _this._kogPath();
         Amoeba.oneText.val(result);
-        result = _this._kogPath(0);
+        result = _this._kogPath(false);
         Amoeba.twoText.val(result);
         _this._updateStatus("Showing example3");
         return _this.doAnimate();
@@ -210,9 +208,13 @@
       return result;
     };
 
-    Animations.prototype._createCogSegments = function(size, toothHeight, numSegments) {
-      var i, innerPoint, innerPoints, isTooth, newSegment, outerPoint, outerPoints, result, _i;
+    Animations.prototype._createCogSegments = function(size, showTeeth, numSegments) {
+      var i, innerPoint, innerPoints, isTooth, newSegment, outerPoint, outerPoints, result, toothHeight, _i;
       result = [];
+      toothHeight = 0;
+      if (showTeeth) {
+        toothHeight = 24;
+      }
       outerPoints = this._pairsAroundCircle(size, 0, numSegments);
       innerPoints = this._pairsAroundCircle(size, toothHeight, numSegments);
       if ((outerPoints.length !== innerPoints.length) || (outerPoints.length !== numSegments)) {
@@ -222,7 +224,7 @@
         for (i = _i = 0; 0 <= numSegments ? _i < numSegments : _i > numSegments; i = 0 <= numSegments ? ++_i : --_i) {
           outerPoint = outerPoints[i];
           innerPoint = innerPoints[i];
-          newSegment = new CogSegment(isTooth, outerPoint.left, outerPoint.right, innerPoint.left, innerPoint.right);
+          newSegment = new CogSegment(isTooth, size, toothHeight, outerPoint.left, outerPoint.right, innerPoint.left, innerPoint.right);
           result.push(newSegment);
           isTooth = !isTooth;
         }
@@ -230,35 +232,19 @@
       return result;
     };
 
-    Animations.prototype._toothPath = function(segment, radius) {
-      var result;
-      result = "";
-      result += "L" + segment.topLeft.x + "," + segment.topLeft.y;
-      result += "A" + radius + "," + radius + ",0,0,1," + segment.topRight.x + "," + segment.topRight.y;
-      result += "L" + segment.bottomRight.x + "," + segment.bottomRight.y;
-      return result;
-    };
-
-    Animations.prototype._kogPath = function(toothHeight) {
-      var innerRadius, outerRadius, result, segment, segments, size, _i, _len;
-      if (toothHeight == null) {
-        toothHeight = 30;
+    Animations.prototype._kogPath = function(showTeeth) {
+      var result, segment, segments, _i, _len;
+      if (showTeeth == null) {
+        showTeeth = true;
       }
-      size = 500;
-      segments = this._createCogSegments(size, toothHeight, 24);
-      outerRadius = size / 2;
-      innerRadius = (size - (toothHeight * 2)) / 2;
+      segments = this._createCogSegments(500, showTeeth, 34);
       result = null;
       for (_i = 0, _len = segments.length; _i < _len; _i++) {
         segment = segments[_i];
         if (!(result != null)) {
           result = "M" + segment.bottomLeft.x + "," + segment.bottomLeft.y;
         }
-        if (segment.isTooth) {
-          result += this._toothPath(segment, outerRadius);
-        } else {
-          result += "A" + innerRadius + "," + innerRadius + ",0,0,1," + segment.bottomRight.x + "," + segment.bottomRight.y;
-        }
+        result += segment.path();
       }
       result += "z";
       return result;
@@ -277,6 +263,15 @@
 
     Point.prototype.toString = function() {
       return "(" + this.x + ", " + this.y + ")";
+    };
+
+    Point.prototype.distance = function(point2) {
+      var xs, ys;
+      xs = point2.x - this.x;
+      xs = xs * xs;
+      ys = point2.y - this.y;
+      ys = ys * ys;
+      return Math.sqrt(xs + ys);
     };
 
     return Point;
@@ -300,16 +295,33 @@
 
   CogSegment = (function() {
 
-    function CogSegment(isTooth, topLeft, topRight, bottomLeft, bottomRight) {
+    function CogSegment(isTooth, size, toothHeight, topLeft, topRight, bottomLeft, bottomRight) {
       this.isTooth = isTooth;
+      this.size = size;
+      this.toothHeight = toothHeight;
       this.topLeft = topLeft;
       this.topRight = topRight;
       this.bottomLeft = bottomLeft;
       this.bottomRight = bottomRight;
+      this.outerRadius = this.size / 2;
+      this.innerRadius = (this.size - (this.toothHeight * 2)) / 2;
     }
 
     CogSegment.prototype.toString = function() {
       return "(" + this.topLeft + ", " + this.topRight + ", " + this.bottomLeft + ", " + this.bottomRight + ")";
+    };
+
+    CogSegment.prototype.path = function() {
+      var result;
+      result = "";
+      if (this.isTooth) {
+        result += "L" + this.topLeft.x + "," + this.topLeft.y;
+        result += "A" + this.outerRadius + "," + this.outerRadius + ",0,0,1," + this.topRight.x + "," + this.topRight.y;
+        result += "L" + this.bottomRight.x + "," + this.bottomRight.y;
+      } else {
+        result += "A" + this.innerRadius + "," + this.innerRadius + ",0,0,1," + this.bottomRight.x + "," + this.bottomRight.y;
+      }
+      return result;
     };
 
     return CogSegment;

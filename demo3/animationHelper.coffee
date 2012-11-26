@@ -74,7 +74,7 @@ class Amoeba.Animations
       result = this._kogPath();
       Amoeba.oneText.val result
 
-      result = this._kogPath(0);
+      result = this._kogPath(false);
       Amoeba.twoText.val result
 
       this._updateStatus("Showing example3")
@@ -194,8 +194,13 @@ class Amoeba.Animations
 
     return result
 
-  _createCogSegments: (size, toothHeight, numSegments) =>
+  _createCogSegments: (size, showTeeth, numSegments) =>
     result = []
+
+    # tooth height is relative to the space between two points
+    toothHeight = 0
+    if (showTeeth)
+      toothHeight = 24 # innerPoints[0].left.distance(innerPoints[0].right)
 
     outerPoints = this._pairsAroundCircle(size, 0, numSegments)
     innerPoints = this._pairsAroundCircle(size, toothHeight, numSegments)
@@ -209,27 +214,16 @@ class Amoeba.Animations
         outerPoint = outerPoints[i]
         innerPoint = innerPoints[i]
 
-        newSegment = new CogSegment(isTooth, outerPoint.left, outerPoint.right, innerPoint.left, innerPoint.right);
+        newSegment = new CogSegment(isTooth, size, toothHeight, outerPoint.left, outerPoint.right, innerPoint.left, innerPoint.right);
         result.push(newSegment)
        
         isTooth = not isTooth
 
     return result;
 
-  _toothPath: (segment, radius) =>
-    result = ""
-
-    result += "L#{segment.topLeft.x},#{segment.topLeft.y}"
-    result += "A#{radius},#{radius},0,0,1,#{segment.topRight.x},#{segment.topRight.y}"
-    result += "L#{segment.bottomRight.x},#{segment.bottomRight.y}"
-
-    return result
-
-  _kogPath: (toothHeight=30) =>
-    size = 500
-
+  _kogPath: (showTeeth=true) =>
     # CogSegments array
-    segments = this._createCogSegments(size, toothHeight, 24)
+    segments = this._createCogSegments(500, showTeeth, 34)
 
     # debug points
     # result = ""
@@ -239,18 +233,12 @@ class Amoeba.Animations
     #   result += makeCirclePath(segment.bottomLeft.x, segment.bottomLeft.y, 5)
     #   result += makeCirclePath(segment.bottomRight.x, segment.bottomRight.y, 5)
 
-    outerRadius = size / 2
-    innerRadius = (size - (toothHeight*2)) / 2
-
     result = null
     for segment in segments
       if (not result?)
         result = "M#{segment.bottomLeft.x},#{segment.bottomLeft.y}"
 
-      if segment.isTooth
-        result += this._toothPath(segment, outerRadius)
-      else
-        result += "A#{innerRadius},#{innerRadius},0,0,1,#{segment.bottomRight.x},#{segment.bottomRight.y}"
+      result += segment.path()
 
     result += "z"
 
@@ -265,6 +253,15 @@ class Point
   toString: ->
     return "(#{@x}, #{@y})"
 
+  distance: (point2) ->
+    xs = point2.x - this.x;
+    xs = xs * xs;
+   
+    ys = point2.y - this.y;
+    ys = ys * ys;
+   
+    return Math.sqrt( xs + ys );
+
 class PointPair
   constructor: (@left, @right) ->
 
@@ -272,15 +269,24 @@ class PointPair
     return "(#{@left}, #{@right})"
 
 class CogSegment # isTooth, or is a spacer
-  constructor: (@isTooth, @topLeft, @topRight, @bottomLeft, @bottomRight) ->
-    # going to inset the points for a test
-    # if @isTooth
-    #   topLeft.x = (topLeft.x + topRight.x) / 2;
-    #   topLeft.y = (topLeft.y + topRight.y) / 2;
+  constructor: (@isTooth, @size, @toothHeight, @topLeft, @topRight, @bottomLeft, @bottomRight) ->
+    @outerRadius = @size/2
+    @innerRadius = (@size - (@toothHeight * 2)) / 2
 
   toString: ->
     return "(#{@topLeft}, #{@topRight}, #{@bottomLeft}, #{@bottomRight})"
 
+  path: ->
+    result = ""
+
+    if @isTooth
+      result += "L#{@topLeft.x},#{@topLeft.y}"
+      result += "A#{@outerRadius},#{@outerRadius},0,0,1,#{@topRight.x},#{@topRight.y}"
+      result += "L#{@bottomRight.x},#{@bottomRight.y}"
+    else
+      result += "A#{@innerRadius},#{@innerRadius},0,0,1,#{@bottomRight.x},#{@bottomRight.y}"
+
+    return result;
 
 
 
