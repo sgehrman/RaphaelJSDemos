@@ -214,7 +214,8 @@
       }
       return this.mainPath.animate({
         path: thePath,
-        fill: this.fillColor
+        fill: this.fillColor,
+        'fill-opacity': 0.4
       }, 800, "<>", function() {
         if (!_this.stopped) {
           if (jQuery('#repeatCheck').is(':checked')) {
