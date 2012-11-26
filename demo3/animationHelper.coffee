@@ -216,12 +216,12 @@ class Amoeba.Animations
 
     return result;
 
-  _toothPath: (topLeft, topRight, bottomRight, radius) =>
+  _toothPath: (segment, radius) =>
     result = ""
 
-    result += "L#{topLeft.x},#{topLeft.y}"
-    result += "A#{radius},#{radius},0,0,1,#{topRight.x},#{topRight.y}"
-    result += "L#{bottomRight.x},#{bottomRight.y}"
+    result += "L#{segment.topLeft.x},#{segment.topLeft.y}"
+    result += "A#{radius},#{radius},0,0,1,#{segment.topRight.x},#{segment.topRight.y}"
+    result += "L#{segment.bottomRight.x},#{segment.bottomRight.y}"
 
     return result
 
@@ -248,7 +248,7 @@ class Amoeba.Animations
         result = "M#{segment.bottomLeft.x},#{segment.bottomLeft.y}"
 
       if segment.isTooth
-        result += this._toothPath(segment.topLeft, segment.topRight, segment.bottomRight, outerRadius)
+        result += this._toothPath(segment, outerRadius)
       else
         result += "A#{innerRadius},#{innerRadius},0,0,1,#{segment.bottomRight.x},#{segment.bottomRight.y}"
 
@@ -273,7 +273,11 @@ class PointPair
 
 class CogSegment # isTooth, or is a spacer
   constructor: (@isTooth, @topLeft, @topRight, @bottomLeft, @bottomRight) ->
-   
+    # going to inset the points for a test
+    # if @isTooth
+    #   topLeft.x = (topLeft.x + topRight.x) / 2;
+    #   topLeft.y = (topLeft.y + topRight.y) / 2;
+
   toString: ->
     return "(#{@topLeft}, #{@topRight}, #{@bottomLeft}, #{@bottomRight})"
 
