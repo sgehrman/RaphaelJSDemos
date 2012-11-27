@@ -184,7 +184,7 @@ class PathAnimation
   pathOne: (offset) ->
     result = Amoeba.oneText.val()
     
-    # result = Amoeba.Graphics.normalizePath(result)
+    result = Amoeba.Graphics.normalizePath(result)
     # result = Amoeba.Graphics.scalePath(result, 0.5);
     # result = Amoeba.Graphics.translatePath(result, offset, 0)
     # result = Amoeba.Graphics.rotatePath(result, 180);
@@ -194,7 +194,7 @@ class PathAnimation
   pathTwo: (offset) ->
     result = Amoeba.twoText.val()
 
-    # result = Amoeba.Graphics.normalizePath(result)
+    result = Amoeba.Graphics.normalizePath(result)
     # result = Amoeba.Graphics.scalePath(result, 0.5);
     # result = Amoeba.Graphics.translatePath(result, offset, 0)
     # result = Amoeba.Graphics.rotatePath(result, 180);

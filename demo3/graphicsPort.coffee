@@ -3,7 +3,7 @@ window.Amoeba ?= {}
 
 # ------------------------------------------------
 class Amoeba.GraphicsPort
-  constructor: (@rect, attr) ->
+  constructor: (@rect, attr=null) ->
 
     attr ?= {fill: "90-#aaf-#004", stroke: "#f99"}
 

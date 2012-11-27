@@ -11,6 +11,9 @@
 
     function GraphicsPort(rect, attr) {
       this.rect = rect;
+      if (attr == null) {
+        attr = null;
+      }
       this.clearAll = __bind(this.clearAll, this);
 
       if (attr == null) {

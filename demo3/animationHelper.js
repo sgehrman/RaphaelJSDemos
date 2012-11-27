@@ -223,12 +223,14 @@
     PathAnimation.prototype.pathOne = function(offset) {
       var result;
       result = Amoeba.oneText.val();
+      result = Amoeba.Graphics.normalizePath(result);
       return result;
     };
 
     PathAnimation.prototype.pathTwo = function(offset) {
       var result;
       result = Amoeba.twoText.val();
+      result = Amoeba.Graphics.normalizePath(result);
       return result;
     };
 
