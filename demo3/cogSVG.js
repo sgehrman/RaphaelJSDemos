@@ -30,6 +30,7 @@
         if (!(result != null)) {
           result = "M" + segment.bottomLeft.x + "," + segment.bottomLeft.y;
         }
+        segment.debugPoints(this.graphicsPort);
         result += segment.path();
       }
       result += "z";
@@ -85,7 +86,7 @@
           prevPoint = nextPoint;
         }
       } else {
-        leftPoints = this._pointsAroundCircle(size, inset, numSegments, 1);
+        leftPoints = this._pointsAroundCircle(size, inset, numSegments, -1);
         rightPoints = this._pointsAroundCircle(size, inset, numSegments, -1);
         for (i = _j = 0, _ref1 = leftPoints.length - 1; 0 <= _ref1 ? _j < _ref1 : _j > _ref1; i = 0 <= _ref1 ? ++_j : --_j) {
           result.push(new Amoeba.Pair(leftPoints[i], rightPoints[i + 1]));
@@ -142,11 +143,10 @@
 
     CogSegment.prototype.debugPoints = function(graphicsPort) {
       if (this.isTooth) {
-        graphicsPort.addPoints([this.bottomLeft], 2, "black");
-        return graphicsPort.addPoints([this.bottomRight], 2, "orange");
+
       } else {
-        graphicsPort.addPoints([this.bottomLeft], 2, "red");
-        return graphicsPort.addPoints([this.bottomRight], 2, "yellow");
+        graphicsPort.addPoints([this.topLeft], 2, "red");
+        return graphicsPort.addPoints([this.topRight], 2, "yellow");
       }
     };
 

@@ -14,7 +14,7 @@ class Amoeba.Cog
         result = "M#{segment.bottomLeft.x},#{segment.bottomLeft.y}"
 
       # debugging points
-      # segment.debugPoints(@graphicsPort)
+      segment.debugPoints(@graphicsPort)
 
       result += segment.path()
 
@@ -71,7 +71,7 @@ class Amoeba.Cog
 
     else
 
-      leftPoints = this._pointsAroundCircle(size, inset, numSegments, 1)
+      leftPoints = this._pointsAroundCircle(size, inset, numSegments, -1)
       rightPoints = this._pointsAroundCircle(size, inset, numSegments, -1)
 
       for i in [0...leftPoints.length-1]
@@ -118,11 +118,11 @@ class CogSegment
 
   debugPoints: (graphicsPort) ->
     if @isTooth
-      graphicsPort.addPoints([@bottomLeft], 2, "black")
-      graphicsPort.addPoints([@bottomRight], 2, "orange")
+      # graphicsPort.addPoints([@topLeft], 2, "black")
+      # graphicsPort.addPoints([@topRight], 2, "orange")
     else
-      graphicsPort.addPoints([@bottomLeft], 2, "red")
-      graphicsPort.addPoints([@bottomRight], 2, "yellow")
+      graphicsPort.addPoints([@topLeft], 2, "red")
+      graphicsPort.addPoints([@topRight], 2, "yellow")
 
   path: ->
     result = ""
@@ -139,3 +139,7 @@ class CogSegment
       result += "A#{@outerRadius},#{@outerRadius},0,0,#{flag},#{@bottomRight.x},#{@bottomRight.y}"
 
     return result;
+
+
+
+
