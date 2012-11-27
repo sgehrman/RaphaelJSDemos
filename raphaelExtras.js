@@ -97,54 +97,6 @@ function makeTrianglePath(x, y, x1, y1, x2, y2) {
 
 // moves the path so it starts at 0,0
 
-function normalizePath(path) {
-  var bBox = Raphael.pathBBox(path);
-
-  var theMatrix = new Raphael.matrix();
-  theMatrix.translate(-bBox.x, -bBox.y);
-
-  var transformString = theMatrix.toTransformString();
-  path = Raphael.transformPath(path, transformString);
-
-  return path;
-}
-
-function scalePath(path, amount) {
-  var bBox = Raphael.pathBBox(path);
-
-  var theMatrix = new Raphael.matrix();
-  theMatrix.scale(amount, amount);
-
-  var transformString = theMatrix.toTransformString();
-  path = Raphael.transformPath(path, transformString);
-
-  return path;
-}
-
-function translatePath(path, amountX, amountY) {
-  var bBox = Raphael.pathBBox(path);
-
-  var theMatrix = new Raphael.matrix();
-  theMatrix.translate(amountX, amountY);
-
-  var transformString = theMatrix.toTransformString();
-  path = Raphael.transformPath(path, transformString);
-
-  return path;
-}
-
-function rotatePath(path, degrees) {
-  var bBox = Raphael.pathBBox(path);
-
-  var theMatrix = new Raphael.matrix();
-  theMatrix.rotate(degrees, bBox.x + (bBox.width / 2), bBox.y + (bBox.height / 2));
-
-  var transformString = theMatrix.toTransformString();
-  path = Raphael.transformPath(path, transformString);
-
-  return path;
-}
-
 function crap(r)
 {
   var angle = 0;
