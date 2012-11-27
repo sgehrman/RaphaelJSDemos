@@ -151,8 +151,8 @@
       centerY = dim / 2;
       angle = 0;
       while (angle <= 360) {
-        x1 = centerX + (Math.cos(toRadians(angle)) * radius);
-        y1 = centerY + (Math.sin(toRadians(angle)) * radius);
+        x1 = centerX + (Math.cos(Amoeba.Graphics.toRadians(angle)) * radius);
+        y1 = centerY + (Math.sin(Amoeba.Graphics.toRadians(angle)) * radius);
         if (angle === 0) {
           result = "M" + x1 + "," + y1;
         } else {

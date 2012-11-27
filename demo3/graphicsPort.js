@@ -9,16 +9,18 @@
 
   Amoeba.GraphicsPort = (function() {
 
-    function GraphicsPort(rect) {
+    function GraphicsPort(rect, attr) {
       this.rect = rect;
       this.clearAll = __bind(this.clearAll, this);
 
+      if (attr == null) {
+        attr = {
+          fill: "90-#aaf-#004",
+          stroke: "#f99"
+        };
+      }
       this.paper = Raphael(this.rect.x, this.rect.y, this.rect.w, this.rect.h);
-      this.paper.rect(0, 0, this.rect.w, this.rect.h).attr({
-        fill: "90-#aaf-#004",
-        stroke: "#f99",
-        title: "background"
-      });
+      this.paper.rect(0, 0, this.rect.w, this.rect.h).attr(attr);
       this.elements = [];
     }
 
@@ -110,6 +112,62 @@
     };
 
     return Rect;
+
+  })();
+
+  Amoeba.Graphics = (function() {
+
+    function Graphics() {}
+
+    Graphics.toDegrees = function(angle) {
+      return angle * (180 / Math.PI);
+    };
+
+    Graphics.toRadians = function(angle) {
+      return angle * (Math.PI / 180);
+    };
+
+    Graphics.normalizePath = function(path) {
+      var bBox, theMatrix, transformString;
+      bBox = Raphael.pathBBox(path);
+      theMatrix = new Raphael.matrix();
+      theMatrix.translate(-bBox.x, -bBox.y);
+      transformString = theMatrix.toTransformString();
+      path = Raphael.transformPath(path, transformString);
+      return path;
+    };
+
+    Graphics.scalePath = function(path, amount) {
+      var bBox, theMatrix, transformString;
+      bBox = Raphael.pathBBox(path);
+      theMatrix = new Raphael.matrix();
+      theMatrix.scale(amount, amount);
+      transformString = theMatrix.toTransformString();
+      path = Raphael.transformPath(path, transformString);
+      return path;
+    };
+
+    Graphics.translatePath = function(path, amountX, amountY) {
+      var bBox, theMatrix, transformString;
+      bBox = Raphael.pathBBox(path);
+      theMatrix = new Raphael.matrix();
+      theMatrix.translate(amountX, amountY);
+      transformString = theMatrix.toTransformString();
+      path = Raphael.transformPath(path, transformString);
+      return path;
+    };
+
+    Graphics.rotatePath = function(path, degrees) {
+      var bBox, theMatrix, transformString;
+      bBox = Raphael.pathBBox(path);
+      theMatrix = new Raphael.matrix();
+      theMatrix.rotate(degrees, bBox.x + (bBox.width / 2), bBox.y + (bBox.height / 2));
+      transformString = theMatrix.toTransformString();
+      path = Raphael.transformPath(path, transformString);
+      return path;
+    };
+
+    return Graphics;
 
   })();
 

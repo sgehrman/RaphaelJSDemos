@@ -46,8 +46,8 @@ class Amoeba.Cog
       else if angle < 0
         angle = 360 + angle
 
-      cosValue = Math.cos(toRadians(angle))
-      sinValue = Math.sin(toRadians(angle))
+      cosValue = Math.cos(Amoeba.Graphics.toRadians(angle))
+      sinValue = Math.sin(Amoeba.Graphics.toRadians(angle))
 
       x = centerX + (cosValue * radius)
       y = centerY + (sinValue * radius)

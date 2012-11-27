@@ -3,13 +3,12 @@ window.Amoeba ?= {}
 
 # ------------------------------------------------
 class Amoeba.GraphicsPort
-  constructor: (@rect) ->
+  constructor: (@rect, attr) ->
+
+    attr ?= {fill: "90-#aaf-#004", stroke: "#f99"}
 
     @paper = Raphael(@rect.x, @rect.y, @rect.w, @rect.h)
-    @paper.rect(0, 0, @rect.w, @rect.h).attr
-      fill: "90-#aaf-#004"
-      stroke: "#f99"
-      title: "background"
+    @paper.rect(0, 0, @rect.w, @rect.h).attr(attr)
 
     @elements = []
 
@@ -25,7 +24,7 @@ class Amoeba.GraphicsPort
   clearAll: =>
     # @paper.clear() removes all, but we only want to remove stuff we know about
     for element in @elements
-      element.remove;
+      element.remove
 
 # ------------------------------------------------
 class Amoeba.Point
@@ -35,13 +34,13 @@ class Amoeba.Point
     return "(#{@x}, #{@y})"
 
   distance: (point2) ->
-    xs = point2.x - this.x;
-    xs = xs * xs;
+    xs = point2.x - this.x
+    xs = xs * xs
    
-    ys = point2.y - this.y;
-    ys = ys * ys;
+    ys = point2.y - this.y
+    ys = ys * ys
    
-    return Math.sqrt( xs + ys );
+    return Math.sqrt( xs + ys )
 
 # ------------------------------------------------
 class Amoeba.Pair
@@ -56,3 +55,62 @@ class Amoeba.Rect
 
   toString: ->
     return "(x:#{@x}, y:#{@y}, w:#{@w}, h:#{@h})"
+
+# ------------------------------------------------
+class Amoeba.Graphics
+  # class methods
+
+  @toDegrees: (angle) ->
+    return angle * (180 / Math.PI)
+
+  @toRadians: (angle) ->
+    return angle * (Math.PI / 180)
+
+  @normalizePath: (path) ->
+    bBox = Raphael.pathBBox(path)
+
+    theMatrix = new Raphael.matrix()
+    theMatrix.translate(-bBox.x, -bBox.y)
+
+    transformString = theMatrix.toTransformString()
+    path = Raphael.transformPath(path, transformString)
+
+    return path
+
+  @scalePath: (path, amount) ->
+    bBox = Raphael.pathBBox(path)
+
+    theMatrix = new Raphael.matrix()
+    theMatrix.scale(amount, amount)
+
+    transformString = theMatrix.toTransformString()
+    path = Raphael.transformPath(path, transformString)
+
+    return path
+
+  @translatePath: (path, amountX, amountY) ->
+    bBox = Raphael.pathBBox(path)
+
+    theMatrix = new Raphael.matrix()
+    theMatrix.translate(amountX, amountY)
+
+    transformString = theMatrix.toTransformString()
+    path = Raphael.transformPath(path, transformString)
+
+    return path
+
+  @rotatePath: (path, degrees) ->
+    bBox = Raphael.pathBBox(path)
+
+    theMatrix = new Raphael.matrix()
+    theMatrix.rotate(degrees, bBox.x + (bBox.width / 2), bBox.y + (bBox.height / 2))
+
+    transformString = theMatrix.toTransformString()
+    path = Raphael.transformPath(path, transformString)
+
+    return path
+
+
+
+
+

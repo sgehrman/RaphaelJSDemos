@@ -132,8 +132,8 @@ class Amoeba.Animations
     angle = 0;
 
     while (angle <= 360)
-      x1 = centerX + (Math.cos(toRadians(angle)) * radius)
-      y1 = centerY + (Math.sin(toRadians(angle)) * radius)
+      x1 = centerX + (Math.cos(Amoeba.Graphics.toRadians(angle)) * radius)
+      y1 = centerY + (Math.sin(Amoeba.Graphics.toRadians(angle)) * radius)
 
       if (angle is 0)
         result = "M#{x1},#{y1}"
@@ -184,19 +184,19 @@ class PathAnimation
   pathOne: (offset) ->
     result = Amoeba.oneText.val()
     
-    # result = normalizePath(result)
-    # result = scalePath(result, 0.5);
-    # result = translatePath(result, offset, 0)
-    # result = rotatePath(result, 180);
+    # result = Amoeba.Graphics.normalizePath(result)
+    # result = Amoeba.Graphics.scalePath(result, 0.5);
+    # result = Amoeba.Graphics.translatePath(result, offset, 0)
+    # result = Amoeba.Graphics.rotatePath(result, 180);
 
     result
     
   pathTwo: (offset) ->
     result = Amoeba.twoText.val()
 
-    # result = normalizePath(result)
-    # result = scalePath(result, 0.5);
-    # result = translatePath(result, offset, 0)
-    #  result = rotatePath(result, 180);
+    # result = Amoeba.Graphics.normalizePath(result)
+    # result = Amoeba.Graphics.scalePath(result, 0.5);
+    # result = Amoeba.Graphics.translatePath(result, offset, 0)
+    # result = Amoeba.Graphics.rotatePath(result, 180);
 
     result

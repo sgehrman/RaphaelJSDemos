@@ -145,14 +145,6 @@ function rotatePath(path, degrees) {
   return path;
 }
 
-function toDegrees (angle) {
-  return angle * (180 / Math.PI);
-}
-
-function toRadians (angle) {
-  return angle * (Math.PI / 180);
-}
-
 function crap(r)
 {
   var angle = 0;
