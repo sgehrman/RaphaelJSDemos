@@ -1,0 +1,63 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title>Demo 3</title>
+        <style type="text/css" media="screen">
+        body {
+            background-color: gray;
+        }
+            h2 {
+                text-align: center;
+            }
+            textarea {
+                width: 80%;
+                height: 4em;
+            }
+
+            .clit {
+                padding: 10px;
+
+                /*text-transform: uppercase;*/
+                text-shadow: 45px;
+                font-size: 2em;
+
+                width: 80%;
+                text-align: center;
+            }
+
+        </style>
+        <script src="../js/amoeba/graphics.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../js/amoeba/cogSVG.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../js/cogDemo/cogDemoHelper.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../raphael.js"></script>
+        <script src="../raphaelExtras.js"></script>
+        <script src="../vendor/jquery-1.8.2.js" type="text/javascript" charset="utf-8"></script>
+        <!-- this was hanging when the net was down, isn't this suppose to get cached?
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script> 
+        -->
+
+        <script type="text/javascript" charset="utf-8">
+            window.onload = function() {
+                var animations = new Amoeba.CogDemo;
+                animations.setupPathFields();
+                animations.setupAnimations();
+            };
+        </script>
+
+    </head>
+    <body>
+        <br>
+        <a href="../index.html">HOME</a>
+        <br>
+        <br>
+
+        <textarea id="one"></textarea></br>
+        <textarea id="two"></textarea></br>
+          
+        <br/><br/>
+        <input id="repeatCheck" type=checkbox checked="checked">Repeat</input>
+
+        <button id="run">Play Animation</button>        
+    </body>
+</html>
