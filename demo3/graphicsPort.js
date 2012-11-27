@@ -14,6 +14,8 @@
       if (attr == null) {
         attr = null;
       }
+      this.clear = __bind(this.clear, this);
+
       this.clearAll = __bind(this.clearAll, this);
 
       if (attr == null) {
@@ -48,6 +50,10 @@
     };
 
     GraphicsPort.prototype.clearAll = function() {
+      return this.paper.clear();
+    };
+
+    GraphicsPort.prototype.clear = function() {
       var element, _i, _len, _ref1, _results;
       _ref1 = this.elements;
       _results = [];

@@ -22,7 +22,10 @@ class Amoeba.GraphicsPort
       @elements.push(circle)
 
   clearAll: =>
-    # @paper.clear() removes all, but we only want to remove stuff we know about
+    @paper.clear()
+    
+  clear: =>
+    # clearAll removes every element, but we only want to remove stuff we know about
     for element in @elements
       element.remove
 
