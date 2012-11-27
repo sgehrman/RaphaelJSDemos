@@ -7,7 +7,7 @@ class Amoeba.Animations
   constructor: ->
 
   setupAnimations: ->
-    @graphicsPort = new Amoeba.GraphicsPort(new Amoeba.Rect(0, 380, 850, 650))
+    @graphicsPort = new Amoeba.GraphicsPaper(new Amoeba.Rect(0, 380, 850, 650))
 
     this._createAnimations()
     

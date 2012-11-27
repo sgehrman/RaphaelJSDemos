@@ -7,9 +7,9 @@
     window.Amoeba = {};
   }
 
-  Amoeba.GraphicsPort = (function() {
+  Amoeba.GraphicsPaper = (function() {
 
-    function GraphicsPort(rect, attr) {
+    function GraphicsPaper(rect, attr) {
       this.rect = rect;
       if (attr == null) {
         attr = null;
@@ -29,7 +29,7 @@
       this.elements = [];
     }
 
-    GraphicsPort.prototype.addPoints = function(points, radius, color) {
+    GraphicsPaper.prototype.addPoints = function(points, radius, color) {
       var circle, point, _i, _len, _results,
         _this = this;
       if (color == null) {
@@ -49,11 +49,11 @@
       return _results;
     };
 
-    GraphicsPort.prototype.clearAll = function() {
+    GraphicsPaper.prototype.clearAll = function() {
       return this.paper.clear();
     };
 
-    GraphicsPort.prototype.clear = function() {
+    GraphicsPaper.prototype.clear = function() {
       var element, _i, _len, _ref1, _results;
       _ref1 = this.elements;
       _results = [];
@@ -64,7 +64,7 @@
       return _results;
     };
 
-    return GraphicsPort;
+    return GraphicsPaper;
 
   })();
 

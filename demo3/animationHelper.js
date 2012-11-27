@@ -21,7 +21,7 @@
     }
 
     Animations.prototype.setupAnimations = function() {
-      this.graphicsPort = new Amoeba.GraphicsPort(new Amoeba.Rect(0, 380, 850, 650));
+      this.graphicsPort = new Amoeba.GraphicsPaper(new Amoeba.Rect(0, 380, 850, 650));
       return this._createAnimations();
     };
 
