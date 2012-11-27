@@ -7,11 +7,7 @@ class Amoeba.Animations
   constructor: ->
 
   setupAnimations: ->
-    @paper = Raphael(0, 380, 850, 650)
-    @paper.rect(0, 0, 850, 650).attr
-      fill: "90-#aaf-#004"
-      stroke: "#f99"
-      title: "background"
+    @graphicsPort = new Amoeba.GraphicsPort(new Amoeba.Rect(0, 380, 850, 650))
 
     this._createAnimations()
     
@@ -72,7 +68,7 @@ class Amoeba.Animations
       this.doAnimate()
 
     $("#example4").on "click", (event) =>
-      theCog = new Amoeba.Cog(400, 34);
+      theCog = new Amoeba.Cog(400, 34, @graphicsPort);
       result = theCog.path(true);
       Amoeba.oneText.val result
 
@@ -122,7 +118,7 @@ class Amoeba.Animations
     if @animations?
       num.remove() for num in @animations
 
-    @animations = [new PathAnimation("#44f", 0, @paper)] # , new PathAnimation("#f31", 420, @paper)]
+    @animations = [new PathAnimation("#44f", 0, @graphicsPort)] # , new PathAnimation("#f31", 420, @graphicsPort)]
   
   _updateStatus: (inStatus) =>
     Amoeba.statusText.text inStatus
@@ -158,10 +154,10 @@ class Amoeba.Animations
 # ///////////////////////////////////////////////////////////////////////
 
 class PathAnimation
-  constructor: (@fillColor, @offset, paper) ->
+  constructor: (@fillColor, @offset, graphicsPort) ->
     @pathSwitch = true
     @stopped = false;
-    @mainPath = paper.path(this.pathOne(@offset)).attr(fill:@fillColor)
+    @mainPath = graphicsPort.paper.path(this.pathOne(@offset)).attr(fill:@fillColor)
     
     @mainPath.node.onclick = =>
       this.animate()

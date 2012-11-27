@@ -21,12 +21,7 @@
     }
 
     Animations.prototype.setupAnimations = function() {
-      this.paper = Raphael(0, 380, 850, 650);
-      this.paper.rect(0, 0, 850, 650).attr({
-        fill: "90-#aaf-#004",
-        stroke: "#f99",
-        title: "background"
-      });
+      this.graphicsPort = new Amoeba.GraphicsPort(new Amoeba.Rect(0, 380, 850, 650));
       return this._createAnimations();
     };
 
@@ -84,7 +79,7 @@
       });
       $("#example4").on("click", function(event) {
         var result, theCog;
-        theCog = new Amoeba.Cog(400, 34);
+        theCog = new Amoeba.Cog(400, 34, _this.graphicsPort);
         result = theCog.path(true);
         Amoeba.oneText.val(result);
         result = theCog.path(false);
@@ -135,7 +130,7 @@
           num.remove();
         }
       }
-      return this.animations = [new PathAnimation("#44f", 0, this.paper)];
+      return this.animations = [new PathAnimation("#44f", 0, this.graphicsPort)];
     };
 
     Animations.prototype._updateStatus = function(inStatus) {
@@ -179,13 +174,13 @@
 
   PathAnimation = (function() {
 
-    function PathAnimation(fillColor, offset, paper) {
+    function PathAnimation(fillColor, offset, graphicsPort) {
       var _this = this;
       this.fillColor = fillColor;
       this.offset = offset;
       this.pathSwitch = true;
       this.stopped = false;
-      this.mainPath = paper.path(this.pathOne(this.offset)).attr({
+      this.mainPath = graphicsPort.paper.path(this.pathOne(this.offset)).attr({
         fill: this.fillColor
       });
       this.mainPath.node.onclick = function() {

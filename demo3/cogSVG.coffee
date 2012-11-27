@@ -3,7 +3,7 @@ window.Amoeba ?= {}
 
 # ------------------------------------------------
 class Amoeba.Cog
-  constructor: (@size, @numSegments) ->
+  constructor: (@size, @numSegments, @graphicsPort) ->
 
   path: (showTeeth) ->
     segments = this._createCogSegments(@size, showTeeth, @numSegments)
@@ -12,6 +12,9 @@ class Amoeba.Cog
     for segment in segments
       if (not result?)
         result = "M#{segment.bottomLeft.x},#{segment.bottomLeft.y}"
+
+      # debugging points
+      # segment.debugPoints(@graphicsPort)
 
       result += segment.path()
 
@@ -49,7 +52,7 @@ class Amoeba.Cog
       x = centerX + (cosValue * radius)
       y = centerY + (sinValue * radius)
 
-      result.push(new Point(x,y))
+      result.push(new Amoeba.Point(x,y))
 
     return result
 
@@ -63,7 +66,7 @@ class Amoeba.Cog
       prevPoint = null
       for nextPoint in points
         if (prevPoint?)
-          result.push(new PointPair(prevPoint, nextPoint))
+          result.push(new Amoeba.Pair(prevPoint, nextPoint))
         prevPoint = nextPoint
 
     else
@@ -72,7 +75,7 @@ class Amoeba.Cog
       rightPoints = this._pointsAroundCircle(size, inset, numSegments, -1)
 
       for i in [0...leftPoints.length-1]
-        result.push(new PointPair(leftPoints[i], rightPoints[i+1]))
+        result.push(new Amoeba.Pair(leftPoints[i], rightPoints[i+1]))
 
     return result
 
@@ -105,29 +108,6 @@ class Amoeba.Cog
     return result;
 
 # ------------------------------------------------
-class Point
-  constructor: (@x, @y) ->
-
-  toString: ->
-    return "(#{@x}, #{@y})"
-
-  distance: (point2) ->
-    xs = point2.x - this.x;
-    xs = xs * xs;
-   
-    ys = point2.y - this.y;
-    ys = ys * ys;
-   
-    return Math.sqrt( xs + ys );
-
-# ------------------------------------------------
-class PointPair
-  constructor: (@left, @right) ->
-    
-  toString: ->
-    return "(#{@left}, #{@right})"
-
-# ------------------------------------------------
 class CogSegment
   constructor: (@isTooth, @size, @toothHeight, @topLeft, @topRight, @bottomLeft, @bottomRight) ->
     @outerRadius = @size/2
@@ -136,10 +116,16 @@ class CogSegment
   toString: ->
     return "(#{@topLeft}, #{@topRight}, #{@bottomLeft}, #{@bottomRight})"
 
+  debugPoints: (graphicsPort) ->
+    if @isTooth
+      graphicsPort.addPoints([@bottomLeft], 2, "black")
+      graphicsPort.addPoints([@bottomRight], 2, "orange")
+    else
+      graphicsPort.addPoints([@bottomLeft], 2, "red")
+      graphicsPort.addPoints([@bottomRight], 2, "yellow")
+
   path: ->
     result = ""
-
-    # return makeCirclePath(@bottomLeft.x, @bottomLeft.y, 3) + makeCirclePath(@bottomRight.x, @bottomRight.y, 5);
 
     if @isTooth
       result += "L#{@topLeft.x},#{@topLeft.y}"
