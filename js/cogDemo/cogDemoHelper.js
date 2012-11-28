@@ -26,7 +26,7 @@
       Amoeba.oneText.val(this.cog.path(true));
       Amoeba.twoText.val(this.cog.path(false));
       Amoeba.threeText.val(Amoeba.Graphics.circleWithFourPoints(0, 0, this.size / 2));
-      Amoeba.fourText.val(Amoeba.Graphics.rectWithFourPoints(0, 0, 200, 500));
+      Amoeba.fourText.val(Amoeba.Graphics.rectWithFourPoints(0, 0, 100, 300));
       this._createAnimations();
       $("#run").on("click", function(event) {
         return _this._start();
@@ -52,7 +52,7 @@
           one.remove();
         }
       }
-      return this.animations = [new CogAnimation("#44f", 0, this.graphicsPaper)];
+      return this.animations = [new CogAnimation(Raphael.getColor(), 0, this.graphicsPaper), new CogAnimation(Raphael.getColor(), 1, this.graphicsPaper), new CogAnimation(Raphael.getColor(), 2, this.graphicsPaper), new CogAnimation(Raphael.getColor(), 3, this.graphicsPaper), new CogAnimation(Raphael.getColor(), 4, this.graphicsPaper)];
     };
 
     CogDemo.prototype._start = function() {
@@ -74,13 +74,13 @@
 
   CogAnimation = (function() {
 
-    function CogAnimation(fillColor, offset, graphicsPaper) {
+    function CogAnimation(fillColor, index, graphicsPaper) {
       var _this = this;
       this.fillColor = fillColor;
-      this.offset = offset;
+      this.index = index;
       this.pathSwitch = true;
       this.removed = false;
-      this.mainPath = graphicsPaper.paper.path(this.pathOne(this.offset)).attr({
+      this.mainPath = graphicsPaper.paper.path(this.pathOne()).attr({
         fill: this.fillColor,
         "fill-opacity": 0,
         transform: "t" + (graphicsPaper.width()) + ",0"
@@ -102,22 +102,40 @@
     };
 
     CogAnimation.prototype.start = function() {
-      var params,
-        _this = this;
-      params = {
+      var _this = this;
+      return setTimeout(function() {
+        return _this._doStart();
+      }, 100 * this.index);
+    };
+
+    CogAnimation.prototype._doStart = function() {
+      var _this = this;
+      this.mainPath.stop();
+      return this.mainPath.animate({
         "fill-opacity": 1,
         transform: "t0,0"
-      };
-      this.mainPath.stop();
-      return this.mainPath.animate(params, 800, "<>", function() {
-        return _this.changeToPathTwo();
+      }, 600, "<>", function() {
+        return _this.rotate();
+      });
+    };
+
+    CogAnimation.prototype.rotate = function() {
+      var _this = this;
+      return this.mainPath.animate({
+        transform: "r0"
+      }, 0, "<>", function() {
+        return _this.mainPath.animate({
+          transform: "r360"
+        }, 1800, "<>", function() {
+          return _this.changeToPathTwo();
+        });
       });
     };
 
     CogAnimation.prototype.changeToPathTwo = function() {
       var _this = this;
       return this.mainPath.animate({
-        path: this.pathTwo(this.offset),
+        path: this.pathTwo(),
         fill: this.fillColor
       }, 800, "<>", function() {
         return _this.changeToPathThree();
@@ -127,7 +145,7 @@
     CogAnimation.prototype.changeToPathThree = function() {
       var _this = this;
       return this.mainPath.animate({
-        path: this.pathThree(this.offset)
+        path: this.pathThree()
       }, 0, "", function() {
         return _this.changeToPathFour();
       });
@@ -136,38 +154,43 @@
     CogAnimation.prototype.changeToPathFour = function() {
       var _this = this;
       return this.mainPath.animate({
-        path: this.pathFour(this.offset),
+        path: this.pathFour(),
         fill: this.fillColor
       }, 800, "<>", function() {
         return console.log("cunt");
       });
     };
 
-    CogAnimation.prototype.pathOne = function(offset) {
+    CogAnimation.prototype.pathOne = function() {
       var result;
       result = Amoeba.oneText.val();
       result = Amoeba.Graphics.normalizePath(result);
+      result = Amoeba.Graphics.translatePath(result, this.index * 120, 0);
       return result;
     };
 
-    CogAnimation.prototype.pathTwo = function(offset) {
+    CogAnimation.prototype.pathTwo = function() {
       var result;
       result = Amoeba.twoText.val();
       result = Amoeba.Graphics.normalizePath(result);
+      result = Amoeba.Graphics.translatePath(result, 100 + this.index * 220, 120);
       return result;
     };
 
-    CogAnimation.prototype.pathThree = function(offset) {
+    CogAnimation.prototype.pathThree = function() {
       var result;
       result = Amoeba.threeText.val();
       result = Amoeba.Graphics.normalizePath(result);
+      result = Amoeba.Graphics.translatePath(result, 100 + this.index * 220, 120);
       return result;
     };
 
-    CogAnimation.prototype.pathFour = function(offset) {
+    CogAnimation.prototype.pathFour = function() {
       var result;
       result = Amoeba.fourText.val();
       result = Amoeba.Graphics.normalizePath(result);
+      result = Amoeba.Graphics.scalePath(result, .5, .5 + .3 * this.index);
+      result = Amoeba.Graphics.translatePath(result, 300 + this.index * 50, 220);
       return result;
     };
 

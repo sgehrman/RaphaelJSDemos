@@ -110,11 +110,11 @@ class Amoeba.Graphics
 
     return path
 
-  @scalePath: (path, amount) ->
+  @scalePath: (path, amountX, amountY) ->
     bBox = Raphael.pathBBox(path)
 
     theMatrix = new Raphael.matrix()
-    theMatrix.scale(amount, amount)
+    theMatrix.scale(amountX, amountY)
 
     transformString = theMatrix.toTransformString()
     path = Raphael.transformPath(path, transformString)

@@ -205,11 +205,11 @@
       return path;
     };
 
-    Graphics.scalePath = function(path, amount) {
+    Graphics.scalePath = function(path, amountX, amountY) {
       var bBox, theMatrix, transformString;
       bBox = Raphael.pathBBox(path);
       theMatrix = new Raphael.matrix();
-      theMatrix.scale(amount, amount);
+      theMatrix.scale(amountX, amountY);
       transformString = theMatrix.toTransformString();
       path = Raphael.transformPath(path, transformString);
       return path;

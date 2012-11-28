@@ -14,7 +14,7 @@ class Amoeba.CogDemo
     Amoeba.oneText.val @cog.path(true)
     Amoeba.twoText.val @cog.path(false)
     Amoeba.threeText.val Amoeba.Graphics.circleWithFourPoints(0,0,@size/2)
-    Amoeba.fourText.val Amoeba.Graphics.rectWithFourPoints(0,0,200,500)
+    Amoeba.fourText.val Amoeba.Graphics.rectWithFourPoints(0,0,100,300)
 
     this._createAnimations()
 
@@ -36,8 +36,14 @@ class Amoeba.CogDemo
     if @animations?
       one.remove() for one in @animations
 
-    @animations = [new CogAnimation("#44f", 0, @graphicsPaper)] # , new CogAnimation("#f31", 420, @graphicsPaper)]
-  
+    @animations = [
+      new CogAnimation(Raphael.getColor(), 0, @graphicsPaper)
+      new CogAnimation(Raphael.getColor(), 1, @graphicsPaper)
+      new CogAnimation(Raphael.getColor(), 2, @graphicsPaper)
+      new CogAnimation(Raphael.getColor(), 3, @graphicsPaper)
+      new CogAnimation(Raphael.getColor(), 4, @graphicsPaper)
+    ]
+
   _start: =>
     if @animations?
       one.start() for one in @animations
@@ -46,12 +52,12 @@ class Amoeba.CogDemo
 # ///////////////////////////////////////////////////////////////////////
 
 class CogAnimation
-  constructor: (@fillColor, @offset, graphicsPaper) ->
+  constructor: (@fillColor, @index, graphicsPaper) ->
     @pathSwitch = true
     @removed = false;
 
     # create it offscreen and transparent
-    @mainPath = graphicsPaper.paper.path(this.pathOne(@offset)).attr({fill:@fillColor, "fill-opacity": 0, transform: "t#{graphicsPaper.width()},0"})
+    @mainPath = graphicsPaper.paper.path(this.pathOne()).attr({fill:@fillColor, "fill-opacity": 0, transform: "t#{graphicsPaper.width()},0"})
     
     @mainPath.node.onclick = =>
       this.animate()
@@ -65,50 +71,65 @@ class CogAnimation
       @mainPath.remove()
 
   start: ->
-    params = {"fill-opacity": 1, transform: "t0,0"}
+    setTimeout( => 
+      this._doStart()
+    , 100*@index)
 
+  _doStart: ->
     @mainPath.stop()
-    @mainPath.animate params, 800, "<>", =>
-      this.changeToPathTwo();
+    @mainPath.animate {"fill-opacity": 1, transform: "t0,0"}, 600, "<>", =>
+      this.rotate();
+
+  rotate: ->
+    @mainPath.animate transform: "r0", 0, "<>", =>
+      @mainPath.animate transform: "r360", 1800, "<>", =>
+        this.changeToPathTwo();
 
   changeToPathTwo: ->
-    @mainPath.animate path:this.pathTwo(@offset), fill:@fillColor, 800, "<>", =>
+    @mainPath.animate path:this.pathTwo(), fill:@fillColor, 800, "<>", =>
       this.changeToPathThree();
     
   changeToPathThree: ->
     # just changing circles, 0 duration
-    @mainPath.animate path:this.pathThree(@offset), 0, "", =>
+    @mainPath.animate path:this.pathThree(), 0, "", =>
       this.changeToPathFour();
 
   changeToPathFour: ->
-    @mainPath.animate path:this.pathFour(@offset), fill:@fillColor, 800, "<>", =>
+    @mainPath.animate path:this.pathFour(), fill:@fillColor, 800, "<>", =>
       console.log("cunt")
 
-  pathOne: (offset) ->
+  pathOne: ->
     result = Amoeba.oneText.val()
     
     result = Amoeba.Graphics.normalizePath(result)
+
+    result = Amoeba.Graphics.translatePath(result, @index*120, 0);
  
     return result
     
-  pathTwo: (offset) ->
+  pathTwo: ->
     result = Amoeba.twoText.val()
 
     result = Amoeba.Graphics.normalizePath(result)
-  
+    result = Amoeba.Graphics.translatePath(result, 100+@index*220, 120);
+
     return result
 
-  pathThree: (offset) ->
+  pathThree: ->
     result = Amoeba.threeText.val()
 
     result = Amoeba.Graphics.normalizePath(result)
-  
+    result = Amoeba.Graphics.translatePath(result, 100+@index*220, 120);
+
     return result
 
-  pathFour: (offset) ->
+  pathFour: ->
     result = Amoeba.fourText.val()
 
     result = Amoeba.Graphics.normalizePath(result)
+
+    result = Amoeba.Graphics.scalePath(result, .5, .5 + .3*@index);
+    result = Amoeba.Graphics.translatePath(result, 300+@index*50, 220);
   
     return result
 
