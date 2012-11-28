@@ -60,7 +60,7 @@
       this.fillColor = fillColor;
       this.offset = offset;
       this.pathSwitch = true;
-      this.stopped = false;
+      this.removed = false;
       this.mainPath = graphicsPort.paper.path(this.pathOne(this.offset)).attr({
         fill: this.fillColor
       });
@@ -72,7 +72,7 @@
 
     CogAnimation.prototype.remove = function() {
       var _this = this;
-      this.stopped = true;
+      this.removed = true;
       return this.mainPath.animate({
         "fill-opacity": 0
       }, 400, "<>", function() {
@@ -88,13 +88,14 @@
       } else {
         thePath = this.pathTwo(this.offset);
       }
+      this.mainPath.stop();
       return this.mainPath.animate({
         path: thePath,
         fill: this.fillColor,
         'fill-opacity': 0.4
       }, 800, "<>", function() {
-        if (!_this.stopped) {
-          if (jQuery('#repeatCheck').is(':checked')) {
+        if (jQuery('#repeatCheck').is(':checked')) {
+          if (!_this.removed) {
             return _this.animate();
           }
         }
@@ -104,12 +105,14 @@
     CogAnimation.prototype.pathOne = function(offset) {
       var result;
       result = Amoeba.oneText.val();
+      result = Amoeba.Graphics.normalizePath(result);
       return result;
     };
 
     CogAnimation.prototype.pathTwo = function(offset) {
       var result;
       result = Amoeba.twoText.val();
+      result = Amoeba.Graphics.normalizePath(result);
       return result;
     };
 

@@ -35,7 +35,7 @@ class Amoeba.CogDemo
 class CogAnimation
   constructor: (@fillColor, @offset, graphicsPort) ->
     @pathSwitch = true
-    @stopped = false;
+    @removed = false;
     @mainPath = graphicsPort.paper.path(this.pathOne(@offset)).attr(fill:@fillColor)
     
     @mainPath.node.onclick = =>
@@ -43,7 +43,7 @@ class CogAnimation
       this.mainPath.toFront()
 
   remove: ->
-    @stopped = true
+    @removed = true
 
     # animate it out so it looks cool
     @mainPath.animate "fill-opacity":0, 400, "<>", =>
@@ -55,21 +55,23 @@ class CogAnimation
     else
       thePath = this.pathTwo(@offset)
 
+    @mainPath.stop();
+
     @mainPath.animate path:thePath, fill:@fillColor, 'fill-opacity': 0.4, 800, "<>", =>
-      if (not @stopped)
-        if (jQuery('#repeatCheck').is(':checked'))
+      if (jQuery('#repeatCheck').is(':checked'))
+        if (not @removed)
           this.animate()
 
   pathOne: (offset) ->
     result = Amoeba.oneText.val()
     
-    # result = Amoeba.Graphics.scalePath(result, 0.5)
+    result = Amoeba.Graphics.normalizePath(result)
  
     result
     
   pathTwo: (offset) ->
     result = Amoeba.twoText.val()
 
-    # result = Amoeba.Graphics.scalePath(result, 0.5)
+    result = Amoeba.Graphics.normalizePath(result)
   
     result

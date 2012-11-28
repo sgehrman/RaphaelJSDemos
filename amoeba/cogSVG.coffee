@@ -6,6 +6,9 @@ class Amoeba.Cog
   constructor: (@size, @numSegments, @graphicsPort) ->
 
   path: (showTeeth) ->
+    # alternate gear if needed in future
+    # return this._alternateGear();
+
     segments = this._createCogSegments(@size, showTeeth, @numSegments)
 
     result = null
@@ -106,6 +109,47 @@ class Amoeba.Cog
         isTooth = not isTooth
 
     return result;
+
+
+    # sites to check out
+    # https://github.com/mbostock/d3/wiki/Gallery
+    # http://deanm.github.com/pre3d/colorscube.html
+    # http://deanm.github.com/pre3d/
+
+  _alternateGear: () ->
+    inRadius = 200
+    inTeeth = 32
+    insideOut = false
+
+    n = inTeeth
+    r2 = Math.abs(inRadius)
+    r0 = r2 - 8
+    r1 = r2 + 8
+
+    if (insideOut)
+      r3 = r0
+      r0 = r1
+      r1 = r3
+      r3 = r2 + 20
+    else
+      r3 = 20
+
+    da = Math.PI / n
+    a0 = -Math.PI / 2 + (insideOut ? Math.PI / n : 0)
+    i = -1
+    path = ["M", r0 * Math.cos(a0), ",", r0 * Math.sin(a0)]
+
+    while (++i < n) 
+      path.push(
+        "A", r0, ",", r0, " 0 0,1 ", r0 * Math.cos(a0 += da), ",", r0 * Math.sin(a0),
+        "L", r2 * Math.cos(a0), ",", r2 * Math.sin(a0),
+        "L", r1 * Math.cos(a0 += da / 3), ",", r1 * Math.sin(a0),
+        "A", r1, ",", r1, " 0 0,1 ", r1 * Math.cos(a0 += da / 3), ",", r1 * Math.sin(a0),
+        "L", r2 * Math.cos(a0 += da / 3), ",", r2 * Math.sin(a0),
+        "L", r0 * Math.cos(a0), ",", r0 * Math.sin(a0))
+
+    path.push("M0,", -r3, "A", r3, ",", r3, " 0 0,0 0,", r3, "A", r3, ",", r3, " 0 0,0 0,", -r3, "Z")
+    return path.join("")
 
 # ------------------------------------------------
 class CogSegment
