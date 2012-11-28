@@ -8,14 +8,17 @@ class Amoeba.GraphicsPaper
     attr ?= {fill: "90-#aaf-#004", stroke: "#f99"}
 
     @paper = Raphael(@divHolder)
-
-    # not sure why there isn't a size method on paper, using this I found online
-    width = if @paper.canvas.clientWidth then @paper.canvas.clientWidth else @paper.width
-    height = if @paper.canvas.clientHeight then @paper.canvas.clientHeight else @paper.height
-
-    @paper.rect(0, 0, width, height).attr(attr)
+    @paper.rect(0, 0, this.width(), this.height()).attr(attr)
 
     @points = []
+
+  width: ->
+    # not sure why there isn't a size method on paper, using this I found online
+    return if @paper.canvas.clientWidth then @paper.canvas.clientWidth else @paper.width
+  
+  height: ->
+    # not sure why there isn't a size method on paper, using this I found online
+    return if @paper.canvas.clientHeight then @paper.canvas.clientHeight else @paper.height
 
   addPoints: (points, radius, color="#f00") ->
     for point in points

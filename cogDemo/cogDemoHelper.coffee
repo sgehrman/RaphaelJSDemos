@@ -19,7 +19,7 @@ class Amoeba.CogDemo
     this._createAnimations()
 
     $("#run").on "click", (event) =>
-      this.doAnimate()
+      this._start()
 
     $("#showPoints").on "click", (event) =>
       @cog.showPoints()
@@ -32,10 +32,6 @@ class Amoeba.CogDemo
 
     this._start()
 
-  doAnimate: ->
-    @animations.forEach (el) ->
-      el.animate()
-
   _createAnimations: =>
     if @animations?
       one.remove() for one in @animations
@@ -44,7 +40,7 @@ class Amoeba.CogDemo
   
   _start: =>
     if @animations?
-      one.slideIn() for one in @animations
+      one.start() for one in @animations
   
 # ///////////////////////////////////////////////////////////////////////
 # ///////////////////////////////////////////////////////////////////////
@@ -53,7 +49,7 @@ class CogAnimation
   constructor: (@fillColor, @offset, graphicsPaper) ->
     @pathSwitch = true
     @removed = false;
-    @mainPath = graphicsPaper.paper.path(this.pathOne(@offset)).attr({fill:@fillColor, "fill-opacity": 0, transform: "t1000,0"})
+    @mainPath = graphicsPaper.paper.path(this.pathOne(@offset)).attr({fill:@fillColor, "fill-opacity": 0, transform: "t#{graphicsPaper.width()},0"})
     
     @mainPath.node.onclick = =>
       this.animate()
@@ -66,9 +62,10 @@ class CogAnimation
     @mainPath.animate "fill-opacity":0, 400, "<>", =>
       @mainPath.remove()
 
-  slideIn: ->
+  start: ->
     params = {"fill-opacity": 1, transform: "t0,0"}
 
+    @mainPath.stop()
     @mainPath.animate params, 800, "<>", =>
       this.changeToPathTwo();
 

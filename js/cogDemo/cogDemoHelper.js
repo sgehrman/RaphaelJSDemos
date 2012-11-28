@@ -29,7 +29,7 @@
       Amoeba.fourText.val(makeRectanglePath(0, 0, 200, 500));
       this._createAnimations();
       $("#run").on("click", function(event) {
-        return _this.doAnimate();
+        return _this._start();
       });
       $("#showPoints").on("click", function(event) {
         return _this.cog.showPoints();
@@ -42,12 +42,6 @@
       });
       this._start();
     }
-
-    CogDemo.prototype.doAnimate = function() {
-      return this.animations.forEach(function(el) {
-        return el.animate();
-      });
-    };
 
     CogDemo.prototype._createAnimations = function() {
       var one, _i, _len, _ref1;
@@ -68,7 +62,7 @@
         _results = [];
         for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
           one = _ref1[_i];
-          _results.push(one.slideIn());
+          _results.push(one.start());
         }
         return _results;
       }
@@ -89,7 +83,7 @@
       this.mainPath = graphicsPaper.paper.path(this.pathOne(this.offset)).attr({
         fill: this.fillColor,
         "fill-opacity": 0,
-        transform: "t1000,0"
+        transform: "t" + (graphicsPaper.width()) + ",0"
       });
       this.mainPath.node.onclick = function() {
         _this.animate();
@@ -107,13 +101,14 @@
       });
     };
 
-    CogAnimation.prototype.slideIn = function() {
+    CogAnimation.prototype.start = function() {
       var params,
         _this = this;
       params = {
         "fill-opacity": 1,
         transform: "t0,0"
       };
+      this.mainPath.stop();
       return this.mainPath.animate(params, 800, "<>", function() {
         return _this.changeToPathTwo();
       });

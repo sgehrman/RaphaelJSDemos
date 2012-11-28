@@ -10,7 +10,6 @@
   Amoeba.GraphicsPaper = (function() {
 
     function GraphicsPaper(divHolder, attr) {
-      var height, width;
       this.divHolder = divHolder;
       if (attr == null) {
         attr = null;
@@ -30,11 +29,25 @@
         };
       }
       this.paper = Raphael(this.divHolder);
-      width = this.paper.canvas.clientWidth ? this.paper.canvas.clientWidth : this.paper.width;
-      height = this.paper.canvas.clientHeight ? this.paper.canvas.clientHeight : this.paper.height;
-      this.paper.rect(0, 0, width, height).attr(attr);
+      this.paper.rect(0, 0, this.width(), this.height()).attr(attr);
       this.points = [];
     }
+
+    GraphicsPaper.prototype.width = function() {
+      if (this.paper.canvas.clientWidth) {
+        return this.paper.canvas.clientWidth;
+      } else {
+        return this.paper.width;
+      }
+    };
+
+    GraphicsPaper.prototype.height = function() {
+      if (this.paper.canvas.clientHeight) {
+        return this.paper.canvas.clientHeight;
+      } else {
+        return this.paper.height;
+      }
+    };
 
     GraphicsPaper.prototype.addPoints = function(points, radius, color) {
       var circle, point, _i, _len, _results;
