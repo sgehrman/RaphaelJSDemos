@@ -2,41 +2,39 @@
 window.Amoeba ?= {}
 
 class Amoeba.CogDemo
-  constructor: ->
-    @graphicsPort = new Amoeba.GraphicsPaper(new Amoeba.Rect(0, 380, 850, 650))
+  constructor: (divHolder, @size, @numSegments) ->
+    @graphicsPaper = new Amoeba.GraphicsPaper(divHolder)
 
-  setupAnimations: ->
+    Amoeba.oneText = $("#one")
+    Amoeba.twoText = $("#two")
+        
+    theCog = new Amoeba.Cog(@size, @numSegments, @graphicsPaper);
+    Amoeba.oneText.val theCog.path(true)
+    Amoeba.twoText.val theCog.path(false)
+
     this._createAnimations()
+
+    $("#run").on "click", (event) =>
+      this.doAnimate()
     
   doAnimate: ->
     @animations.forEach (el) ->
       el.animate()
 
-  setupPathFields: ->
-    Amoeba.oneText = $("#one")
-    Amoeba.twoText = $("#two")
-        
-    theCog = new Amoeba.Cog(400, 34, @graphicsPort);
-    Amoeba.oneText.val theCog.path(true)
-    Amoeba.twoText.val theCog.path(false)
-
-    $("#run").on "click", (event) =>
-      this.doAnimate()
-
   _createAnimations: =>
     if @animations?
       num.remove() for num in @animations
 
-    @animations = [new CogAnimation("#44f", 0, @graphicsPort)] # , new CogAnimation("#f31", 420, @graphicsPort)]
+    @animations = [new CogAnimation("#44f", 0, @graphicsPaper)] # , new CogAnimation("#f31", 420, @graphicsPaper)]
   
 # ///////////////////////////////////////////////////////////////////////
 # ///////////////////////////////////////////////////////////////////////
 
 class CogAnimation
-  constructor: (@fillColor, @offset, graphicsPort) ->
+  constructor: (@fillColor, @offset, graphicsPaper) ->
     @pathSwitch = true
     @removed = false;
-    @mainPath = graphicsPort.paper.path(this.pathOne(@offset)).attr(fill:@fillColor)
+    @mainPath = graphicsPaper.paper.path(this.pathOne(@offset)).attr(fill:@fillColor)
     
     @mainPath.node.onclick = =>
       this.animate()

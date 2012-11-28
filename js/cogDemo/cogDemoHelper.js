@@ -9,31 +9,28 @@
 
   Amoeba.CogDemo = (function() {
 
-    function CogDemo() {
+    function CogDemo(divHolder, size, numSegments) {
+      var theCog,
+        _this = this;
+      this.size = size;
+      this.numSegments = numSegments;
       this._createAnimations = __bind(this._createAnimations, this);
-      this.graphicsPort = new Amoeba.GraphicsPaper(new Amoeba.Rect(0, 380, 850, 650));
-    }
 
-    CogDemo.prototype.setupAnimations = function() {
-      return this._createAnimations();
-    };
+      this.graphicsPaper = new Amoeba.GraphicsPaper(divHolder);
+      Amoeba.oneText = $("#one");
+      Amoeba.twoText = $("#two");
+      theCog = new Amoeba.Cog(this.size, this.numSegments, this.graphicsPaper);
+      Amoeba.oneText.val(theCog.path(true));
+      Amoeba.twoText.val(theCog.path(false));
+      this._createAnimations();
+      $("#run").on("click", function(event) {
+        return _this.doAnimate();
+      });
+    }
 
     CogDemo.prototype.doAnimate = function() {
       return this.animations.forEach(function(el) {
         return el.animate();
-      });
-    };
-
-    CogDemo.prototype.setupPathFields = function() {
-      var theCog,
-        _this = this;
-      Amoeba.oneText = $("#one");
-      Amoeba.twoText = $("#two");
-      theCog = new Amoeba.Cog(400, 34, this.graphicsPort);
-      Amoeba.oneText.val(theCog.path(true));
-      Amoeba.twoText.val(theCog.path(false));
-      return $("#run").on("click", function(event) {
-        return _this.doAnimate();
       });
     };
 
@@ -46,7 +43,7 @@
           num.remove();
         }
       }
-      return this.animations = [new CogAnimation("#44f", 0, this.graphicsPort)];
+      return this.animations = [new CogAnimation("#44f", 0, this.graphicsPaper)];
     };
 
     return CogDemo;
@@ -55,13 +52,13 @@
 
   CogAnimation = (function() {
 
-    function CogAnimation(fillColor, offset, graphicsPort) {
+    function CogAnimation(fillColor, offset, graphicsPaper) {
       var _this = this;
       this.fillColor = fillColor;
       this.offset = offset;
       this.pathSwitch = true;
       this.removed = false;
-      this.mainPath = graphicsPort.paper.path(this.pathOne(this.offset)).attr({
+      this.mainPath = graphicsPaper.paper.path(this.pathOne(this.offset)).attr({
         fill: this.fillColor
       });
       this.mainPath.node.onclick = function() {

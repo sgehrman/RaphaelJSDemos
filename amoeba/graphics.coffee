@@ -3,12 +3,12 @@ window.Amoeba ?= {}
 
 # ------------------------------------------------
 class Amoeba.GraphicsPaper
-  constructor: (@rect, attr=null) ->
+  constructor: (@divHolder, attr=null) ->
 
     attr ?= {fill: "90-#aaf-#004", stroke: "#f99"}
 
-    @paper = Raphael(@rect.x, @rect.y, @rect.w, @rect.h)
-    @paper.rect(0, 0, @rect.w, @rect.h).attr(attr)
+    @paper = Raphael(@divHolder)
+    # @paper.rect(0, 0, @rect.w, @rect.h).attr(attr)
 
     @elements = []
 

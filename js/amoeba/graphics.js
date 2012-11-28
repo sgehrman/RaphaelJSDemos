@@ -9,8 +9,8 @@
 
   Amoeba.GraphicsPaper = (function() {
 
-    function GraphicsPaper(rect, attr) {
-      this.rect = rect;
+    function GraphicsPaper(divHolder, attr) {
+      this.divHolder = divHolder;
       if (attr == null) {
         attr = null;
       }
@@ -24,8 +24,7 @@
           stroke: "#f99"
         };
       }
-      this.paper = Raphael(this.rect.x, this.rect.y, this.rect.w, this.rect.h);
-      this.paper.rect(0, 0, this.rect.w, this.rect.h).attr(attr);
+      this.paper = Raphael(this.divHolder);
       this.elements = [];
     }
 

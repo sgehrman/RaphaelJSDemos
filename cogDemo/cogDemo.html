@@ -4,9 +4,9 @@
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
         <title>Demo 3</title>
         <style type="text/css" media="screen">
-        body {
-            background-color: gray;
-        }
+            body {
+                background-color: gray;
+            }
             h2 {
                 text-align: center;
             }
@@ -14,8 +14,13 @@
                 width: 80%;
                 height: 4em;
             }
+            #paper {
+                background-color: gray;
 
-            .clit {
+                width: 600px;
+                height: 600px;
+                }
+            .cruft {
                 padding: 10px;
 
                 /*text-transform: uppercase;*/
@@ -39,9 +44,7 @@
 
         <script type="text/javascript" charset="utf-8">
             window.onload = function() {
-                var animations = new Amoeba.CogDemo;
-                animations.setupPathFields();
-                animations.setupAnimations();
+                new Amoeba.CogDemo("paper", 400, 32);
             };
         </script>
 
@@ -59,5 +62,7 @@
 
         <button id="run">Play Animation</button>        
         <input id="repeatCheck" type=checkbox checked="checked">Repeat</input>
+
+        <div id="paper"></div>
     </body>
 </html>
