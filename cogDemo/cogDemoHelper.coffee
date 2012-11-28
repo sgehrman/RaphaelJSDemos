@@ -72,7 +72,7 @@ class CogAnimation
       this.changeToPathTwo();
 
   changeToPathTwo: ->
-    @mainPath.animate path:this.pathTwo(@offset), fill:@fillColor, 'fill-opacity': 0.4, 800, "<>", =>
+    @mainPath.animate path:this.pathTwo(@offset), fill:@fillColor, 800, "<>", =>
       this.changeToPathThree();
     
   changeToPathThree: ->
@@ -81,7 +81,7 @@ class CogAnimation
       this.changeToPathFour();
 
   changeToPathFour: ->
-    @mainPath.animate path:this.pathFour(@offset), fill:@fillColor, 'fill-opacity': 0.4, 800, "<>", =>
+    @mainPath.animate path:this.pathFour(@offset), fill:@fillColor, 800, "<>", =>
       console.log("cunt")
 
   pathOne: (offset) ->

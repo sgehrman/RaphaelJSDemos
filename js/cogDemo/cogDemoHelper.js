@@ -118,8 +118,7 @@
       var _this = this;
       return this.mainPath.animate({
         path: this.pathTwo(this.offset),
-        fill: this.fillColor,
-        'fill-opacity': 0.4
+        fill: this.fillColor
       }, 800, "<>", function() {
         return _this.changeToPathThree();
       });
@@ -138,8 +137,7 @@
       var _this = this;
       return this.mainPath.animate({
         path: this.pathFour(this.offset),
-        fill: this.fillColor,
-        'fill-opacity': 0.4
+        fill: this.fillColor
       }, 800, "<>", function() {
         return console.log("cunt");
       });
