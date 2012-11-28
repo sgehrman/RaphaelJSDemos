@@ -25,8 +25,8 @@
       this.cog = new Amoeba.Cog(this.size, this.numSegments, this.graphicsPaper);
       Amoeba.oneText.val(this.cog.path(true));
       Amoeba.twoText.val(this.cog.path(false));
-      Amoeba.threeText.val(Amoeba.Graphics.circleWithFourPoints(0, 0, 300));
-      Amoeba.fourText.val(makeRectanglePath(0, 0, 200, 500));
+      Amoeba.threeText.val(Amoeba.Graphics.circleWithFourPoints(0, 0, this.size / 2));
+      Amoeba.fourText.val(Amoeba.Graphics.rectWithFourPoints(0, 0, 200, 500));
       this._createAnimations();
       $("#run").on("click", function(event) {
         return _this._start();
@@ -128,10 +128,8 @@
     CogAnimation.prototype.changeToPathThree = function() {
       var _this = this;
       return this.mainPath.animate({
-        path: this.pathThree(this.offset),
-        fill: this.fillColor,
-        'fill-opacity': 0.4
-      }, 800, "<>", function() {
+        path: this.pathThree(this.offset)
+      }, 0, "", function() {
         return _this.changeToPathFour();
       });
     };

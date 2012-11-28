@@ -254,6 +254,16 @@
       return result;
     };
 
+    Graphics.rectWithFourPoints = function(x, y, w, h) {
+      var result;
+      result = "M" + x + ", " + y;
+      result += "l" + w + ", 0";
+      result += "l0, " + h;
+      result += "l" + (-w) + ", 0";
+      result += "l0, " + (-h);
+      return result;
+    };
+
     return Graphics;
 
   })();

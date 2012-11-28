@@ -157,10 +157,22 @@ class Amoeba.Graphics
 
     result += "z"
 
-    # want it to match our rectangle
+    # want it to match our rectangle points
     result = @rotatePath(result, -135)
 
     return result
+
+  @rectWithFourPoints: (x, y, w, h) ->
+    result = "M#{x}, #{y}"
+
+    result += "l#{w}, 0"
+    result += "l0, #{h}"
+    result += "l#{-w}, 0"
+    result += "l0, #{-h}"
+
+    return result
+
+
 
 
 

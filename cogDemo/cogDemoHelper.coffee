@@ -13,8 +13,8 @@ class Amoeba.CogDemo
     @cog = new Amoeba.Cog(@size, @numSegments, @graphicsPaper);
     Amoeba.oneText.val @cog.path(true)
     Amoeba.twoText.val @cog.path(false)
-    Amoeba.threeText.val Amoeba.Graphics.circleWithFourPoints(0,0,300)
-    Amoeba.fourText.val makeRectanglePath(0,0,200,500)
+    Amoeba.threeText.val Amoeba.Graphics.circleWithFourPoints(0,0,@size/2)
+    Amoeba.fourText.val Amoeba.Graphics.rectWithFourPoints(0,0,200,500)
 
     this._createAnimations()
 
@@ -49,6 +49,8 @@ class CogAnimation
   constructor: (@fillColor, @offset, graphicsPaper) ->
     @pathSwitch = true
     @removed = false;
+
+    # create it offscreen and transparent
     @mainPath = graphicsPaper.paper.path(this.pathOne(@offset)).attr({fill:@fillColor, "fill-opacity": 0, transform: "t#{graphicsPaper.width()},0"})
     
     @mainPath.node.onclick = =>
@@ -74,7 +76,8 @@ class CogAnimation
       this.changeToPathThree();
     
   changeToPathThree: ->
-    @mainPath.animate path:this.pathThree(@offset), fill:@fillColor, 'fill-opacity': 0.4, 800, "<>", =>
+    # just changing circles, 0 duration
+    @mainPath.animate path:this.pathThree(@offset), 0, "", =>
       this.changeToPathFour();
 
   changeToPathFour: ->
