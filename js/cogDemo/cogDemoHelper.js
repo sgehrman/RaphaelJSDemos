@@ -15,8 +15,6 @@
       this.numSegments = numSegments;
       this._start = __bind(this._start, this);
 
-      this._createAnimations = __bind(this._createAnimations, this);
-
       this.graphicsPaper = new Amoeba.GraphicsPaper(divHolder);
       Amoeba.oneText = $("#one");
       Amoeba.twoText = $("#two");
@@ -27,7 +25,6 @@
       Amoeba.twoText.val(this.cog.path(false));
       Amoeba.threeText.val(Amoeba.Graphics.circleWithFourPoints(0, 0, this.size / 2));
       Amoeba.fourText.val(Amoeba.Graphics.rectWithFourPoints(0, 0, 100, 300));
-      this._createAnimations();
       $("#run").on("click", function(event) {
         return _this._start();
       });
@@ -43,8 +40,8 @@
       this._start();
     }
 
-    CogDemo.prototype._createAnimations = function() {
-      var one, _i, _len, _ref1;
+    CogDemo.prototype._start = function() {
+      var one, _i, _j, _len, _len1, _ref1, _ref2, _results;
       if (this.animations != null) {
         _ref1 = this.animations;
         for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
@@ -52,20 +49,14 @@
           one.remove();
         }
       }
-      return this.animations = [new CogAnimation(Raphael.getColor(), 0, this.graphicsPaper), new CogAnimation(Raphael.getColor(), 1, this.graphicsPaper), new CogAnimation(Raphael.getColor(), 2, this.graphicsPaper), new CogAnimation(Raphael.getColor(), 3, this.graphicsPaper), new CogAnimation(Raphael.getColor(), 4, this.graphicsPaper)];
-    };
-
-    CogDemo.prototype._start = function() {
-      var one, _i, _len, _ref1, _results;
-      if (this.animations != null) {
-        _ref1 = this.animations;
-        _results = [];
-        for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
-          one = _ref1[_i];
-          _results.push(one.start());
-        }
-        return _results;
+      this.animations = [new CogAnimation(Raphael.getColor(), 0, this.graphicsPaper), new CogAnimation(Raphael.getColor(), 1, this.graphicsPaper), new CogAnimation(Raphael.getColor(), 2, this.graphicsPaper), new CogAnimation(Raphael.getColor(), 3, this.graphicsPaper), new CogAnimation(Raphael.getColor(), 4, this.graphicsPaper)];
+      _ref2 = this.animations;
+      _results = [];
+      for (_j = 0, _len1 = _ref2.length; _j < _len1; _j++) {
+        one = _ref2[_j];
+        _results.push(one.start());
       }
+      return _results;
     };
 
     return CogDemo;
@@ -104,13 +95,13 @@
     CogAnimation.prototype.start = function() {
       var _this = this;
       return setTimeout(function() {
-        return _this._doStart();
+        return _this._start();
       }, 100 * this.index);
     };
 
-    CogAnimation.prototype._doStart = function() {
+    CogAnimation.prototype._start = function() {
       var _this = this;
-      this.mainPath.stop();
+      this._stop();
       return this.mainPath.animate({
         "fill-opacity": 1,
         transform: "t0,0"
@@ -119,14 +110,20 @@
       });
     };
 
+    CogAnimation.prototype._stop = function() {
+      if (!this.removed) {
+        return this.mainPath.stop();
+      }
+    };
+
     CogAnimation.prototype.rotate = function() {
       var _this = this;
       return this.mainPath.animate({
         transform: "r0"
-      }, 0, "<>", function() {
+      }, 0, "", function() {
         return _this.mainPath.animate({
           transform: "r360"
-        }, 1800, "<>", function() {
+        }, 1000, "<>", function() {
           return _this.changeToPathTwo();
         });
       });

@@ -16,8 +16,6 @@ class Amoeba.CogDemo
     Amoeba.threeText.val Amoeba.Graphics.circleWithFourPoints(0,0,@size/2)
     Amoeba.fourText.val Amoeba.Graphics.rectWithFourPoints(0,0,100,300)
 
-    this._createAnimations()
-
     $("#run").on "click", (event) =>
       this._start()
 
@@ -30,9 +28,9 @@ class Amoeba.CogDemo
     $("#pulsatePoints").on "click", (event) =>
       @graphicsPaper.pulsatePoints()
 
-    this._start()
+    this._start()  
 
-  _createAnimations: =>
+  _start: =>
     if @animations?
       one.remove() for one in @animations
 
@@ -43,10 +41,7 @@ class Amoeba.CogDemo
       new CogAnimation(Raphael.getColor(), 3, @graphicsPaper)
       new CogAnimation(Raphael.getColor(), 4, @graphicsPaper)
     ]
-
-  _start: =>
-    if @animations?
-      one.start() for one in @animations
+    one.start() for one in @animations
   
 # ///////////////////////////////////////////////////////////////////////
 # ///////////////////////////////////////////////////////////////////////
@@ -67,22 +62,28 @@ class CogAnimation
     @removed = true
 
     # animate it out so it looks cool
+    # Warning: this final animation could get stopped and we never get removed
     @mainPath.animate "fill-opacity":0, 400, "<>", =>
       @mainPath.remove()
 
   start: ->
     setTimeout( => 
-      this._doStart()
+      this._start()
     , 100*@index)
 
-  _doStart: ->
-    @mainPath.stop()
+  _start: ->
+    this._stop()
     @mainPath.animate {"fill-opacity": 1, transform: "t0,0"}, 600, "<>", =>
       this.rotate();
 
+  _stop: ->
+    # don't stop if removing, we don't want our final animation to get canceled which would prevent the removal of the element
+    if (not @removed)
+      @mainPath.stop()
+
   rotate: ->
-    @mainPath.animate transform: "r0", 0, "<>", =>
-      @mainPath.animate transform: "r360", 1800, "<>", =>
+    @mainPath.animate transform: "r0", 0, "", =>
+      @mainPath.animate transform: "r360", 1000, "<>", =>
         this.changeToPathTwo();
 
   changeToPathTwo: ->
