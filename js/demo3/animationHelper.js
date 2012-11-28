@@ -193,7 +193,7 @@
       var _this = this;
       this.stopped = true;
       return this.mainPath.animate({
-        "fill-opacity": 0
+        opacity: 0
       }, 400, "<>", function() {
         return _this.mainPath.remove();
       });
@@ -210,7 +210,7 @@
       return this.mainPath.animate({
         path: thePath,
         fill: this.fillColor,
-        'fill-opacity': 0.4
+        opacity: 0.4
       }, 800, "<>", function() {
         if (!_this.stopped) {
           if (jQuery('#repeatCheck').is(':checked')) {

@@ -40,10 +40,10 @@ class Amoeba.GraphicsPaper
       point.remove()
 
   _fadePoint: (out, point) =>
-    fadeOut = Raphael.animation({transform: "s2", "fill-opacity": 1}, 600, "<", =>
+    fadeOut = Raphael.animation({transform: "s2", opacity: 1}, 600, "<", =>
       this._fadePoint(not out, point))
 
-    fadeIn = Raphael.animation({transform: "s1", "fill-opacity": 0.1}, 600, ">", =>
+    fadeIn = Raphael.animation({transform: "s1", opacity: 0.1}, 600, ">", =>
       this._fadePoint(not out, point))
 
     point.stop() # stop if currently animating
@@ -111,8 +111,6 @@ class Amoeba.Graphics
     return path
 
   @scalePath: (path, amountX, amountY) ->
-    bBox = Raphael.pathBBox(path)
-
     theMatrix = new Raphael.matrix()
     theMatrix.scale(amountX, amountY)
 
@@ -122,8 +120,6 @@ class Amoeba.Graphics
     return path
 
   @translatePath: (path, amountX, amountY) ->
-    bBox = Raphael.pathBBox(path)
-
     theMatrix = new Raphael.matrix()
     theMatrix.translate(amountX, amountY)
 

@@ -103,16 +103,16 @@ function crap(r)
   while (angle < 360) {
       var color = Raphael.getColor();
       (function (t, c) {
-          var theCircle = r.circle(320, 450, 20).attr({stroke: c, fill: c, transform: t, "fill-opacity": 0.4});
+          var theCircle = r.circle(320, 450, 20).attr({stroke: c, fill: c, transform: t, opacity: 0.4});
 
           theCircle.click(function () {
               s.animate({transform: t, stroke: c}, 2000, "bounce");
           })
           theCircle.mouseover(function () {
-              this.animate({"fill-opacity": 0.75}, 500);
+              this.animate({opacity: 0.75}, 500);
           })
           theCircle.mouseout(function () {
-              this.animate({"fill-opacity": 0.4}, 500);
+              this.animate({opacity: 0.4}, 500);
           });
 
       })("r" + angle + " 320 240", color);

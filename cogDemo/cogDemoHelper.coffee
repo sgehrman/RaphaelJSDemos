@@ -52,7 +52,7 @@ class CogAnimation
     @removed = false;
 
     # create it offscreen and transparent
-    @mainPath = graphicsPaper.paper.path(this.pathOne()).attr({fill:@fillColor, "fill-opacity": 0, transform: "t#{graphicsPaper.width()},0"})
+    @mainPath = graphicsPaper.paper.path(this.pathOne()).attr({fill:@fillColor, opacity: 0, transform: "t#{graphicsPaper.width()},0"})
     
     @mainPath.node.onclick = =>
       this.animate()
@@ -63,7 +63,7 @@ class CogAnimation
 
     # animate it out so it looks cool
     # Warning: this final animation could get stopped and we never get removed
-    @mainPath.animate "fill-opacity":0, 400, "<>", =>
+    @mainPath.animate opacity:0, 400, "<>", =>
       @mainPath.remove()
 
   start: ->
@@ -73,7 +73,7 @@ class CogAnimation
 
   _start: ->
     this._stop()
-    @mainPath.animate {"fill-opacity": 1, transform: "t0,0"}, 600, "<>", =>
+    @mainPath.animate {opacity: 1, transform: "t0,0"}, 600, "<>", =>
       this.rotate();
 
   _stop: ->
@@ -84,19 +84,26 @@ class CogAnimation
   rotate: ->
     @mainPath.animate transform: "r0", 0, "", =>
       @mainPath.animate transform: "r360", 1000, "<>", =>
-        this.changeToPathTwo();
+        this.changeToPathTwo()
 
   changeToPathTwo: ->
-    @mainPath.animate path:this.pathTwo(), fill:@fillColor, 800, "<>", =>
-      this.changeToPathThree();
+    @mainPath.animate path:this.pathTwo(), 800, "<>", =>
+      this.changeToPathThree()
     
   changeToPathThree: ->
     # just changing circles, 0 duration
     @mainPath.animate path:this.pathThree(), 0, "", =>
-      this.changeToPathFour();
+      this.changeToPathFour()
 
   changeToPathFour: ->
-    @mainPath.animate path:this.pathFour(), fill:@fillColor, 800, "<>", =>
+    @mainPath.animate path:this.pathFour(), 800, "<>", =>
+      this.changeToPathFive()
+
+  changeToPathFive: ->
+    bBox = @mainPath.getBBox()
+
+    diff = 700 - bBox.y2
+    @mainPath.animate transform:"t0,#{diff}", 800, "bounce", =>
       console.log("cunt")
 
   pathOne: ->
@@ -130,7 +137,7 @@ class CogAnimation
     result = Amoeba.Graphics.normalizePath(result)
 
     result = Amoeba.Graphics.scalePath(result, .5, .5 + .3*@index);
-    result = Amoeba.Graphics.translatePath(result, 300+@index*50, 220);
+    result = Amoeba.Graphics.translatePath(result, 500+@index*50, 220);
   
     return result
 

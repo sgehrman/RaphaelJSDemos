@@ -98,13 +98,13 @@
         _this = this;
       fadeOut = Raphael.animation({
         transform: "s2",
-        "fill-opacity": 1
+        opacity: 1
       }, 600, "<", function() {
         return _this._fadePoint(!out, point);
       });
       fadeIn = Raphael.animation({
         transform: "s1",
-        "fill-opacity": 0.1
+        opacity: 0.1
       }, 600, ">", function() {
         return _this._fadePoint(!out, point);
       });
@@ -206,8 +206,7 @@
     };
 
     Graphics.scalePath = function(path, amountX, amountY) {
-      var bBox, theMatrix, transformString;
-      bBox = Raphael.pathBBox(path);
+      var theMatrix, transformString;
       theMatrix = new Raphael.matrix();
       theMatrix.scale(amountX, amountY);
       transformString = theMatrix.toTransformString();
@@ -216,8 +215,7 @@
     };
 
     Graphics.translatePath = function(path, amountX, amountY) {
-      var bBox, theMatrix, transformString;
-      bBox = Raphael.pathBBox(path);
+      var theMatrix, transformString;
       theMatrix = new Raphael.matrix();
       theMatrix.translate(amountX, amountY);
       transformString = theMatrix.toTransformString();

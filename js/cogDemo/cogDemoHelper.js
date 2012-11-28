@@ -73,7 +73,7 @@
       this.removed = false;
       this.mainPath = graphicsPaper.paper.path(this.pathOne()).attr({
         fill: this.fillColor,
-        "fill-opacity": 0,
+        opacity: 0,
         transform: "t" + (graphicsPaper.width()) + ",0"
       });
       this.mainPath.node.onclick = function() {
@@ -86,7 +86,7 @@
       var _this = this;
       this.removed = true;
       return this.mainPath.animate({
-        "fill-opacity": 0
+        opacity: 0
       }, 400, "<>", function() {
         return _this.mainPath.remove();
       });
@@ -103,7 +103,7 @@
       var _this = this;
       this._stop();
       return this.mainPath.animate({
-        "fill-opacity": 1,
+        opacity: 1,
         transform: "t0,0"
       }, 600, "<>", function() {
         return _this.rotate();
@@ -132,8 +132,7 @@
     CogAnimation.prototype.changeToPathTwo = function() {
       var _this = this;
       return this.mainPath.animate({
-        path: this.pathTwo(),
-        fill: this.fillColor
+        path: this.pathTwo()
       }, 800, "<>", function() {
         return _this.changeToPathThree();
       });
@@ -151,9 +150,20 @@
     CogAnimation.prototype.changeToPathFour = function() {
       var _this = this;
       return this.mainPath.animate({
-        path: this.pathFour(),
-        fill: this.fillColor
+        path: this.pathFour()
       }, 800, "<>", function() {
+        return _this.changeToPathFive();
+      });
+    };
+
+    CogAnimation.prototype.changeToPathFive = function() {
+      var bBox, diff,
+        _this = this;
+      bBox = this.mainPath.getBBox();
+      diff = 700 - bBox.y2;
+      return this.mainPath.animate({
+        transform: "t0," + diff
+      }, 800, "bounce", function() {
         return console.log("cunt");
       });
     };
@@ -187,7 +197,7 @@
       result = Amoeba.fourText.val();
       result = Amoeba.Graphics.normalizePath(result);
       result = Amoeba.Graphics.scalePath(result, .5, .5 + .3 * this.index);
-      result = Amoeba.Graphics.translatePath(result, 300 + this.index * 50, 220);
+      result = Amoeba.Graphics.translatePath(result, 500 + this.index * 50, 220);
       return result;
     };
 

@@ -167,7 +167,7 @@ class PathAnimation
     @stopped = true
 
     # animate it out so it looks cool
-    @mainPath.animate "fill-opacity":0, 400, "<>", =>
+    @mainPath.animate opacity:0, 400, "<>", =>
       @mainPath.remove()
 
   animate: ->
@@ -176,7 +176,7 @@ class PathAnimation
     else
       thePath = this.pathTwo(@offset)
 
-    @mainPath.animate path:thePath, fill:@fillColor, 'fill-opacity': 0.4, 800, "<>", =>
+    @mainPath.animate path:thePath, fill:@fillColor, opacity: 0.4, 800, "<>", =>
       if (not @stopped)
         if (jQuery('#repeatCheck').is(':checked'))
           this.animate()
