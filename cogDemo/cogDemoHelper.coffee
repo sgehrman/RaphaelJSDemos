@@ -8,11 +8,13 @@ class Amoeba.CogDemo
     Amoeba.oneText = $("#one")
     Amoeba.twoText = $("#two")
     Amoeba.threeText = $("#three")
+    Amoeba.fourText = $("#four")
         
     @cog = new Amoeba.Cog(@size, @numSegments, @graphicsPaper);
     Amoeba.oneText.val @cog.path(true)
     Amoeba.twoText.val @cog.path(false)
-    Amoeba.threeText.val makeRectanglePath(0,0,200,500)
+    Amoeba.threeText.val Amoeba.Graphics.circleWithFourPoints(0,0,300)
+    Amoeba.fourText.val makeRectanglePath(0,0,200,500)
 
     this._createAnimations()
 
@@ -36,7 +38,7 @@ class Amoeba.CogDemo
 
   _createAnimations: =>
     if @animations?
-      num.remove() for num in @animations
+      one.remove() for one in @animations
 
     @animations = [new CogAnimation("#44f", 0, @graphicsPaper)] # , new CogAnimation("#f31", 420, @graphicsPaper)]
   
@@ -76,6 +78,10 @@ class CogAnimation
     
   changeToPathThree: ->
     @mainPath.animate path:this.pathThree(@offset), fill:@fillColor, 'fill-opacity': 0.4, 800, "<>", =>
+      this.changeToPathFour();
+
+  changeToPathFour: ->
+    @mainPath.animate path:this.pathFour(@offset), fill:@fillColor, 'fill-opacity': 0.4, 800, "<>", =>
       console.log("cunt")
 
   pathOne: (offset) ->
@@ -83,18 +89,30 @@ class CogAnimation
     
     result = Amoeba.Graphics.normalizePath(result)
  
-    result
+    return result
     
   pathTwo: (offset) ->
     result = Amoeba.twoText.val()
 
     result = Amoeba.Graphics.normalizePath(result)
   
-    result
+    return result
 
   pathThree: (offset) ->
     result = Amoeba.threeText.val()
 
     result = Amoeba.Graphics.normalizePath(result)
   
-    result
+    return result
+
+  pathFour: (offset) ->
+    result = Amoeba.fourText.val()
+
+    result = Amoeba.Graphics.normalizePath(result)
+  
+    return result
+
+
+
+
+

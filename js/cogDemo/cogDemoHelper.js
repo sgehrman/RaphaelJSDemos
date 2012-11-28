@@ -21,10 +21,12 @@
       Amoeba.oneText = $("#one");
       Amoeba.twoText = $("#two");
       Amoeba.threeText = $("#three");
+      Amoeba.fourText = $("#four");
       this.cog = new Amoeba.Cog(this.size, this.numSegments, this.graphicsPaper);
       Amoeba.oneText.val(this.cog.path(true));
       Amoeba.twoText.val(this.cog.path(false));
-      Amoeba.threeText.val(makeRectanglePath(0, 0, 200, 500));
+      Amoeba.threeText.val(Amoeba.Graphics.circleWithFourPoints(0, 0, 300));
+      Amoeba.fourText.val(makeRectanglePath(0, 0, 200, 500));
       this._createAnimations();
       $("#run").on("click", function(event) {
         return _this.doAnimate();
@@ -48,12 +50,12 @@
     };
 
     CogDemo.prototype._createAnimations = function() {
-      var num, _i, _len, _ref1;
+      var one, _i, _len, _ref1;
       if (this.animations != null) {
         _ref1 = this.animations;
         for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
-          num = _ref1[_i];
-          num.remove();
+          one = _ref1[_i];
+          one.remove();
         }
       }
       return this.animations = [new CogAnimation("#44f", 0, this.graphicsPaper)];
@@ -135,6 +137,17 @@
         fill: this.fillColor,
         'fill-opacity': 0.4
       }, 800, "<>", function() {
+        return _this.changeToPathFour();
+      });
+    };
+
+    CogAnimation.prototype.changeToPathFour = function() {
+      var _this = this;
+      return this.mainPath.animate({
+        path: this.pathFour(this.offset),
+        fill: this.fillColor,
+        'fill-opacity': 0.4
+      }, 800, "<>", function() {
         return console.log("cunt");
       });
     };
@@ -156,6 +169,13 @@
     CogAnimation.prototype.pathThree = function(offset) {
       var result;
       result = Amoeba.threeText.val();
+      result = Amoeba.Graphics.normalizePath(result);
+      return result;
+    };
+
+    CogAnimation.prototype.pathFour = function(offset) {
+      var result;
+      result = Amoeba.fourText.val();
       result = Amoeba.Graphics.normalizePath(result);
       return result;
     };

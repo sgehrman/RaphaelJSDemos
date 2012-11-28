@@ -29,8 +29,7 @@ class Amoeba.Cog
       segment.debugPoints(@graphicsPaper)
 
   _pointsAroundCircle: (size, inset, numSegments, shift=0) =>
-    centerX = size/2
-    centerY = size/2
+    centerPoint = new Amoeba.Point(size/2, size/2)
     radius = (size-(inset*2))/2
 
     degrees = (360/numSegments)
@@ -52,13 +51,7 @@ class Amoeba.Cog
       else if angle < 0
         angle = 360 + angle
 
-      cosValue = Math.cos(Amoeba.Graphics.toRadians(angle))
-      sinValue = Math.sin(Amoeba.Graphics.toRadians(angle))
-
-      x = centerX + (cosValue * radius)
-      y = centerY + (sinValue * radius)
-
-      result.push(new Amoeba.Point(x,y))
+      result.push(Amoeba.Graphics.pointForAngle(angle, radius, centerPoint))
 
     return result
 

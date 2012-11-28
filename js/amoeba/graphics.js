@@ -175,6 +175,13 @@
       return angle * (Math.PI / 180);
     };
 
+    Graphics.pointForAngle = function(degrees, radius, centerPoint) {
+      var cosValue, sinValue;
+      cosValue = Math.cos(Amoeba.Graphics.toRadians(degrees));
+      sinValue = Math.sin(Amoeba.Graphics.toRadians(degrees));
+      return new Amoeba.Point(centerPoint.x + (cosValue * radius), centerPoint.y + (sinValue * radius));
+    };
+
     Graphics.normalizePath = function(path) {
       var bBox, theMatrix, transformString;
       bBox = Raphael.pathBBox(path);
@@ -213,6 +220,25 @@
       transformString = theMatrix.toTransformString();
       path = Raphael.transformPath(path, transformString);
       return path;
+    };
+
+    Graphics.circleWithFourPoints = function(x, y, r) {
+      var centerPoint, degrees, point, result, _i, _len, _ref1;
+      centerPoint = new Amoeba.Point(x, y);
+      result = null;
+      _ref1 = [0, 90, 180, 270, 360];
+      for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+        degrees = _ref1[_i];
+        point = this.pointForAngle(degrees, r, centerPoint);
+        if (!(result != null)) {
+          result = "M" + (x + r) + ", " + y;
+        } else {
+          result += "A" + r + "," + r + ",0,0,1," + point.x + "," + point.y;
+        }
+      }
+      result += "z";
+      result = this.rotatePath(result, -135);
+      return result;
     };
 
     return Graphics;

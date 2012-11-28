@@ -90,6 +90,12 @@ class Amoeba.Graphics
   @toRadians: (angle) ->
     return angle * (Math.PI / 180)
 
+  @pointForAngle: (degrees, radius, centerPoint) ->
+    cosValue = Math.cos(Amoeba.Graphics.toRadians(degrees))
+    sinValue = Math.sin(Amoeba.Graphics.toRadians(degrees))
+
+    return new Amoeba.Point(centerPoint.x + (cosValue * radius), centerPoint.y + (sinValue * radius))
+
   @normalizePath: (path) ->
     bBox = Raphael.pathBBox(path)
 
@@ -134,6 +140,24 @@ class Amoeba.Graphics
 
     return path
 
+  @circleWithFourPoints: (x, y, r) ->
+    centerPoint = new Amoeba.Point(x, y)
+    result = null
+
+    for degrees in [0, 90, 180, 270, 360]
+      point = @pointForAngle(degrees, r, centerPoint)
+      
+      if (not result?)
+        result = "M#{x+r}, #{y}"
+      else
+        result += "A#{r},#{r},0,0,1,#{point.x},#{point.y}"
+
+    result += "z"
+
+    # want it to match our rectangle
+    result = @rotatePath(result, -135)
+
+    return result
 
 
 
