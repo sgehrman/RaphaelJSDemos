@@ -7,10 +7,12 @@ class Amoeba.CogDemo
 
     Amoeba.oneText = $("#one")
     Amoeba.twoText = $("#two")
+    Amoeba.threeText = $("#three")
         
     @cog = new Amoeba.Cog(@size, @numSegments, @graphicsPaper);
     Amoeba.oneText.val @cog.path(true)
     Amoeba.twoText.val @cog.path(false)
+    Amoeba.threeText.val makeRectanglePath(0,0,200,500)
 
     this._createAnimations()
 
@@ -26,6 +28,8 @@ class Amoeba.CogDemo
     $("#pulsatePoints").on "click", (event) =>
       @graphicsPaper.pulsatePoints()
 
+    this._start()
+
   doAnimate: ->
     @animations.forEach (el) ->
       el.animate()
@@ -36,6 +40,10 @@ class Amoeba.CogDemo
 
     @animations = [new CogAnimation("#44f", 0, @graphicsPaper)] # , new CogAnimation("#f31", 420, @graphicsPaper)]
   
+  _start: =>
+    if @animations?
+      one.slideIn() for one in @animations
+  
 # ///////////////////////////////////////////////////////////////////////
 # ///////////////////////////////////////////////////////////////////////
 
@@ -43,7 +51,7 @@ class CogAnimation
   constructor: (@fillColor, @offset, graphicsPaper) ->
     @pathSwitch = true
     @removed = false;
-    @mainPath = graphicsPaper.paper.path(this.pathOne(@offset)).attr(fill:@fillColor)
+    @mainPath = graphicsPaper.paper.path(this.pathOne(@offset)).attr({fill:@fillColor, "fill-opacity": 0, transform: "t1000,0"})
     
     @mainPath.node.onclick = =>
       this.animate()
@@ -56,16 +64,19 @@ class CogAnimation
     @mainPath.animate "fill-opacity":0, 400, "<>", =>
       @mainPath.remove()
 
-  animate: ->
-    if (+(@pathSwitch = not @pathSwitch)) 
-      thePath = this.pathOne(@offset)
-    else
-      thePath = this.pathTwo(@offset)
+  slideIn: ->
+    params = {"fill-opacity": 1, transform: "t0,0"}
 
-    @mainPath.stop().animate path:thePath, fill:@fillColor, 'fill-opacity': 0.4, 800, "<>", =>
-      if (jQuery('#repeatCheck').is(':checked'))
-        if (not @removed)
-          this.animate()
+    @mainPath.animate params, 800, "<>", =>
+      this.changeToPathTwo();
+
+  changeToPathTwo: ->
+    @mainPath.animate path:this.pathTwo(@offset), fill:@fillColor, 'fill-opacity': 0.4, 800, "<>", =>
+      this.changeToPathThree();
+    
+  changeToPathThree: ->
+    @mainPath.animate path:this.pathThree(@offset), fill:@fillColor, 'fill-opacity': 0.4, 800, "<>", =>
+      console.log("cunt")
 
   pathOne: (offset) ->
     result = Amoeba.oneText.val()
@@ -76,6 +87,13 @@ class CogAnimation
     
   pathTwo: (offset) ->
     result = Amoeba.twoText.val()
+
+    result = Amoeba.Graphics.normalizePath(result)
+  
+    result
+
+  pathThree: (offset) ->
+    result = Amoeba.threeText.val()
 
     result = Amoeba.Graphics.normalizePath(result)
   

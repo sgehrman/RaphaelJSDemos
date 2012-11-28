@@ -13,14 +13,18 @@
       var _this = this;
       this.size = size;
       this.numSegments = numSegments;
+      this._start = __bind(this._start, this);
+
       this._createAnimations = __bind(this._createAnimations, this);
 
       this.graphicsPaper = new Amoeba.GraphicsPaper(divHolder);
       Amoeba.oneText = $("#one");
       Amoeba.twoText = $("#two");
+      Amoeba.threeText = $("#three");
       this.cog = new Amoeba.Cog(this.size, this.numSegments, this.graphicsPaper);
       Amoeba.oneText.val(this.cog.path(true));
       Amoeba.twoText.val(this.cog.path(false));
+      Amoeba.threeText.val(makeRectanglePath(0, 0, 200, 500));
       this._createAnimations();
       $("#run").on("click", function(event) {
         return _this.doAnimate();
@@ -34,6 +38,7 @@
       $("#pulsatePoints").on("click", function(event) {
         return _this.graphicsPaper.pulsatePoints();
       });
+      this._start();
     }
 
     CogDemo.prototype.doAnimate = function() {
@@ -54,6 +59,19 @@
       return this.animations = [new CogAnimation("#44f", 0, this.graphicsPaper)];
     };
 
+    CogDemo.prototype._start = function() {
+      var one, _i, _len, _ref1, _results;
+      if (this.animations != null) {
+        _ref1 = this.animations;
+        _results = [];
+        for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+          one = _ref1[_i];
+          _results.push(one.slideIn());
+        }
+        return _results;
+      }
+    };
+
     return CogDemo;
 
   })();
@@ -67,7 +85,9 @@
       this.pathSwitch = true;
       this.removed = false;
       this.mainPath = graphicsPaper.paper.path(this.pathOne(this.offset)).attr({
-        fill: this.fillColor
+        fill: this.fillColor,
+        "fill-opacity": 0,
+        transform: "t1000,0"
       });
       this.mainPath.node.onclick = function() {
         _this.animate();
@@ -85,24 +105,37 @@
       });
     };
 
-    CogAnimation.prototype.animate = function() {
-      var thePath,
+    CogAnimation.prototype.slideIn = function() {
+      var params,
         _this = this;
-      if (+(this.pathSwitch = !this.pathSwitch)) {
-        thePath = this.pathOne(this.offset);
-      } else {
-        thePath = this.pathTwo(this.offset);
-      }
-      return this.mainPath.stop().animate({
-        path: thePath,
+      params = {
+        "fill-opacity": 1,
+        transform: "t0,0"
+      };
+      return this.mainPath.animate(params, 800, "<>", function() {
+        return _this.changeToPathTwo();
+      });
+    };
+
+    CogAnimation.prototype.changeToPathTwo = function() {
+      var _this = this;
+      return this.mainPath.animate({
+        path: this.pathTwo(this.offset),
         fill: this.fillColor,
         'fill-opacity': 0.4
       }, 800, "<>", function() {
-        if (jQuery('#repeatCheck').is(':checked')) {
-          if (!_this.removed) {
-            return _this.animate();
-          }
-        }
+        return _this.changeToPathThree();
+      });
+    };
+
+    CogAnimation.prototype.changeToPathThree = function() {
+      var _this = this;
+      return this.mainPath.animate({
+        path: this.pathThree(this.offset),
+        fill: this.fillColor,
+        'fill-opacity': 0.4
+      }, 800, "<>", function() {
+        return console.log("cunt");
       });
     };
 
@@ -116,6 +149,13 @@
     CogAnimation.prototype.pathTwo = function(offset) {
       var result;
       result = Amoeba.twoText.val();
+      result = Amoeba.Graphics.normalizePath(result);
+      return result;
+    };
+
+    CogAnimation.prototype.pathThree = function(offset) {
+      var result;
+      result = Amoeba.threeText.val();
       result = Amoeba.Graphics.normalizePath(result);
       return result;
     };
