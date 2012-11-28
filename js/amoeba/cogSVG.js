@@ -9,15 +9,17 @@
 
   Amoeba.Cog = (function() {
 
-    function Cog(size, numSegments, graphicsPort) {
+    function Cog(size, numSegments, graphicsPaper) {
       this.size = size;
       this.numSegments = numSegments;
-      this.graphicsPort = graphicsPort;
+      this.graphicsPaper = graphicsPaper;
       this._createCogSegments = __bind(this._createCogSegments, this);
 
       this._pairsAroundCircle = __bind(this._pairsAroundCircle, this);
 
       this._pointsAroundCircle = __bind(this._pointsAroundCircle, this);
+
+      this.showPoints = __bind(this.showPoints, this);
 
     }
 
@@ -30,11 +32,21 @@
         if (!(result != null)) {
           result = "M" + segment.bottomLeft.x + "," + segment.bottomLeft.y;
         }
-        segment.debugPoints(this.graphicsPort);
         result += segment.path();
       }
       result += "z";
       return result;
+    };
+
+    Cog.prototype.showPoints = function() {
+      var segment, segments, _i, _len, _results;
+      segments = this._createCogSegments(this.size, true, this.numSegments);
+      _results = [];
+      for (_i = 0, _len = segments.length; _i < _len; _i++) {
+        segment = segments[_i];
+        _results.push(segment.debugPoints(this.graphicsPaper));
+      }
+      return _results;
     };
 
     Cog.prototype._pointsAroundCircle = function(size, inset, numSegments, shift) {
@@ -171,12 +183,17 @@
       return "(" + this.topLeft + ", " + this.topRight + ", " + this.bottomLeft + ", " + this.bottomRight + ")";
     };
 
-    CogSegment.prototype.debugPoints = function(graphicsPort) {
+    CogSegment.prototype.debugPoints = function(graphicsPaper) {
       if (this.isTooth) {
-
+        graphicsPaper.addPoints([this.topLeft], 2, "black");
+        graphicsPaper.addPoints([this.topRight], 2, "orange");
+        graphicsPaper.addPoints([this.bottomLeft], 2, "black");
+        return graphicsPaper.addPoints([this.bottomRight], 2, "orange");
       } else {
-        graphicsPort.addPoints([this.topLeft], 2, "red");
-        return graphicsPort.addPoints([this.topRight], 2, "yellow");
+        graphicsPaper.addPoints([this.topLeft], 2, "red");
+        graphicsPaper.addPoints([this.topRight], 2, "yellow");
+        graphicsPaper.addPoints([this.bottomLeft], 2, "red");
+        return graphicsPaper.addPoints([this.bottomRight], 2, "yellow");
       }
     };
 

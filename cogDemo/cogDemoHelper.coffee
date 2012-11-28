@@ -8,15 +8,24 @@ class Amoeba.CogDemo
     Amoeba.oneText = $("#one")
     Amoeba.twoText = $("#two")
         
-    theCog = new Amoeba.Cog(@size, @numSegments, @graphicsPaper);
-    Amoeba.oneText.val theCog.path(true)
-    Amoeba.twoText.val theCog.path(false)
+    @cog = new Amoeba.Cog(@size, @numSegments, @graphicsPaper);
+    Amoeba.oneText.val @cog.path(true)
+    Amoeba.twoText.val @cog.path(false)
 
     this._createAnimations()
 
     $("#run").on "click", (event) =>
       this.doAnimate()
-    
+
+    $("#showPoints").on "click", (event) =>
+      @cog.showPoints()
+
+    $("#hidePoints").on "click", (event) =>
+      @graphicsPaper.clearPoints()
+
+    $("#pulsatePoints").on "click", (event) =>
+      @graphicsPaper.pulsatePoints()
+
   doAnimate: ->
     @animations.forEach (el) ->
       el.animate()
@@ -53,9 +62,7 @@ class CogAnimation
     else
       thePath = this.pathTwo(@offset)
 
-    @mainPath.stop();
-
-    @mainPath.animate path:thePath, fill:@fillColor, 'fill-opacity': 0.4, 800, "<>", =>
+    @mainPath.stop().animate path:thePath, fill:@fillColor, 'fill-opacity': 0.4, 800, "<>", =>
       if (jQuery('#repeatCheck').is(':checked'))
         if (not @removed)
           this.animate()

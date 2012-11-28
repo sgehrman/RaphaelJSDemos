@@ -8,26 +8,47 @@ class Amoeba.GraphicsPaper
     attr ?= {fill: "90-#aaf-#004", stroke: "#f99"}
 
     @paper = Raphael(@divHolder)
-    # @paper.rect(0, 0, @rect.w, @rect.h).attr(attr)
 
-    @elements = []
+    # not sure why there isn't a size method on paper, using this I found online
+    width = if @paper.canvas.clientWidth then @paper.canvas.clientWidth else @paper.width
+    height = if @paper.canvas.clientHeight then @paper.canvas.clientHeight else @paper.height
+
+    @paper.rect(0, 0, width, height).attr(attr)
+
+    @points = []
 
   addPoints: (points, radius, color="#f00") ->
     for point in points
       circle = @paper.circle(point.x, point.y, radius)
-         .attr({fill: color, stroke: "#0e0"})
-         .click( =>
-            alert(this.data("i")))
+      circle.attr({fill: color, stroke: "none"})
 
-      @elements.push(circle)
+      @points.push(circle)
+
+  pulsatePoints: =>
+    for point in @points
+      this._fadePoint(true, point)
 
   clearAll: =>
     @paper.clear()
     
-  clear: =>
+  clearPoints: =>
     # clearAll removes every element, but we only want to remove stuff we know about
-    for element in @elements
-      element.remove
+    for point in @points
+      point.remove()
+
+  _fadePoint: (out, point) =>
+    fadeOut = Raphael.animation({transform: "s2", "fill-opacity": 1}, 600, "<", =>
+      this._fadePoint(not out, point))
+
+    fadeIn = Raphael.animation({transform: "s1", "fill-opacity": 0.1}, 600, ">", =>
+      this._fadePoint(not out, point))
+
+    point.stop() # stop if currently animating
+
+    if out
+      point.animate(fadeOut)
+    else
+      point.animate(fadeIn)
 
 # ------------------------------------------------
 class Amoeba.Point

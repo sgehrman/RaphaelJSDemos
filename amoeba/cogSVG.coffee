@@ -3,7 +3,7 @@ window.Amoeba ?= {}
 
 # ------------------------------------------------
 class Amoeba.Cog
-  constructor: (@size, @numSegments, @graphicsPort) ->
+  constructor: (@size, @numSegments, @graphicsPaper) ->
 
   path: (showTeeth) ->
     # alternate gear if needed in future
@@ -16,14 +16,17 @@ class Amoeba.Cog
       if (not result?)
         result = "M#{segment.bottomLeft.x},#{segment.bottomLeft.y}"
 
-      # debugging points
-      segment.debugPoints(@graphicsPort)
-
       result += segment.path()
 
     result += "z"
 
     return result
+
+  showPoints: =>
+    segments = this._createCogSegments(@size, true, @numSegments)
+
+    for segment in segments
+      segment.debugPoints(@graphicsPaper)
 
   _pointsAroundCircle: (size, inset, numSegments, shift=0) =>
     centerX = size/2
@@ -160,13 +163,17 @@ class CogSegment
   toString: ->
     return "(#{@topLeft}, #{@topRight}, #{@bottomLeft}, #{@bottomRight})"
 
-  debugPoints: (graphicsPort) ->
+  debugPoints: (graphicsPaper) ->
     if @isTooth
-      # graphicsPort.addPoints([@topLeft], 2, "black")
-      # graphicsPort.addPoints([@topRight], 2, "orange")
+      graphicsPaper.addPoints([@topLeft], 2, "black")
+      graphicsPaper.addPoints([@topRight], 2, "orange")
+      graphicsPaper.addPoints([@bottomLeft], 2, "black")
+      graphicsPaper.addPoints([@bottomRight], 2, "orange")
     else
-      graphicsPort.addPoints([@topLeft], 2, "red")
-      graphicsPort.addPoints([@topRight], 2, "yellow")
+      graphicsPaper.addPoints([@topLeft], 2, "red")
+      graphicsPaper.addPoints([@topRight], 2, "yellow")
+      graphicsPaper.addPoints([@bottomLeft], 2, "red")
+      graphicsPaper.addPoints([@bottomRight], 2, "yellow")
 
   path: ->
     result = ""

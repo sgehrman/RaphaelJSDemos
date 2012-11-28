@@ -10,13 +10,18 @@
   Amoeba.GraphicsPaper = (function() {
 
     function GraphicsPaper(divHolder, attr) {
+      var height, width;
       this.divHolder = divHolder;
       if (attr == null) {
         attr = null;
       }
-      this.clear = __bind(this.clear, this);
+      this._fadePoint = __bind(this._fadePoint, this);
+
+      this.clearPoints = __bind(this.clearPoints, this);
 
       this.clearAll = __bind(this.clearAll, this);
+
+      this.pulsatePoints = __bind(this.pulsatePoints, this);
 
       if (attr == null) {
         attr = {
@@ -25,25 +30,37 @@
         };
       }
       this.paper = Raphael(this.divHolder);
-      this.elements = [];
+      width = this.paper.canvas.clientWidth ? this.paper.canvas.clientWidth : this.paper.width;
+      height = this.paper.canvas.clientHeight ? this.paper.canvas.clientHeight : this.paper.height;
+      this.paper.rect(0, 0, width, height).attr(attr);
+      this.points = [];
     }
 
     GraphicsPaper.prototype.addPoints = function(points, radius, color) {
-      var circle, point, _i, _len, _results,
-        _this = this;
+      var circle, point, _i, _len, _results;
       if (color == null) {
         color = "#f00";
       }
       _results = [];
       for (_i = 0, _len = points.length; _i < _len; _i++) {
         point = points[_i];
-        circle = this.paper.circle(point.x, point.y, radius).attr({
+        circle = this.paper.circle(point.x, point.y, radius);
+        circle.attr({
           fill: color,
-          stroke: "#0e0"
-        }).click(function() {
-          return alert(_this.data("i"));
+          stroke: "none"
         });
-        _results.push(this.elements.push(circle));
+        _results.push(this.points.push(circle));
+      }
+      return _results;
+    };
+
+    GraphicsPaper.prototype.pulsatePoints = function() {
+      var point, _i, _len, _ref1, _results;
+      _ref1 = this.points;
+      _results = [];
+      for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+        point = _ref1[_i];
+        _results.push(this._fadePoint(true, point));
       }
       return _results;
     };
@@ -52,15 +69,38 @@
       return this.paper.clear();
     };
 
-    GraphicsPaper.prototype.clear = function() {
-      var element, _i, _len, _ref1, _results;
-      _ref1 = this.elements;
+    GraphicsPaper.prototype.clearPoints = function() {
+      var point, _i, _len, _ref1, _results;
+      _ref1 = this.points;
       _results = [];
       for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
-        element = _ref1[_i];
-        _results.push(element.remove);
+        point = _ref1[_i];
+        _results.push(point.remove());
       }
       return _results;
+    };
+
+    GraphicsPaper.prototype._fadePoint = function(out, point) {
+      var fadeIn, fadeOut,
+        _this = this;
+      fadeOut = Raphael.animation({
+        transform: "s2",
+        "fill-opacity": 1
+      }, 600, "<", function() {
+        return _this._fadePoint(!out, point);
+      });
+      fadeIn = Raphael.animation({
+        transform: "s1",
+        "fill-opacity": 0.1
+      }, 600, ">", function() {
+        return _this._fadePoint(!out, point);
+      });
+      point.stop();
+      if (out) {
+        return point.animate(fadeOut);
+      } else {
+        return point.animate(fadeIn);
+      }
     };
 
     return GraphicsPaper;

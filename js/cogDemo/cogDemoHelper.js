@@ -10,8 +10,7 @@
   Amoeba.CogDemo = (function() {
 
     function CogDemo(divHolder, size, numSegments) {
-      var theCog,
-        _this = this;
+      var _this = this;
       this.size = size;
       this.numSegments = numSegments;
       this._createAnimations = __bind(this._createAnimations, this);
@@ -19,12 +18,21 @@
       this.graphicsPaper = new Amoeba.GraphicsPaper(divHolder);
       Amoeba.oneText = $("#one");
       Amoeba.twoText = $("#two");
-      theCog = new Amoeba.Cog(this.size, this.numSegments, this.graphicsPaper);
-      Amoeba.oneText.val(theCog.path(true));
-      Amoeba.twoText.val(theCog.path(false));
+      this.cog = new Amoeba.Cog(this.size, this.numSegments, this.graphicsPaper);
+      Amoeba.oneText.val(this.cog.path(true));
+      Amoeba.twoText.val(this.cog.path(false));
       this._createAnimations();
       $("#run").on("click", function(event) {
         return _this.doAnimate();
+      });
+      $("#showPoints").on("click", function(event) {
+        return _this.cog.showPoints();
+      });
+      $("#hidePoints").on("click", function(event) {
+        return _this.graphicsPaper.clearPoints();
+      });
+      $("#pulsatePoints").on("click", function(event) {
+        return _this.graphicsPaper.pulsatePoints();
       });
     }
 
@@ -85,8 +93,7 @@
       } else {
         thePath = this.pathTwo(this.offset);
       }
-      this.mainPath.stop();
-      return this.mainPath.animate({
+      return this.mainPath.stop().animate({
         path: thePath,
         fill: this.fillColor,
         'fill-opacity': 0.4
