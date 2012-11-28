@@ -6,8 +6,8 @@ window.Amoeba ?= {}
 class Amoeba.Animations
   constructor: ->
 
-  setupAnimations: ->
-    @graphicsPort = new Amoeba.GraphicsPaper(new Amoeba.Rect(0, 380, 850, 650))
+  setupAnimations: (divHolder) ->
+    @graphicsPort = new Amoeba.GraphicsPaper(divHolder)
 
     this._createAnimations()
     

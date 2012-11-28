@@ -14,7 +14,12 @@
                 width: 80%;
                 height: 4em;
             }
+            #paper {
+                background-color: gray;
 
+                width: 600px;
+                height: 600px;
+            }
             .clit {
                 padding: 10px;
 
@@ -42,7 +47,7 @@
             window.onload = function() {
                 var animations = new Amoeba.Animations;
                 animations.setupPathFields();
-                animations.setupAnimations();
+                animations.setupAnimations("paper");
             };
         </script>
 
@@ -71,6 +76,9 @@
 
         <div id="status" class="clit"></div>
 
-        <button id="run">Play Animation</button>        
+        <button id="run">Play Animation</button>    
+
+        <div id="paper"></div>
+    
     </body>
 </html>
