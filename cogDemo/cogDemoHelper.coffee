@@ -104,18 +104,17 @@ class CogAnimation
     setTimeout( => 
 
       bBox = @mainPath.getBBox()
+      if (bBox?)  # saw this randomly return undefined once
+        diff = 700 - bBox.y2
+        @mainPath.animate transform:"t0,#{diff}", 800, "bounce", =>
+          # randomize the height
 
-      diff = 700 - bBox.y2
-      @mainPath.animate transform:"t0,#{diff}", 800, "bounce", =>
-        # randomize the height
+          newPath = Amoeba.Graphics.scalePath(@mainPath, 1, 2)
 
-        newPath = Amoeba.Graphics.scalePath(@mainPath, 1, 2)
+          @mainPath.animate path:newPath, 800, "<>", =>
+            newPath = Amoeba.Graphics.scalePath(newPath, 1, 1)
+            @mainPath.animate path:newPath, 800, "<>"
 
-        @mainPath.animate path:newPath, 800, "<>", =>
-          newPath = Amoeba.Graphics.scalePath(newPath, 1, 1)
-          @mainPath.animate path:newPath, 800, "<>"
-
-        
     , 500)
 
   pathOne: ->

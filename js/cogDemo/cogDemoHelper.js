@@ -174,21 +174,23 @@
       return setTimeout(function() {
         var bBox, diff;
         bBox = _this.mainPath.getBBox();
-        diff = 700 - bBox.y2;
-        return _this.mainPath.animate({
-          transform: "t0," + diff
-        }, 800, "bounce", function() {
-          var newPath;
-          newPath = Amoeba.Graphics.scalePath(_this.mainPath, 1, 2);
+        if ((bBox != null)) {
+          diff = 700 - bBox.y2;
           return _this.mainPath.animate({
-            path: newPath
-          }, 800, "<>", function() {
-            newPath = Amoeba.Graphics.scalePath(newPath, 1, 1);
+            transform: "t0," + diff
+          }, 800, "bounce", function() {
+            var newPath;
+            newPath = Amoeba.Graphics.scalePath(_this.mainPath, 1, 2);
             return _this.mainPath.animate({
               path: newPath
-            }, 800, "<>");
+            }, 800, "<>", function() {
+              newPath = Amoeba.Graphics.scalePath(newPath, 1, 1);
+              return _this.mainPath.animate({
+                path: newPath
+              }, 800, "<>");
+            });
           });
-        });
+        }
       }, 500);
     };
 
