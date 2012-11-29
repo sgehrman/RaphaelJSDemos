@@ -3,7 +3,7 @@ window.Amoeba ?= {}
 
 class Amoeba.CogDemo
   constructor: (divHolder, @size, @numSegments) ->
-    @graphicsPaper = new Amoeba.GraphicsPaper(divHolder)
+    @graphicsPaper = new Amoeba.GraphicsPaper(divHolder, {fill: "90-#fff-#bec0c6", stroke: "#f99"})
 
     Amoeba.oneText = $("#one")
     Amoeba.twoText = $("#two")
@@ -81,30 +81,42 @@ class CogAnimation
     if (not @removed)
       @mainPath.stop()
 
-  rotate: ->
+  rotate: =>
     @mainPath.animate transform: "r0", 0, "", =>
       @mainPath.animate transform: "r360", 1000, "<>", =>
         this.changeToPathTwo()
 
-  changeToPathTwo: ->
+  changeToPathTwo: =>
     @mainPath.animate path:this.pathTwo(), 800, "<>", =>
       this.changeToPathThree()
     
-  changeToPathThree: ->
+  changeToPathThree: =>
     # just changing circles, 0 duration
     @mainPath.animate path:this.pathThree(), 0, "", =>
       this.changeToPathFour()
 
-  changeToPathFour: ->
+  changeToPathFour: =>
     @mainPath.animate path:this.pathFour(), 800, "<>", =>
       this.changeToPathFive()
 
-  changeToPathFive: ->
-    bBox = @mainPath.getBBox()
+  changeToPathFive: =>
 
-    diff = 700 - bBox.y2
-    @mainPath.animate transform:"t0,#{diff}", 800, "bounce", =>
-      console.log("cunt")
+    setTimeout( => 
+
+      bBox = @mainPath.getBBox()
+
+      diff = 700 - bBox.y2
+      @mainPath.animate transform:"t0,#{diff}", 800, "bounce", =>
+        # randomize the height
+
+        newPath = Amoeba.Graphics.scalePath(@mainPath, 1, 2)
+
+        @mainPath.animate path:newPath, 800, "<>", =>
+          newPath = Amoeba.Graphics.scalePath(newPath, 1, 1)
+          @mainPath.animate path:newPath, 800, "<>"
+
+        
+    , 500)
 
   pathOne: ->
     result = Amoeba.oneText.val()
@@ -119,14 +131,16 @@ class CogAnimation
     result = Amoeba.twoText.val()
 
     result = Amoeba.Graphics.normalizePath(result)
+    result = Amoeba.Graphics.scalePath(result, .5, .5)
     result = Amoeba.Graphics.translatePath(result, 100+@index*220, 120);
 
     return result
 
-  pathThree: ->
+  pathThree: ->  # 4 part circle step
     result = Amoeba.threeText.val()
 
     result = Amoeba.Graphics.normalizePath(result)
+    result = Amoeba.Graphics.scalePath(result, .5, .5)
     result = Amoeba.Graphics.translatePath(result, 100+@index*220, 120);
 
     return result
@@ -140,6 +154,8 @@ class CogAnimation
     result = Amoeba.Graphics.translatePath(result, 500+@index*50, 220);
   
     return result
+
+
 
 
 

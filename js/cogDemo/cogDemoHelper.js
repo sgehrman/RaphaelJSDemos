@@ -15,7 +15,10 @@
       this.numSegments = numSegments;
       this._start = __bind(this._start, this);
 
-      this.graphicsPaper = new Amoeba.GraphicsPaper(divHolder);
+      this.graphicsPaper = new Amoeba.GraphicsPaper(divHolder, {
+        fill: "90-#fff-#bec0c6",
+        stroke: "#f99"
+      });
       Amoeba.oneText = $("#one");
       Amoeba.twoText = $("#two");
       Amoeba.threeText = $("#three");
@@ -69,6 +72,16 @@
       var _this = this;
       this.fillColor = fillColor;
       this.index = index;
+      this.changeToPathFive = __bind(this.changeToPathFive, this);
+
+      this.changeToPathFour = __bind(this.changeToPathFour, this);
+
+      this.changeToPathThree = __bind(this.changeToPathThree, this);
+
+      this.changeToPathTwo = __bind(this.changeToPathTwo, this);
+
+      this.rotate = __bind(this.rotate, this);
+
       this.pathSwitch = true;
       this.removed = false;
       this.mainPath = graphicsPaper.paper.path(this.pathOne()).attr({
@@ -157,15 +170,26 @@
     };
 
     CogAnimation.prototype.changeToPathFive = function() {
-      var bBox, diff,
-        _this = this;
-      bBox = this.mainPath.getBBox();
-      diff = 700 - bBox.y2;
-      return this.mainPath.animate({
-        transform: "t0," + diff
-      }, 800, "bounce", function() {
-        return console.log("cunt");
-      });
+      var _this = this;
+      return setTimeout(function() {
+        var bBox, diff;
+        bBox = _this.mainPath.getBBox();
+        diff = 700 - bBox.y2;
+        return _this.mainPath.animate({
+          transform: "t0," + diff
+        }, 800, "bounce", function() {
+          var newPath;
+          newPath = Amoeba.Graphics.scalePath(_this.mainPath, 1, 2);
+          return _this.mainPath.animate({
+            path: newPath
+          }, 800, "<>", function() {
+            newPath = Amoeba.Graphics.scalePath(newPath, 1, 1);
+            return _this.mainPath.animate({
+              path: newPath
+            }, 800, "<>");
+          });
+        });
+      }, 500);
     };
 
     CogAnimation.prototype.pathOne = function() {
@@ -180,6 +204,7 @@
       var result;
       result = Amoeba.twoText.val();
       result = Amoeba.Graphics.normalizePath(result);
+      result = Amoeba.Graphics.scalePath(result, .5, .5);
       result = Amoeba.Graphics.translatePath(result, 100 + this.index * 220, 120);
       return result;
     };
@@ -188,6 +213,7 @@
       var result;
       result = Amoeba.threeText.val();
       result = Amoeba.Graphics.normalizePath(result);
+      result = Amoeba.Graphics.scalePath(result, .5, .5);
       result = Amoeba.Graphics.translatePath(result, 100 + this.index * 220, 120);
       return result;
     };
